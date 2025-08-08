@@ -1,0 +1,322 @@
+[
+  {
+    "name": "midnight-professional",
+    "display_name": "Midnight Professional",
+    "description": "Premium dark theme with sophisticated blue accents for professional manga sites",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "220 100% 65%",
+        "secondary": "220 30% 12%",
+        "accent": "220 40% 18%",
+        "background": "220 25% 6%",
+        "foreground": "220 20% 95%",
+        "manga_red": "0 75% 60%",
+        "manga_gold": "45 95% 70%",
+        "manga_blue": "220 100% 70%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.0
+      },
+      "borderRadius": "0.5rem",
+      "animations": {
+        "enabled": true,
+        "duration": "300ms"
+      }
+    },
+    "custom_css": "/* Midnight Professional Theme */\n:root {\n  --shadow-professional: 0 10px 40px -10px hsl(220 100% 10% / 0.4);\n  --gradient-professional: linear-gradient(135deg, hsl(220 100% 65%), hsl(240 90% 55%));\n}\n\n.card {\n  background: linear-gradient(135deg, hsl(220 30% 12% / 0.95), hsl(220 25% 8% / 0.98));\n  border: 1px solid hsl(220 40% 18% / 0.6);\n  box-shadow: var(--shadow-professional);\n}\n\n.nav-item:hover {\n  background: var(--gradient-professional);\n  box-shadow: 0 0 25px hsl(220 100% 65% / 0.3);\n}\n\n.chapter-card {\n  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);\n}\n\n.chapter-card:hover {\n  transform: translateY(-8px) scale(1.02);\n  box-shadow: 0 20px 50px -15px hsl(220 100% 30% / 0.4);\n}"
+  },
+  {
+    "name": "sakura-elegance",
+    "display_name": "Sakura Elegance",
+    "description": "Sophisticated pink and gold theme inspired by Japanese cherry blossoms",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "330 80% 70%",
+        "secondary": "330 25% 15%",
+        "accent": "330 30% 20%",
+        "background": "330 15% 8%",
+        "foreground": "330 20% 95%",
+        "manga_red": "350 85% 65%",
+        "manga_gold": "45 100% 75%",
+        "manga_blue": "270 70% 70%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.05
+      },
+      "borderRadius": "1rem",
+      "animations": {
+        "enabled": true,
+        "duration": "400ms"
+      }
+    },
+    "custom_css": "/* Sakura Elegance Theme */\n:root {\n  --gradient-sakura: linear-gradient(135deg, hsl(330 80% 70%), hsl(15 85% 65%));\n  --shadow-sakura: 0 15px 35px -10px hsl(330 80% 40% / 0.3);\n}\n\n.hero-section {\n  background: var(--gradient-sakura);\n  position: relative;\n}\n\n.hero-section::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"20\" cy=\"20\" r=\"2\" fill=\"%23fff\" opacity=\"0.1\"/><circle cx=\"80\" cy=\"40\" r=\"1.5\" fill=\"%23fff\" opacity=\"0.15\"/><circle cx=\"40\" cy=\"80\" r=\"2.5\" fill=\"%23fff\" opacity=\"0.08\"/></svg>');\n}\n\n.manga-card {\n  background: linear-gradient(135deg, hsl(330 30% 15% / 0.9), hsl(330 25% 12% / 0.95));\n  border: 2px solid hsl(330 80% 70% / 0.2);\n  box-shadow: var(--shadow-sakura);\n}\n\n.button {\n  background: var(--gradient-sakura);\n  box-shadow: 0 8px 20px hsl(330 80% 50% / 0.3);\n}"
+  },
+  {
+    "name": "emerald-luxury",
+    "display_name": "Emerald Luxury",
+    "description": "Premium green theme with gold accents for high-end manga collections",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "160 85% 55%",
+        "secondary": "160 30% 12%",
+        "accent": "160 35% 18%",
+        "background": "160 20% 6%",
+        "foreground": "160 15% 95%",
+        "manga_red": "0 70% 60%",
+        "manga_gold": "50 100% 75%",
+        "manga_blue": "200 80% 65%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.0
+      },
+      "borderRadius": "0.75rem",
+      "animations": {
+        "enabled": true,
+        "duration": "350ms"
+      }
+    },
+    "custom_css": "/* Emerald Luxury Theme */\n:root {\n  --gradient-emerald: linear-gradient(135deg, hsl(160 85% 55%), hsl(140 80% 50%));\n  --gradient-gold: linear-gradient(135deg, hsl(50 100% 75%), hsl(45 95% 65%));\n  --shadow-luxury: 0 20px 60px -15px hsl(160 85% 25% / 0.4);\n}\n\n.premium-badge {\n  background: var(--gradient-gold);\n  color: hsl(50 50% 15%);\n  font-weight: 600;\n  text-transform: uppercase;\n  letter-spacing: 0.05em;\n}\n\n.card {\n  background: linear-gradient(135deg, hsl(160 30% 12% / 0.95), hsl(160 25% 8% / 0.98));\n  border: 1px solid hsl(160 85% 55% / 0.3);\n  box-shadow: var(--shadow-luxury);\n}\n\n.navigation {\n  backdrop-filter: blur(20px);\n  background: hsl(160 20% 6% / 0.9);\n  border-bottom: 2px solid var(--gradient-emerald);\n}\n\n.reader-controls {\n  background: var(--gradient-emerald);\n  box-shadow: 0 0 30px hsl(160 85% 40% / 0.4);\n}"
+  },
+  {
+    "name": "royal-purple",
+    "display_name": "Royal Purple",
+    "description": "Majestic purple theme with silver accents for fantasy manga series",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "280 90% 65%",
+        "secondary": "280 30% 12%",
+        "accent": "280 35% 18%",
+        "background": "280 25% 6%",
+        "foreground": "280 20% 95%",
+        "manga_red": "340 80% 65%",
+        "manga_gold": "50 95% 70%",
+        "manga_blue": "240 85% 70%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.0
+      },
+      "borderRadius": "0.5rem",
+      "animations": {
+        "enabled": true,
+        "duration": "300ms"
+      }
+    },
+    "custom_css": "/* Royal Purple Theme */\n:root {\n  --gradient-royal: linear-gradient(135deg, hsl(280 90% 65%), hsl(260 85% 60%));\n  --gradient-silver: linear-gradient(135deg, hsl(0 0% 85%), hsl(0 0% 75%));\n  --shadow-royal: 0 15px 45px -10px hsl(280 90% 30% / 0.4);\n}\n\n.crown-element {\n  background: var(--gradient-royal);\n  position: relative;\n}\n\n.crown-element::before {\n  content: '♔';\n  position: absolute;\n  top: -5px;\n  right: -5px;\n  color: hsl(50 95% 70%);\n  font-size: 1.2em;\n  text-shadow: 0 0 10px hsl(50 95% 70% / 0.6);\n}\n\n.manga-title {\n  background: var(--gradient-royal);\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  font-weight: 700;\n}\n\n.chapter-list {\n  background: linear-gradient(180deg, hsl(280 30% 12%), hsl(280 25% 8%));\n  border: 2px solid hsl(280 90% 65% / 0.2);\n  box-shadow: var(--shadow-royal);\n}"
+  },
+  {
+    "name": "arctic-minimal",
+    "display_name": "Arctic Minimal",
+    "description": "Clean, minimalist light theme with ice-blue accents for modern reading",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "200 100% 60%",
+        "secondary": "200 20% 85%",
+        "accent": "200 25% 80%",
+        "background": "0 0% 98%",
+        "foreground": "200 20% 15%",
+        "manga_red": "0 85% 55%",
+        "manga_gold": "45 95% 50%",
+        "manga_blue": "200 100% 65%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 0.95
+      },
+      "borderRadius": "1.5rem",
+      "animations": {
+        "enabled": true,
+        "duration": "250ms"
+      }
+    },
+    "custom_css": "/* Arctic Minimal Theme */\n:root {\n  --gradient-arctic: linear-gradient(135deg, hsl(200 100% 60%), hsl(180 90% 55%));\n  --shadow-minimal: 0 8px 25px -8px hsl(200 50% 50% / 0.15);\n  --glass-effect: backdrop-filter: blur(20px);\n}\n\n.card {\n  background: hsl(0 0% 100% / 0.8);\n  var(--glass-effect);\n  border: 1px solid hsl(200 30% 90%);\n  box-shadow: var(--shadow-minimal);\n}\n\n.navigation {\n  background: hsl(0 0% 100% / 0.9);\n  var(--glass-effect);\n  border-bottom: 1px solid hsl(200 30% 90%);\n}\n\n.button {\n  background: var(--gradient-arctic);\n  color: white;\n  border: none;\n  box-shadow: 0 4px 15px hsl(200 100% 60% / 0.3);\n}\n\n.manga-page {\n  border-radius: 1rem;\n  box-shadow: 0 10px 30px -10px hsl(200 50% 50% / 0.1);\n}\n\nbody {\n  background: linear-gradient(180deg, hsl(200 50% 98%), hsl(180 30% 96%));\n}"
+  },
+  {
+    "name": "neon-cyberpunk",
+    "display_name": "Neon Cyberpunk",
+    "description": "Futuristic cyberpunk theme with electric blue and pink neon effects",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "190 100% 50%",
+        "secondary": "190 30% 8%",
+        "accent": "190 40% 12%",
+        "background": "190 20% 4%",
+        "foreground": "190 30% 95%",
+        "manga_red": "340 100% 60%",
+        "manga_gold": "60 100% 60%",
+        "manga_blue": "190 100% 65%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.0
+      },
+      "borderRadius": "0.25rem",
+      "animations": {
+        "enabled": true,
+        "duration": "200ms"
+      }
+    },
+    "custom_css": "/* Neon Cyberpunk Theme */\n:root {\n  --gradient-neon: linear-gradient(135deg, hsl(190 100% 50%), hsl(340 100% 60%));\n  --glow-cyan: 0 0 20px hsl(190 100% 50% / 0.5);\n  --glow-pink: 0 0 20px hsl(340 100% 60% / 0.5);\n}\n\n.cyber-grid {\n  background-image: \n    linear-gradient(hsl(190 100% 50% / 0.1) 1px, transparent 1px),\n    linear-gradient(90deg, hsl(190 100% 50% / 0.1) 1px, transparent 1px);\n  background-size: 20px 20px;\n}\n\n.neon-text {\n  color: hsl(190 100% 50%);\n  text-shadow: var(--glow-cyan);\n  animation: neon-flicker 2s infinite alternate;\n}\n\n@keyframes neon-flicker {\n  0%, 100% { text-shadow: var(--glow-cyan); }\n  50% { text-shadow: var(--glow-cyan), var(--glow-pink); }\n}\n\n.card {\n  background: hsl(190 30% 8% / 0.9);\n  border: 1px solid hsl(190 100% 50% / 0.3);\n  box-shadow: 0 0 30px hsl(190 100% 50% / 0.2);\n}\n\n.button {\n  background: var(--gradient-neon);\n  box-shadow: var(--glow-cyan);\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  font-weight: 600;\n}"
+  },
+  {
+    "name": "vintage-sepia",
+    "display_name": "Vintage Sepia",
+    "description": "Nostalgic sepia theme with warm browns for classic manga collections",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "35 60% 50%",
+        "secondary": "35 40% 20%",
+        "accent": "35 45% 25%",
+        "background": "35 30% 10%",
+        "foreground": "35 20% 90%",
+        "manga_red": "15 70% 55%",
+        "manga_gold": "45 80% 65%",
+        "manga_blue": "210 40% 60%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.1
+      },
+      "borderRadius": "0.5rem",
+      "animations": {
+        "enabled": true,
+        "duration": "400ms"
+      }
+    },
+    "custom_css": "/* Vintage Sepia Theme */\n:root {\n  --gradient-vintage: linear-gradient(135deg, hsl(35 60% 50%), hsl(25 55% 45%));\n  --paper-texture: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><filter id=\"paper\"><feTurbulence baseFrequency=\"0.04\" numOctaves=\"5\" seed=\"2\"/><feComponentTransfer><feFuncA type=\"discrete\" tableValues=\"0 .5 .7 .8 .9 1\"/></feComponentTransfer></filter><rect width=\"100\" height=\"100\" filter=\"url(%23paper)\" fill=\"%23d4a574\" opacity=\"0.1\"/></svg>');\n}\n\n.vintage-paper {\n  background: var(--paper-texture), linear-gradient(135deg, hsl(35 40% 20%), hsl(35 30% 15%));\n  position: relative;\n}\n\n.vintage-paper::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: radial-gradient(circle at center, transparent 30%, hsl(35 30% 10% / 0.1) 100%);\n}\n\n.ornamental-border {\n  border: 2px solid hsl(35 60% 50%);\n  border-style: dashed;\n  position: relative;\n}\n\n.chapter-title {\n  font-family: serif;\n  color: hsl(35 60% 70%);\n  text-shadow: 2px 2px 4px hsl(35 30% 10% / 0.5);\n}\n\n.manga-cover {\n  filter: sepia(30%) contrast(1.1) brightness(0.9);\n  border: 3px solid hsl(35 60% 50%);\n}"
+  },
+  {
+    "name": "coral-sunset",
+    "display_name": "Coral Sunset",
+    "description": "Warm coral and orange theme inspired by tropical sunsets",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "15 85% 65%",
+        "secondary": "15 40% 15%",
+        "accent": "15 45% 20%",
+        "background": "15 30% 8%",
+        "foreground": "15 25% 95%",
+        "manga_red": "0 90% 65%",
+        "manga_gold": "45 95% 70%",
+        "manga_blue": "200 75% 65%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.05
+      },
+      "borderRadius": "1rem",
+      "animations": {
+        "enabled": true,
+        "duration": "350ms"
+      }
+    },
+    "custom_css": "/* Coral Sunset Theme */\n:root {\n  --gradient-sunset: linear-gradient(135deg, hsl(15 85% 65%), hsl(25 80% 60%), hsl(35 75% 55%));\n  --gradient-evening: linear-gradient(180deg, hsl(15 30% 8%), hsl(25 25% 6%));\n  --shadow-warm: 0 15px 40px -10px hsl(15 85% 40% / 0.3);\n}\n\n.sunset-hero {\n  background: var(--gradient-sunset);\n  position: relative;\n  overflow: hidden;\n}\n\n.sunset-hero::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: radial-gradient(ellipse at bottom, transparent 0%, hsl(15 30% 8% / 0.6) 100%);\n}\n\n.tropical-card {\n  background: linear-gradient(135deg, hsl(15 40% 15% / 0.95), hsl(15 35% 12% / 0.98));\n  border: 2px solid hsl(15 85% 65% / 0.3);\n  box-shadow: var(--shadow-warm);\n  backdrop-filter: blur(10px);\n}\n\n.wave-animation {\n  animation: gentle-wave 3s ease-in-out infinite;\n}\n\n@keyframes gentle-wave {\n  0%, 100% { transform: translateY(0px); }\n  50% { transform: translateY(-5px); }\n}\n\nbody {\n  background: var(--gradient-evening);\n}"
+  },
+  {
+    "name": "monochrome-elite",
+    "display_name": "Monochrome Elite",
+    "description": "Sophisticated black and white theme with silver accents for premium manga",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "0 0% 85%",
+        "secondary": "0 0% 15%",
+        "accent": "0 0% 25%",
+        "background": "0 0% 8%",
+        "foreground": "0 0% 95%",
+        "manga_red": "0 85% 60%",
+        "manga_gold": "45 90% 70%",
+        "manga_blue": "210 80% 70%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.0
+      },
+      "borderRadius": "0.75rem",
+      "animations": {
+        "enabled": true,
+        "duration": "300ms"
+      }
+    },
+    "custom_css": "/* Monochrome Elite Theme */\n:root {\n  --gradient-silver: linear-gradient(135deg, hsl(0 0% 85%), hsl(0 0% 70%));\n  --gradient-chrome: linear-gradient(135deg, hsl(0 0% 90%), hsl(0 0% 80%), hsl(0 0% 85%));\n  --shadow-elite: 0 20px 50px -15px hsl(0 0% 0% / 0.4);\n}\n\n.chrome-finish {\n  background: var(--gradient-chrome);\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  font-weight: 700;\n}\n\n.elite-border {\n  border: 2px solid;\n  border-image: var(--gradient-silver) 1;\n}\n\n.card {\n  background: linear-gradient(135deg, hsl(0 0% 15% / 0.95), hsl(0 0% 8% / 0.98));\n  border: 1px solid hsl(0 0% 30%);\n  box-shadow: var(--shadow-elite);\n}\n\n.manga-page {\n  border: 3px solid hsl(0 0% 85%);\n  box-shadow: \n    0 0 0 1px hsl(0 0% 70%),\n    0 15px 35px -10px hsl(0 0% 0% / 0.3);\n}\n\n.premium-indicator {\n  background: var(--gradient-silver);\n  color: hsl(0 0% 10%);\n  font-weight: 600;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n}"
+  },
+  {
+    "name": "aurora-mystical",
+    "display_name": "Aurora Mystical",
+    "description": "Ethereal aurora theme with shifting colors for fantasy and supernatural manga",
+    "author": "KODELEX",
+    "version": "1.0.0",
+    "theme_config": {
+      "colors": {
+        "primary": "120 70% 60%",
+        "secondary": "120 30% 12%",
+        "accent": "120 35% 18%",
+        "background": "220 40% 6%",
+        "foreground": "120 20% 95%",
+        "manga_red": "340 80% 65%",
+        "manga_gold": "60 90% 70%",
+        "manga_blue": "240 85% 70%"
+      },
+      "fonts": {
+        "heading": "Inter",
+        "body": "Inter"
+      },
+      "spacing": {
+        "scale": 1.0
+      },
+      "borderRadius": "1rem",
+      "animations": {
+        "enabled": true,
+        "duration": "500ms"
+      }
+    },
+    "custom_css": "/* Aurora Mystical Theme */\n:root {\n  --gradient-aurora: linear-gradient(135deg, \n    hsl(120 70% 60%), \n    hsl(280 80% 65%), \n    hsl(340 75% 60%), \n    hsl(60 90% 70%));\n  --aurora-glow: 0 0 30px hsl(120 70% 60% / 0.4);\n}\n\n.aurora-background {\n  background: var(--gradient-aurora);\n  background-size: 400% 400%;\n  animation: aurora-shift 8s ease-in-out infinite;\n}\n\n@keyframes aurora-shift {\n  0%, 100% { background-position: 0% 50%; }\n  25% { background-position: 100% 50%; }\n  50% { background-position: 50% 100%; }\n  75% { background-position: 50% 0%; }\n}\n\n.mystical-glow {\n  box-shadow: var(--aurora-glow);\n  animation: mystical-pulse 3s ease-in-out infinite;\n}\n\n@keyframes mystical-pulse {\n  0%, 100% { box-shadow: var(--aurora-glow); }\n  50% { box-shadow: 0 0 40px hsl(280 80% 65% / 0.6); }\n}\n\n.card {\n  background: linear-gradient(135deg, hsl(220 40% 12% / 0.9), hsl(220 35% 8% / 0.95));\n  border: 2px solid transparent;\n  background-clip: padding-box;\n  position: relative;\n}\n\n.card::before {\n  content: '';\n  position: absolute;\n  inset: 0;\n  padding: 2px;\n  background: var(--gradient-aurora);\n  border-radius: inherit;\n  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);\n  mask-composite: exclude;\n}\n\n.ethereal-text {\n  background: var(--gradient-aurora);\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n  animation: aurora-shift 8s ease-in-out infinite;\n}"
+  }
+]

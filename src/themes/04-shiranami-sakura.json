@@ -1,0 +1,41 @@
+{
+  "id": "04-shiranami-sakura",
+  "name": "04-shiranami-sakura", 
+  "display_name": "Shiranami Sakura",
+  "description": "Cinematic samurai aesthetic with misty red-black palette, inspired by cherry blossoms and Japanese warrior themes",
+  "version": "1.0.0",
+  "author": "KODELEX",
+  "is_active": false,
+  "is_default": false,
+  "preview_image_url": "/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png",
+  "homepage_component": "ShiranamiSakuraHomepage",
+  "theme_config": {
+    "colors": {
+      "primary": "0 65% 55%",
+      "secondary": "240 15% 16%", 
+      "accent": "0 75% 45%",
+      "background": "240 20% 8%",
+      "foreground": "0 20% 92%",
+      "manga_red": "0 75% 55%",
+      "manga_gold": "35 85% 65%",
+      "manga_blue": "210 70% 65%",
+      "muted": "240 15% 12%",
+      "muted_foreground": "0 15% 70%",
+      "border": "0 30% 25%",
+      "destructive": "0 65% 55%"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "spacing": {
+      "scale": 1.1
+    },
+    "borderRadius": "0.75rem",
+    "animations": {
+      "enabled": true,
+      "duration": "400ms"
+    }
+  },
+  "custom_css": ":root {\n  --sakura-glow: 0 0 20px hsl(0 75% 55% / 0.3);\n  --samurai-shadow: 0 10px 30px hsl(0 0% 0% / 0.8);\n}\n\n.shiranami-glow {\n  box-shadow: var(--sakura-glow);\n}\n\n.samurai-card {\n  background: linear-gradient(135deg, hsl(0 0% 0% / 0.6), hsl(0 30% 10% / 0.4));\n  backdrop-filter: blur(10px);\n  border: 1px solid hsl(0 30% 25% / 0.5);\n}\n\n.sakura-text {\n  background: linear-gradient(135deg, hsl(0 75% 65%), hsl(0 55% 45%));\n  -webkit-background-clip: text;\n  background-clip: text;\n  -webkit-text-fill-color: transparent;\n}\n\n.warrior-badge {\n  background: linear-gradient(45deg, hsl(0 75% 35%), hsl(0 65% 45%));\n  box-shadow: 0 4px 15px hsl(0 75% 45% / 0.4);\n}\n\n@media (max-width: 768px) {\n  .shiranami-hero {\n    font-size: 2.5rem;\n  }\n  \n  .sakura-layout {\n    grid-template-columns: 1fr;\n  }\n}"
+}

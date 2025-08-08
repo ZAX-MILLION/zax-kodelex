@@ -1,0 +1,78 @@
+{
+  "name": "KODELEX Manga Reader",
+  "short_name": "Manga Reader",
+  "description": "Premium manga reading experience by KODELEX with beautiful design and cutting-edge technology",
+  "theme_color": "#d4a574",
+  "background_color": "#1a1a1a",
+  "display": "standalone",
+  "orientation": "any",
+  "scope": "/",
+  "start_url": "/",
+  "id": "kodelex-manga-reader",
+  "categories": ["entertainment", "books", "comics"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/kodelex-favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/kodelex-favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/kodelex-favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/kodelex-favicon.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/kodelex-favicon.png", 
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Read Latest Chapter",
+      "short_name": "Latest",
+      "description": "Jump to the latest chapter",
+      "url": "/chapters",
+      "icons": [
+        {
+          "src": "/kodelex-favicon.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Browse Chapters",
+      "short_name": "Chapters",
+      "description": "Browse all available chapters",
+      "url": "/chapters",
+      "icons": [
+        {
+          "src": "/kodelex-favicon.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}

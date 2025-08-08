@@ -1,0 +1,82 @@
+{
+  "templates": {
+    "hero-centered": {
+      "name": "Hero Centered",
+      "description": "Large centered hero section with title and description",
+      "defaultConfig": {
+        "template": "hero-centered",
+        "title": "{{theme.display_name}}",
+        "subtitle": "{{theme.description}}",
+        "styles": {
+          "background": "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%)",
+          "color": "hsl(var(--primary-foreground))"
+        }
+      }
+    },
+    "split-layout": {
+      "name": "Split Layout",
+      "description": "Two-column layout with content and imagery",
+      "defaultConfig": {
+        "template": "split-layout",
+        "leftContent": "{{theme.display_name}}",
+        "rightContent": "{{theme.description}}",
+        "styles": {
+          "background": "hsl(var(--background))"
+        }
+      }
+    },
+    "minimal": {
+      "name": "Minimal",
+      "description": "Clean, minimal homepage layout",
+      "defaultConfig": {
+        "template": "minimal",
+        "title": "{{theme.display_name}}",
+        "subtitle": "{{theme.description}}",
+        "styles": {
+          "padding": "4rem 1rem"
+        }
+      }
+    },
+    "community": {
+      "name": "Community Focus",
+      "description": "Community-oriented layout with features and highlights",
+      "defaultConfig": {
+        "template": "community",
+        "title": "Join Our {{theme.display_name}} Community",
+        "features": [
+          "Weekly reading discussions",
+          "Exclusive early releases", 
+          "Creator interviews & insights"
+        ],
+        "styles": {
+          "background": "hsl(var(--background))"
+        }
+      }
+    },
+    "gallery": {
+      "name": "Gallery Style",
+      "description": "Visual-focused layout showcasing manga covers",
+      "defaultConfig": {
+        "template": "gallery",
+        "title": "{{theme.display_name}}",
+        "showFeaturedManga": true,
+        "styles": {
+          "gridColumns": 3,
+          "imageAspectRatio": "2/3"
+        }
+      }
+    }
+  },
+  "variables": {
+    "{{theme.display_name}}": "Theme display name",
+    "{{theme.description}}": "Theme description",
+    "{{theme.author}}": "Theme author",
+    "{{theme.version}}": "Theme version"
+  },
+  "validation": {
+    "required": ["template"],
+    "allowedTemplates": ["hero-centered", "split-layout", "minimal", "community", "gallery", "default"],
+    "maxTitleLength": 100,
+    "maxDescriptionLength": 500
+  }
+}

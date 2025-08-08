@@ -1,0 +1,51 @@
+{
+  "name": "03-zen-minimalist",
+  "display_name": "03 - Zen Minimalist",
+  "description": "Clean, minimalist design focused on readability and tranquility",
+  "author": "KODELEX",
+  "version": "1.0.0",
+  "premium": false,
+  "price": 0,
+  "theme_config": {
+    "colors": {
+      "primary": "210 20% 40%",
+      "secondary": "210 10% 95%",
+      "accent": "210 15% 60%",
+      "background": "0 0% 100%",
+      "foreground": "210 20% 15%",
+      "manga_red": "0 60% 55%",
+      "manga_gold": "45 70% 60%",
+      "manga_blue": "210 70% 60%"
+    },
+    "fonts": {
+      "heading": "Inter",
+      "body": "Inter"
+    },
+    "spacing": {
+      "scale": 1.2
+    },
+    "borderRadius": "1rem",
+    "animations": {
+      "enabled": true,
+      "duration": "200ms"
+    }
+  },
+  "custom_css": "/* Zen Minimalist Theme */\n:root {\n  --subtle-shadow: 0 2px 20px hsl(var(--primary) / 0.08);\n  --zen-gradient: linear-gradient(180deg, hsl(var(--background)), hsl(var(--secondary) / 0.3));\n}\n\n.card {\n  background: hsl(var(--background));\n  border: 1px solid hsl(var(--primary) / 0.1);\n  box-shadow: var(--subtle-shadow);\n}\n\n.nav-item {\n  font-weight: 400;\n  letter-spacing: 0.05em;\n  transition: color 0.2s ease;\n}\n\n.nav-item:hover {\n  color: hsl(var(--primary));\n}\n\n.chapter-card {\n  transition: all 0.2s ease;\n  border: none;\n  background: transparent;\n}\n\n.chapter-card:hover {\n  background: hsl(var(--secondary) / 0.3);\n  transform: translateY(-2px);\n}\n\nh1, h2, h3 {\n  font-weight: 300;\n  letter-spacing: -0.02em;\n  line-height: 1.2;\n}\n\n.btn-primary {\n  background: hsl(var(--primary));\n  border-radius: 2rem;\n  font-weight: 400;\n  letter-spacing: 0.02em;\n}\n\nbody {\n  font-weight: 300;\n  line-height: 1.7;\n}",
+  "homepage_component": "ZenMinimalistHomepage",
+  "features": [
+    "Ultra-clean design",
+    "Generous whitespace",
+    "Subtle shadows",
+    "Light font weights",
+    "Calm color palette",
+    "Focus on typography"
+  ],
+  "compatible_genres": [
+    "Philosophy",
+    "Self-Help",
+    "Romance",
+    "Drama",
+    "Slice of Life",
+    "Educational"
+  ]
+}
