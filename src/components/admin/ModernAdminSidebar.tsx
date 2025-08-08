@@ -165,11 +165,22 @@ export const ModernAdminSidebar = () => {
   const currentPath = location.pathname;
   const collapsed = state === "collapsed";
   const [searchQuery, setSearchQuery] = useState("");
-  const findSectionForPath = (path: string) => {
-    const section = menuSections.find(sec => sec.items.some(it => path.startsWith(it.url)));
-    return section?.label ?? "Dashboard & Analytics";
+  const getBestSectionForPath = (path: string) => {
+    // Choose the most specific matching item across all sections
+    let best: { section: string; url: string } | null = null;
+    menuSections.forEach(sec => {
+      sec.items.forEach(it => {
+        const match = it.exact ? path === it.url : path.startsWith(it.url);
+        if (match) {
+          if (!best || it.url.length > best.url.length) {
+            best = { section: sec.label, url: it.url };
+          }
+        }
+      });
+    });
+    return best?.section ?? "Dashboard & Analytics";
   };
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set([findSectionForPath(currentPath)]));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set([getBestSectionForPath(currentPath)]));
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const navigate = useNavigate();
@@ -185,7 +196,7 @@ export const ModernAdminSidebar = () => {
 
   // Sync expanded section with current route and keep only one open
   useEffect(() => {
-    setExpandedSections(new Set([findSectionForPath(currentPath)]));
+    setExpandedSections(new Set([getBestSectionForPath(currentPath)]));
   }, [currentPath]);
 
   const isActive = (path: string, exact?: boolean) => {
