@@ -237,9 +237,7 @@ export const BlogManager = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold truncate text-sm md:text-base">{post.title}</h3>
-                      <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>
-                        {post.status}
-                      </Badge>
+                      
                     </div>
                     
                     <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground">
