@@ -253,7 +253,7 @@ export const BlogManager = () => {
     <div className="space-y-6 w-full max-w-screen-2xl mx-auto px-2 sm:px-4 lg:px-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold">Blog Manager</h2>
+          <h2 className="text-xl md:text-2xl font-bold">Blog Manager</h2>
           <p className="text-muted-foreground">Create and manage blog articles</p>
         </div>
         <Button onClick={createNewPost} className="gap-2">
@@ -264,20 +264,20 @@ export const BlogManager = () => {
 
       {/* Blog Posts List */}
       {!showEditor && (
-        <Card>
+        <Card className="max-w-5xl mx-auto">
           <CardHeader>
             <CardTitle>All Articles ({posts.length})</CardTitle>
             <CardDescription>Manage your blog posts and articles</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {posts.map((post) => (
                 <div
                   key={post.id}
-                  className="flex flex-wrap sm:flex-nowrap items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                  className="flex flex-wrap sm:flex-nowrap items-center gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   {/* Featured Image */}
-                  <div className="w-16 h-12 rounded-lg overflow-hidden bg-muted flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-10 rounded-lg overflow-hidden bg-muted flex items-center justify-center flex-shrink-0">
                     {post.featured_image_url ? (
                       <img
                         src={post.featured_image_url}
@@ -292,13 +292,13 @@ export const BlogManager = () => {
                   {/* Post Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold truncate">{post.title}</h3>
+                      <h3 className="font-semibold truncate text-sm md:text-base">{post.title}</h3>
                       <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>
                         {post.status}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">{post.excerpt}</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                    <p className="text-xs md:text-sm text-muted-foreground truncate">{post.excerpt}</p>
+                    <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
@@ -308,7 +308,7 @@ export const BlogManager = () => {
                         {post.view_count} views
                       </div>
                       {post.tags.length > 0 && (
-                        <div className="flex items-center gap-1">
+                        <div className="hidden sm:flex items-center gap-1">
                           <Tag className="h-3 w-3" />
                           {post.tags.slice(0, 2).join(', ')}
                         </div>
