@@ -64,6 +64,7 @@ const contentMenuItems = [
   { title: "Comments Manager", url: "/admin/comments", icon: MessageSquare },
   { title: "User Manager", url: "/admin/users", icon: Users },
   { title: "Role Manager", url: "/admin/roles", icon: UserCheck },
+  { title: "Blog Manager", url: "/admin/blog", icon: FileText },
 ];
 
 // 3. Monetization & Store
@@ -121,6 +122,16 @@ export const AdminSidebar = () => {
       : "hover:bg-muted/50 text-muted-foreground hover:text-foreground";
   };
 
+  // Keep only the group that contains the active route expanded
+  const isRouteMatch = (item: { url: string; exact?: boolean }) =>
+    item.exact ? currentPath === item.url : currentPath.startsWith(item.url);
+
+  const dashboardOpen = dashboardMenuItems.some(isRouteMatch);
+  const contentOpen = contentMenuItems.some(isRouteMatch);
+  const monetizationOpen = monetizationMenuItems.some(isRouteMatch);
+  const systemOpen = systemMenuItems.some(isRouteMatch);
+  const devToolsOpen = devToolsMenuItems.some(isRouteMatch);
+
   return (
     <Sidebar
       className={collapsed ? "w-14" : "w-64"}
@@ -144,125 +155,130 @@ export const AdminSidebar = () => {
           )}
         </div>
 
-        {/* 1. Dashboard & Analytics */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             Dashboard & Analytics
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {dashboardMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      end={item.exact}
-                      className={getNavClasses(item.url, item.exact)}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {dashboardOpen && (
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {dashboardMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink 
+                        to={item.url} 
+                        end={item.exact}
+                        className={getNavClasses(item.url, item.exact)}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
         </SidebarGroup>
 
-        {/* 2. Content & Community */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             Content & Community
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {contentMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url}
-                      className={getNavClasses(item.url)}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {contentOpen && (
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {contentMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink 
+                        to={item.url}
+                        className={getNavClasses(item.url)}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
         </SidebarGroup>
 
-        {/* 3. Monetization & Store */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             Monetization & Store
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {monetizationMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url}
-                      className={getNavClasses(item.url)}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {monetizationOpen && (
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {monetizationMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink 
+                        to={item.url}
+                        className={getNavClasses(item.url)}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
         </SidebarGroup>
 
-        {/* 4. System & Settings */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             System & Settings
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {systemMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url}
-                      className={getNavClasses(item.url)}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {systemOpen && (
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {systemMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink 
+                        to={item.url}
+                        className={getNavClasses(item.url)}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
         </SidebarGroup>
 
-        {/* 5. Dev Tools & Maintenance */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             Dev Tools & Maintenance
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {devToolsMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url}
-                      className={getNavClasses(item.url)}
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {devToolsOpen && (
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {devToolsMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink 
+                        to={item.url}
+                        className={getNavClasses(item.url)}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
