@@ -250,7 +250,7 @@ export const BlogManager = () => {
   }
 
   return (
-    <div className="space-y-6 w-full max-w-screen-2xl mx-auto px-2 sm:px-4 lg:px-6 overflow-x-hidden">
+    <div className="space-y-6 w-full max-w-screen-xl mx-auto px-2 sm:px-4 lg:px-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 className="text-xl md:text-2xl font-bold">Blog Manager</h2>
