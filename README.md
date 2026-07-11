@@ -22,7 +22,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Open **http://localhost:6000**. On first launch without env vars, the setup wizard guides you through Supabase configuration and admin account creation.
+Open **http://localhost:8080**. On first launch without env vars, the setup wizard guides you through Supabase configuration and admin account creation.
 
 ## Environment variables
 
@@ -40,7 +40,7 @@ See [docs/SETUP.md](docs/SETUP.md) for full production setup.
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Dev server on port **6000** |
+| `npm run dev` | Dev server on port **8080** |
 | `npm run build` | Production build |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript check |
