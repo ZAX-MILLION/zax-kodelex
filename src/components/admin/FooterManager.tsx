@@ -80,7 +80,8 @@ const defaultFooterSettings: FooterSettings = {
         { id: '5', label: 'Discord Server', url: 'https://discord.gg/zaxmillion', isExternal: true },
         { id: '6', label: 'Forums', url: '/community', isExternal: false },
         { id: '7', label: 'Support Us', url: '/support', isExternal: false },
-        { id: '8', label: 'Send Feedback', url: '/feedback', isExternal: false },
+        { id: '8', label: 'Ko-fi', url: 'https://ko-fi.com/zaxmi', isExternal: true },
+        { id: '9', label: 'Send Feedback', url: '/feedback', isExternal: false },
       ]
     },
     {
@@ -88,10 +89,10 @@ const defaultFooterSettings: FooterSettings = {
       title: 'Legal',
       icon: 'Shield',
       links: [
-        { id: '9', label: 'Privacy Policy', url: '/privacy', isExternal: false },
-        { id: '10', label: 'Terms of Service', url: '/terms', isExternal: false },
-        { id: '11', label: 'Cookie Policy', url: '/cookies', isExternal: false },
-        { id: '12', label: 'DMCA Policy', url: '/dmca', isExternal: false },
+        { id: '10', label: 'Privacy Policy', url: '/privacy', isExternal: false },
+        { id: '11', label: 'Terms of Service', url: '/terms', isExternal: false },
+        { id: '12', label: 'Cookie Policy', url: '/cookies', isExternal: false },
+        { id: '13', label: 'DMCA Policy', url: '/dmca', isExternal: false },
       ]
     }
   ],

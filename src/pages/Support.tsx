@@ -4,7 +4,9 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, Coffee, DollarSign, Check } from 'lucide-react';
+import { Heart, Coffee, DollarSign, Check, ExternalLink } from 'lucide-react';
+
+const KOFI_SUPPORT_URL = 'https://ko-fi.com/zaxmi';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -154,6 +156,29 @@ const Support = () => {
           </Card>
         )}
 
+        <Card className="p-6 bg-gradient-to-r from-[#ff5f5f]/10 to-primary/10 border-[#ff5f5f]/30">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <h2 className="text-xl font-semibold flex items-center justify-center sm:justify-start gap-2">
+                <Coffee className="h-5 w-5 text-[#ff5f5f]" />
+                Support on Ko-fi
+              </h2>
+              <p className="text-muted-foreground mt-1">
+                Buy us a coffee and help keep Zax Million running.
+              </p>
+            </div>
+            <Button
+              asChild
+              className="bg-[#ff5f5f] hover:bg-[#ff5f5f]/90 text-white shrink-0"
+            >
+              <a href={KOFI_SUPPORT_URL} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Support on Ko-fi
+              </a>
+            </Button>
+          </div>
+        </Card>
+
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Donation Form */}
           <Card className="p-6 bg-gradient-card border-border/50">
@@ -284,7 +309,7 @@ const Support = () => {
                 Secure & Safe
               </h3>
               <p className="text-muted-foreground">
-                All donations are processed securely through PayPal. 
+                Donations are processed securely through PayPal or Ko-fi.
                 We never store your payment information.
               </p>
             </Card>

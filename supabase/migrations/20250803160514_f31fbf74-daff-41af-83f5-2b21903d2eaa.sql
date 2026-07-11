@@ -31,7 +31,7 @@ INSERT INTO public.social_media_settings (platform_name, platform_url, icon_type
 ('Patreon', 'https://patreon.com/zaxmillion', 'lucide', '#ff424d', 1),
 ('Discord', 'https://discord.gg/zaxmillion', 'lucide', '#5865f2', 2),
 ('PayPal', 'https://paypal.me/zaxmillion', 'lucide', '#0070ba', 3),
-('Ko-fi', 'https://ko-fi.com/zaxmillion', 'lucide', '#ff5f5f', 4);
+('Ko-fi', 'https://ko-fi.com/zaxmi', 'lucide', '#ff5f5f', 4);
 
 -- Create trigger for updated_at
 CREATE TRIGGER update_social_media_settings_updated_at
