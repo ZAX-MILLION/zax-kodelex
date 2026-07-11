@@ -107,7 +107,7 @@ export const DemoResetButton = () => {
         description: 'A demonstration manga series for testing purposes',
         author: 'Demo Author',
         status: 'ongoing' as const,
-        cover_image_url: '/lovable-uploads/demo-cover.jpg',
+        cover_image_url: '/uploads/demo-cover.jpg',
         genres: ['Action', 'Adventure'],
         tags: ['Demo', 'Sample']
       };
@@ -127,9 +127,9 @@ export const DemoResetButton = () => {
           title: 'Chapter 1: The Beginning',
           chapter_number: 1,
           pages: [
-            { page_number: 1, image_url: '/lovable-uploads/demo-page-1.jpg' },
-            { page_number: 2, image_url: '/lovable-uploads/demo-page-2.jpg' },
-            { page_number: 3, image_url: '/lovable-uploads/demo-page-3.jpg' }
+            { page_number: 1, image_url: '/uploads/demo-page-1.jpg' },
+            { page_number: 2, image_url: '/uploads/demo-page-2.jpg' },
+            { page_number: 3, image_url: '/uploads/demo-page-3.jpg' }
           ],
           page_count: 3,
           sort_order: 1
@@ -139,8 +139,8 @@ export const DemoResetButton = () => {
           title: 'Chapter 2: The Journey',
           chapter_number: 2,
           pages: [
-            { page_number: 1, image_url: '/lovable-uploads/demo-page-4.jpg' },
-            { page_number: 2, image_url: '/lovable-uploads/demo-page-5.jpg' }
+            { page_number: 1, image_url: '/uploads/demo-page-4.jpg' },
+            { page_number: 2, image_url: '/uploads/demo-page-5.jpg' }
           ],
           page_count: 2,
           sort_order: 2,

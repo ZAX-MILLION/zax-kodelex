@@ -26,9 +26,7 @@ export const InstallationGate = ({ children }: InstallationGateProps) => {
 
   // Show setup wizard if not installed
   if (needsSetup) {
-    const isPreview = window.location.hostname.includes('preview--') || 
-                     window.location.hostname.includes('lovable') ||
-                     window.location.href.includes('lovable.app/container');
+    const isPreview = window.location.hostname.includes('preview--');
     
     return (
       <div className="min-h-screen">

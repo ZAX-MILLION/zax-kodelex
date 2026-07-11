@@ -23,13 +23,13 @@ export const getSecurityHeaders = (environment: 'development' | 'production' = '
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https: http:", // Allow external images for manga pages
       "media-src 'self' blob:",
-      "connect-src 'self' https://eslcxgomsaizesekdvcc.supabase.co wss://eslcxgomsaizesekdvcc.supabase.co https://api.lovable.dev",
+      "connect-src 'self' https://eslcxgomsaizesekdvcc.supabase.co wss://eslcxgomsaizesekdvcc.supabase.co",
       "frame-src 'self' https://www.google.com https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
       "upgrade-insecure-requests",
-      isDev ? "frame-ancestors 'self' https://lovable.dev https://*.lovable.dev" : "frame-ancestors 'none'"
+      isDev ? "frame-ancestors 'self'" : "frame-ancestors 'none'"
     ].join('; '),
 
     // HTTP Strict Transport Security - 1 year, include subdomains

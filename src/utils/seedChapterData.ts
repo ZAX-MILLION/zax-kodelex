@@ -43,7 +43,7 @@ export const seedChapterData = async () => {
           view_count: Math.floor(Math.random() * 1000) + 50,
           is_locked: isLocked,
           unlock_cost: unlockCost,
-          thumbnail_url: `/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png`,
+          thumbnail_url: `/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png`,
           pages: JSON.stringify(generatePages(Math.floor(Math.random() * 25) + 15))
         });
       }
@@ -87,7 +87,7 @@ const generatePages = (pageCount: number): string[] => {
   const pages = [];
   for (let i = 1; i <= pageCount; i++) {
     // Use the same placeholder image for all pages for now
-    pages.push(`/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png`);
+    pages.push(`/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png`);
   }
   return pages;
 };

@@ -19,12 +19,10 @@ export const getInstallationConfig = () => {
 };
 
 export const needsInstallation = (): boolean => {
-  // Skip installation in development/preview mode (Lovable editor)
-  if (import.meta.env.DEV || window.location.hostname.includes('lovable.dev')) {
+  if (import.meta.env.DEV) {
     return false;
   }
-  
-  // In production, check installation complete status
+
   const isComplete = isInstallationComplete();
   return !isComplete;
 };

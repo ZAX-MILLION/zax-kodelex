@@ -45,8 +45,7 @@ export const SetupWizard = () => {
 
   const handleComplete = async () => {
     try {
-      const isPreview = window.location.hostname.includes('preview--') || 
-                       window.location.hostname.includes('lovable');
+      const isPreview = window.location.hostname.includes('preview--');
       
       if (isPreview) {
         // In preview mode, just set local skip flag

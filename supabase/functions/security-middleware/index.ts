@@ -18,13 +18,13 @@ const getSecurityHeaders = (environment: 'development' | 'production' = 'product
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https: http:",
       "media-src 'self' blob:",
-      "connect-src 'self' https://eslcxgomsaizesekdvcc.supabase.co wss://eslcxgomsaizesekdvcc.supabase.co https://api.lovable.dev",
+      "connect-src 'self' https://eslcxgomsaizesekdvcc.supabase.co wss://eslcxgomsaizesekdvcc.supabase.co",
       "frame-src 'self' https://www.google.com https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
       "upgrade-insecure-requests",
-      isDev ? "frame-ancestors 'self' https://lovable.dev https://*.lovable.dev" : "frame-ancestors 'none'"
+      isDev ? "frame-ancestors 'self'" : "frame-ancestors 'none'"
     ].join('; '),
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
     'X-Frame-Options': isDev ? 'SAMEORIGIN' : 'DENY',
@@ -113,7 +113,7 @@ function validateInput(input: string): { isValid: boolean; sanitized: string; th
   // SQL injection patterns
   const sqlPatterns = [
     /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/i,
-    /(\'|\"|;|--|\||\*)/,
+    /('|"|;|--|\||\*)/,
     /(\b(OR|AND)\b.*=.*)/i
   ];
   

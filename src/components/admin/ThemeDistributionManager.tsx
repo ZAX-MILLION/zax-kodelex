@@ -111,7 +111,7 @@ export const ThemeDistributionManager: React.FC = () => {
       description: "Preparing self-hosted version without builder dependencies...",
     });
 
-    // This would remove all Lovable-specific code and create a clean standalone version
+    // Create a clean standalone distribution package
     await generateThemePackage();
   };
 

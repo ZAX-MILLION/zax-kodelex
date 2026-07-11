@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 
 interface ProductionSettings {
-  hideLovableBadge: boolean;
   removeBuilderUI: boolean;
   disableDevFeatures: boolean;
   enableSEOMode: boolean;
@@ -30,7 +29,6 @@ interface ProductionSettings {
 export const ProductionModeManager: React.FC = () => {
   const { toast } = useToast();
   const [settings, setSettings] = useState<ProductionSettings>({
-    hideLovableBadge: false,
     removeBuilderUI: false,
     disableDevFeatures: false,
     enableSEOMode: true,
@@ -58,39 +56,11 @@ export const ProductionModeManager: React.FC = () => {
       // Save settings
       localStorage.setItem('production_settings', JSON.stringify(settings));
 
-      // Apply Lovable badge hiding
-      if (settings.hideLovableBadge) {
-        const lovableBadges = document.querySelectorAll('[data-lovable-badge], .lovable-badge, [aria-label="Edit in Lovable"]');
-        lovableBadges.forEach(badge => {
-          (badge as HTMLElement).style.display = 'none';
+      if (settings.removeBuilderUI) {
+        const builderElements = document.querySelectorAll('.edit-overlay, .builder-overlay');
+        builderElements.forEach(element => {
+          (element as HTMLElement).style.display = 'none';
         });
-
-        // Add global CSS to hide any Lovable UI elements
-        const hideBuilderCSS = `
-          /* Hide Lovable specific elements */
-          [data-lovable-badge],
-          .lovable-badge,
-          [aria-label="Edit in Lovable"],
-          [data-builder="lovable"] {
-            display: none !important;
-          }
-          
-          /* Hide any floating edit buttons */
-          button[aria-label*="Edit"],
-          button[title*="Edit"],
-          .edit-overlay,
-          .builder-overlay {
-            display: none !important;
-          }
-        `;
-
-        let styleElement = document.getElementById('hide-builder-ui');
-        if (!styleElement) {
-          styleElement = document.createElement('style');
-          styleElement.id = 'hide-builder-ui';
-          document.head.appendChild(styleElement);
-        }
-        styleElement.textContent = hideBuilderCSS;
       }
 
       // Apply performance optimizations
@@ -206,22 +176,6 @@ export const ProductionModeManager: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="hide-lovable">Hide Lovable Badge</Label>
-                <p className="text-sm text-muted-foreground">
-                  Remove "Edit in Lovable" footer badge and overlays
-                </p>
-              </div>
-              <Switch
-                id="hide-lovable"
-                checked={settings.hideLovableBadge}
-                onCheckedChange={(checked) => 
-                  setSettings(prev => ({ ...prev, hideLovableBadge: checked }))
-                }
-              />
-            </div>
-
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="remove-builder">Remove Builder UI</Label>
@@ -374,8 +328,8 @@ export const ProductionModeManager: React.FC = () => {
               Production Checklist
             </h5>
             <ul className="text-sm space-y-1">
-              <li className={`flex items-center gap-2 ${settings.hideLovableBadge ? 'text-green-600' : 'text-muted-foreground'}`}>
-                {settings.hideLovableBadge ? '✓' : '○'} Builder elements hidden
+              <li className={`flex items-center gap-2 ${settings.removeBuilderUI ? 'text-green-600' : 'text-muted-foreground'}`}>
+                {settings.removeBuilderUI ? '✓' : '○'} Builder elements hidden
               </li>
               <li className={`flex items-center gap-2 ${settings.enableSEOMode ? 'text-green-600' : 'text-muted-foreground'}`}>
                 {settings.enableSEOMode ? '✓' : '○'} SEO optimizations enabled

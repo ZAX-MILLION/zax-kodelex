@@ -20,18 +20,11 @@ export const useInstallationStatus = (): InstallationStatus => {
 
   const checkInstallationStatus = async () => {
     try {
-      // Enhanced detection for Lovable containers and preview environments
-      const isPreview = window.location.hostname.includes('preview--') || 
-                       window.location.hostname.includes('lovable') ||
-                       window.location.href.includes('lovable.app/container');
-      const isDev = import.meta.env.DEV;
+      const isPreview = window.location.hostname.includes('preview--');
       const skipSetup = localStorage.getItem('skipSetup') === 'true';
       const installationComplete = localStorage.getItem('installation_complete') === 'true';
-      
-      // Optional global override via environment
       const skipOverride = import.meta.env.VITE_SKIP_SETUP === 'true';
 
-      // If we should skip setup entirely, return as installed
       if (isPreview || skipSetup || skipOverride || installationComplete) {
         setStatus({
           isInstalled: true,
@@ -41,7 +34,6 @@ export const useInstallationStatus = (): InstallationStatus => {
         return;
       }
 
-      // For personal use, always mark as installed
       setStatus({
         isInstalled: true,
         isLoading: false,
