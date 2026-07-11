@@ -44,7 +44,7 @@ Migrations live in `supabase/migrations/` (80+ files). They create tables for se
 In Supabase **Authentication → URL Configuration**:
 
 - **Site URL:** your production domain (e.g. `https://zaxmillion.com`)
-- **Redirect URLs:** add `https://zaxmillion.com/reset-password` and `http://localhost:8080/reset-password`
+- **Redirect URLs:** add `https://zaxmillion.com/reset-password` and `http://localhost:6000/reset-password`
 
 Customize email templates with Zax Million branding under **Authentication → Email Templates**.
 

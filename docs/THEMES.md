@@ -165,7 +165,7 @@ Themes support a `customCss` field — raw CSS injected at runtime after variabl
 
 ## Development tips
 
-- Run `npm run dev` on port **8080**
+- Run `npm run dev` on port **6000**
 - Switch themes live in admin to preview without rebuild
 - Theme components are lazy-loaded; check Network tab for chunk names like `04-shiranami-sakura-*.js`
 - Use browser DevTools → Elements → `:root` to inspect injected CSS variables
