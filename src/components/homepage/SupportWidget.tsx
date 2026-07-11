@@ -74,16 +74,16 @@ const SupportWidget = ({ className = '' }: SupportWidgetProps) => {
   return (
     <Card className={`bg-gradient-to-r from-primary/10 to-destructive/10 border border-primary/20 hover:border-primary/40 transition-all duration-300 ${className}`}>
       <CardContent className="p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           {/* Main Support Button */}
           <Button
             variant="ghost"
             onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center gap-3 text-primary hover:text-destructive font-semibold group"
+            className="flex items-center gap-2 sm:gap-3 text-primary hover:text-destructive font-semibold group min-w-0"
           >
-            <Heart className="h-5 w-5 fill-current group-hover:scale-110 transition-transform" />
-            <span>Support Zax Million</span>
-            <ExternalLink className="h-3 w-3 opacity-60" />
+            <Heart className="h-5 w-5 fill-current group-hover:scale-110 transition-transform shrink-0" />
+            <span className="truncate">Support Zax Million</span>
+            <ExternalLink className="h-3 w-3 opacity-60 shrink-0" />
           </Button>
 
           {/* Social Platform Buttons */}
@@ -93,7 +93,7 @@ const SupportWidget = ({ className = '' }: SupportWidgetProps) => {
                 ? 'opacity-100 translate-x-0 max-w-xs' 
                 : 'opacity-0 translate-x-4 max-w-0 pointer-events-none overflow-hidden'
             }`}>
-              <div className="flex items-center gap-2 whitespace-nowrap">
+              <div className="flex flex-wrap items-center gap-2">
                 {socialPlatforms.slice(0, 3).map((platform) => {
                   const IconComponent = getIconForPlatform(platform.platform_name);
                   return (

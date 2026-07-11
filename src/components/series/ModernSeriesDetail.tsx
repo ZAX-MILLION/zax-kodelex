@@ -256,14 +256,14 @@ const ModernSeriesDetail = () => {
         }} />
         </div>
         
-        <div className="relative container mx-auto px-4 py-16">
+        <div className="relative container mx-auto px-4 py-8 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Enhanced Cover Section */}
             <div className="lg:col-span-3">
               <div className="relative group">
                 {/* Glow Effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-all duration-500" />
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
                 
                 <div className="relative">
                   <LazyImage src={getOptimizedImageUrl(series.cover_image_url || getFallbackCoverImage(series.id), 400, 600)} alt={series.title} className="w-full aspect-[3/4] object-cover rounded-2xl shadow-2xl border border-border/20 transform group-hover:scale-105 transition-transform duration-300" />
@@ -300,7 +300,7 @@ const ModernSeriesDetail = () => {
               
               {/* Title Section */}
               <div className="space-y-4">
-                <h1 className="text-4xl lg:text-6xl font-black bg-gradient-to-r from-foreground via-primary to-secondary bg-clip-text text-transparent leading-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-6xl font-black bg-gradient-to-r from-foreground via-primary to-secondary bg-clip-text text-transparent leading-tight">
                   {series.title}
                 </h1>
                 

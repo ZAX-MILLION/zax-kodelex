@@ -370,7 +370,7 @@ const SeriesPage = () => {
                         {item.title}
                       </CardTitle>
                       
-                      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <BookOpen className="h-3 w-3" />
                           {item.total_chapters} ch
@@ -379,9 +379,9 @@ const SeriesPage = () => {
                           <Eye className="h-3 w-3" />
                           {item.view_count || 0}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {formatDistanceToNow(new Date(item.updated_at), { addSuffix: true })}
+                        <div className="flex items-center gap-1 min-w-0">
+                          <Clock className="h-3 w-3 shrink-0" />
+                          <span className="truncate">{formatDistanceToNow(new Date(item.updated_at), { addSuffix: true })}</span>
                         </div>
                       </div>
                     </CardHeader>
@@ -423,15 +423,15 @@ const SeriesPage = () => {
                                   navigate(`/series/${item.id}/chapter/${chapter.chapter_number}`);
                                 }
                               }}
-                              className="flex items-center justify-between px-2 py-1 bg-muted rounded text-xs cursor-pointer hover:bg-muted/80 transition-colors"
+                              className="flex items-center justify-between gap-2 px-2 py-1 bg-muted rounded text-xs cursor-pointer hover:bg-muted/80 transition-colors"
                             >
-                              <span className="flex items-center gap-2">
-                                <span>Ch.{chapter.chapter_number}</span>
-                                {chapter.title && <span>: {chapter.title}</span>}
+                              <span className="flex items-center gap-2 min-w-0">
+                                <span className="shrink-0">Ch.{chapter.chapter_number}</span>
+                                {chapter.title && <span className="truncate">: {chapter.title}</span>}
                                 {/* Status Badge */}
                                 <Badge 
                                   variant="outline" 
-                                  className={`text-[10px] px-1 py-0 ${
+                                  className={`text-[10px] px-1 py-0 shrink-0 ${
                                     chapter.is_locked 
                                       ? 'bg-red-100 text-red-700 border-red-200' 
                                       : 'bg-green-100 text-green-700 border-green-200'
@@ -440,7 +440,7 @@ const SeriesPage = () => {
                                   {chapter.is_locked ? 'Locked' : 'Free'}
                                 </Badge>
                               </span>
-                              <span className="text-muted-foreground">
+                              <span className="text-muted-foreground shrink-0">
                                 {formatDistanceToNow(new Date(chapter.release_date), { addSuffix: true })}
                               </span>
                             </div>

@@ -42,7 +42,7 @@ export const ChapterSettings = ({ isOpen, onClose }: ChapterSettingsProps) => {
   if (!isOpen) return null;
 
   return (
-    <Card className="fixed top-20 right-4 z-50 w-80 p-4 bg-background/95 backdrop-blur-sm border shadow-lg">
+    <Card className="fixed top-20 right-4 z-50 w-80 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] overflow-y-auto p-4 bg-background/95 backdrop-blur-sm border shadow-lg">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold flex items-center gap-2">
           <Settings className="h-4 w-4" />

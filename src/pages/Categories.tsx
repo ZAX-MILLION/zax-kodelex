@@ -190,7 +190,7 @@ const Categories = () => {
                       <p className="text-muted-foreground mb-4">
                         {selectedCategory.description}
                       </p>
-                      <div className="flex gap-6 text-sm">
+                      <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
                         <div className="flex items-center gap-1">
                           <BookOpen className="h-4 w-4" />
                           {selectedCategory.series_count} series
@@ -207,11 +207,11 @@ const Categories = () => {
                     </div>
 
                     {/* View Mode Toggle */}
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="font-semibold">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+                      <h3 className="font-semibold min-w-0 truncate">
                         All {selectedCategory.name} Series ({categorySeries.length})
                       </h3>
-                      <div className="flex rounded-lg border">
+                      <div className="flex rounded-lg border self-start sm:self-auto shrink-0">
                         <Button
                           variant={viewMode === 'grid' ? 'default' : 'ghost'}
                           size="sm"

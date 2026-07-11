@@ -157,8 +157,7 @@ export const WebtoonReader = ({
       {/* Webtoon Pages Container - Seamless vertical flow */}
       <div 
         ref={containerRef}
-        className="pt-16 sm:pt-20 pb-16 sm:pb-20 overflow-y-auto overflow-x-hidden"
-        style={{ height: '100vh' }}
+        className="pt-16 sm:pt-20 pb-16 sm:pb-20 overflow-y-auto overflow-x-hidden h-[100vh] h-[100dvh]"
       >
         <div className={boxedWidth ? "max-w-4xl mx-auto" : "w-full"}>
           {/* No gaps between images - seamless webtoon experience */}
@@ -208,7 +207,7 @@ export const WebtoonReader = ({
               size="sm"
               onClick={onPreviousChapter}
               disabled={!hasPreviousChapter}
-              className="px-2 sm:px-4"
+              className="h-10 min-w-[44px] px-3 sm:px-4"
             >
               <ChevronLeft className="h-4 w-4 sm:mr-1" />
               <span className="hidden sm:inline">Previous</span>
@@ -228,7 +227,7 @@ export const WebtoonReader = ({
               size="sm"
               onClick={onNextChapter}
               disabled={!hasNextChapter}
-              className="px-2 sm:px-4"
+              className="h-10 min-w-[44px] px-3 sm:px-4"
             >
               <span className="hidden sm:inline">Next</span>
               <ChevronRight className="h-4 w-4 sm:ml-1" />

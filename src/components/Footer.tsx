@@ -88,7 +88,7 @@ const Footer = () => {
     <footer className="bg-card/50 border-t border-border/30 mt-auto">
       <div className={`container mx-auto px-4 ${footerSettings.compactMode ? 'py-4' : 'py-8'}`}>
         {/* Main Footer Content */}
-        <div className={`grid grid-cols-1 md:grid-cols-${Math.min(footerSettings.sections.length + 1, 4)} gap-4 ${footerSettings.compactMode ? 'mb-4' : 'mb-6'}`}>
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ${footerSettings.compactMode ? 'mb-4' : 'mb-6'}`}>
           {/* Brand Section */}
           <div className="md:col-span-1">
             <div className={`flex items-center space-x-2 ${footerSettings.compactMode ? 'mb-2' : 'mb-3'}`}>

@@ -177,7 +177,7 @@ const Help = () => {
           </Alert>
 
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="content">Content</TabsTrigger>
               <TabsTrigger value="users">Users</TabsTrigger>
@@ -420,7 +420,7 @@ const Help = () => {
           </Alert>
 
           <Tabs defaultValue="requirements" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 h-auto">
               <TabsTrigger value="requirements">Requirements</TabsTrigger>
               <TabsTrigger value="installation">Installation</TabsTrigger>
               <TabsTrigger value="configuration">Configuration</TabsTrigger>

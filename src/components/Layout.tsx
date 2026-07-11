@@ -36,9 +36,9 @@ const Layout = ({ children }: LayoutProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
       <CreativeNavBar />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 w-full max-w-full">{children}</main>
       <BackToTop />
       <Footer />
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />

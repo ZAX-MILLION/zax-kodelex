@@ -65,13 +65,13 @@ export const HeroSlider = ({
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setCurrentFilter('trending')}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
                       currentFilter === 'trending' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
-                    <TrendingUp className="h-3 w-3" />
+                    <TrendingUp className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -83,13 +83,13 @@ export const HeroSlider = ({
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setCurrentFilter('new')}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
                       currentFilter === 'new' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
-                    <Clock className="h-3 w-3" />
+                    <Clock className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -101,13 +101,13 @@ export const HeroSlider = ({
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setCurrentFilter('random')}
-                    className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
                       currentFilter === 'random' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
-                    <Shuffle className="h-3 w-3" />
+                    <Shuffle className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -193,8 +193,8 @@ export const HeroSlider = ({
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute -left-12 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
-            <CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
+            <CarouselPrevious className="hidden md:flex absolute left-2 lg:-left-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
+            <CarouselNext className="hidden md:flex absolute right-2 lg:-right-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
           </Carousel>
         </div>
       </div>

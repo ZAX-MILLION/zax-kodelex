@@ -122,7 +122,7 @@ const CoinStorePopup: React.FC<CoinStorePopupProps> = ({ isOpen, onClose }) => {
           {/* Quick Amount Buttons */}
           <div>
             <Label className="text-sm font-medium mb-3 block">Quick Select</Label>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
               {quickAmounts.map(amount => (
                 <Button
                   key={amount}

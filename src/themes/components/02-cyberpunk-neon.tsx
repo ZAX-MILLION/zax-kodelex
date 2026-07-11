@@ -15,36 +15,6 @@ export const CyberpunkNeonHomepage = () => {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNlMTFkNDgiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMjAgMjBjMC0xMS4wNDYtOC45NTQtMjAtMjAtMjB2MjBoMjB6bTAgMHYyMGgyMGMwLTExLjA0Ni04Ljk1NC0yMC0yMC0yMHoiLz48L2c+PC9nPjwvc3ZnPg==')] animate-pulse" />
       </div>
 
-      {/* Futuristic Header */}
-      <header className="relative z-10 border-b border-primary/20 bg-background/90 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <Zap className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                NEXUS
-              </span>
-            </div>
-            
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/chapters" className="text-foreground hover:text-primary transition-colors duration-300 relative group">
-                Chapters
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </Link>
-              <Link to="/profile" className="text-foreground hover:text-primary transition-colors duration-300 relative group">
-                Profile
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </Link>
-              <Button variant="outline" className="border-primary/50 hover:bg-primary/20 hover:border-primary">
-                Sign In
-              </Button>
-            </nav>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="relative z-10 py-20">
         <div className="container mx-auto px-4">

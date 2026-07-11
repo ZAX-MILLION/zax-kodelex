@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useSubscription } from '@/hooks/useSubscription';
 import { AdminOnly, AuthorOnly, RoleGuard } from '@/components/auth/RoleGuard';
 import ThemeSelector from './ThemeSelector';
@@ -38,6 +44,11 @@ const CreativeNavBar = () => {
   const seriesMatch = /^\/series\/([a-z0-9-]+)/i.exec(location.pathname);
   const currentSeriesId = seriesMatch ? seriesMatch[1] : null;
   const { wallet } = useCoinWallet();
+
+  // Close the mobile menu whenever the route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
   const navItems = [{
     icon: Home,
     label: t('header.home', 'Home'),
@@ -132,87 +143,101 @@ const CreativeNavBar = () => {
             )}
             {/* User Menu */}
             {!isLoading && <>
-                {user ? <div className="relative group">
-                     {/* Profile Picture - Compact */}
-                    <div className="flex items-center space-x-1 xs:space-x-2 cursor-pointer">
-                      <div className="hidden xs:block">
-                        <UserProfileBadge />
-                      </div>
-                      <div className="w-6 h-6 xs:w-8 xs:h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-primary to-manga-gold flex items-center justify-center">
-                        <User className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-white" />
-                      </div>
-                    </div>
-                    
-                    {/* Dropdown Menu on Hover */}
-                    <div className="absolute right-0 top-full mt-2 w-60 xs:w-72 bg-background/95 backdrop-blur-xl border border-border/30 rounded-xl xs:rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                      <div className="p-3 xs:p-4">
-                        {/* User Info */}
-                        <div className="flex items-center space-x-2 xs:space-x-3 pb-3 xs:pb-4 border-b border-border/30">
-                          <div className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-primary to-manga-gold flex items-center justify-center">
-                            <User className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-foreground text-xs xs:text-sm truncate">{user.email?.split('@')[0]}</div>
-                            <div className="text-xs text-muted-foreground truncate">{user.email}</div>
-                            {/* Role Badge */}
-                            {userProfile?.role && <div className="flex items-center gap-1 mt-1 flex-wrap">
-                                {userProfile.role === 'admin' && <Badge variant="outline" className="text-xs bg-red-500/10 text-red-600 border-red-500/30">
-                                    <Shield className="h-2 w-2 xs:h-3 xs:w-3 mr-1" />
-                                    Admin
-                                  </Badge>}
-                                {userProfile.role === 'author' && <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-600 border-blue-500/30">
-                                    <Edit className="h-2 w-2 xs:h-3 xs:w-3 mr-1" />
-                                    Author
-                                  </Badge>}
-                                {isPremium && <Badge variant="outline" className="text-xs bg-amber-500/10 text-amber-600 border-amber-500/30">
-                                    <Crown className="h-2 w-2 xs:h-3 xs:w-3 mr-1" />
-                                    Premium
-                                  </Badge>}
-                              </div>}
-                          </div>
+                {user ? <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center space-x-1 xs:space-x-2 cursor-pointer outline-none" aria-label="Open user menu">
+                        <div className="hidden xs:block">
+                          <UserProfileBadge />
                         </div>
-                        
-                         {/* Quick Links */}
-                         <div className="py-2 xs:py-3 space-y-1">
-                           <Link to="/profile" className="flex items-center space-x-2 xs:space-x-3 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg xs:rounded-xl hover:bg-muted/50 transition-colors">
-                             <User className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
-                             <span className="text-xs xs:text-sm">Profile</span>
-                           </Link>
-                           <Link to="/settings" className="flex items-center space-x-2 xs:space-x-3 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg xs:rounded-xl hover:bg-muted/50 transition-colors">
-                             <Settings className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
-                             <span className="text-xs xs:text-sm">Settings</span>
-                           </Link>
-                           
-                           {/* Theme Selector */}
-                           
-                           
-                           {/* Language Switcher */}
-                           
-                           
-                           <AdminOnly hide>
-                             <Link to="/admin" className="flex items-center space-x-2 xs:space-x-3 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg xs:rounded-xl hover:bg-muted/50 transition-colors">
-                               <Shield className="h-3 w-3 xs:h-4 xs:w-4 text-manga-red" />
-                               <span className="text-xs xs:text-sm text-manga-red">Admin Panel</span>
-                             </Link>
-                           </AdminOnly>
-                           <AuthorOnly hide>
-                             <Link to="/author" className="flex items-center space-x-2 xs:space-x-3 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg xs:rounded-xl hover:bg-muted/50 transition-colors">
-                               <Edit className="h-3 w-3 xs:h-4 xs:w-4 text-blue-500" />
-                               <span className="text-xs xs:text-sm text-blue-600">Author Dashboard</span>
-                             </Link>
-                           </AuthorOnly>
-                         </div>
-                        
-                        {/* Sign Out */}
-                        <div className={`${isAdmin ? 'pt-2 xs:pt-3 border-t border-border/30' : 'pt-0'}`}>
-                          <button onClick={signOut} className="flex items-center space-x-2 xs:space-x-3 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg xs:rounded-xl hover:bg-destructive/10 transition-colors w-full text-left">
-                            <LogOut className="h-3 w-3 xs:h-4 xs:w-4 text-destructive" />
-                            <span className="text-xs xs:text-sm text-destructive">Sign Out</span>
-                          </button>
+                        <div className="w-6 h-6 xs:w-8 xs:h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-primary to-manga-gold flex items-center justify-center">
+                          <User className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4 text-white" />
+                        </div>
+                      </button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent align="end" className="w-60 xs:w-72 bg-background/95 backdrop-blur-xl border border-border/30 rounded-xl xs:rounded-2xl shadow-xl p-3 xs:p-4 z-50">
+                      {/* User Info */}
+                      <div className="flex items-center space-x-2 xs:space-x-3 pb-3 xs:pb-4 border-b border-border/30">
+                        <div className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-primary to-manga-gold flex items-center justify-center">
+                          <User className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-foreground text-xs xs:text-sm truncate">{user.email?.split('@')[0]}</div>
+                          <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+                          {/* Role Badge */}
+                          {userProfile?.role && <div className="flex items-center gap-1 mt-1 flex-wrap">
+                              {userProfile.role === 'admin' && <Badge variant="outline" className="text-xs bg-red-500/10 text-red-600 border-red-500/30">
+                                  <Shield className="h-2 w-2 xs:h-3 xs:w-3 mr-1" />
+                                  Admin
+                                </Badge>}
+                              {userProfile.role === 'author' && <Badge variant="outline" className="text-xs bg-blue-500/10 text-blue-600 border-blue-500/30">
+                                  <Edit className="h-2 w-2 xs:h-3 xs:w-3 mr-1" />
+                                  Author
+                                </Badge>}
+                              {isPremium && <Badge variant="outline" className="text-xs bg-amber-500/10 text-amber-600 border-amber-500/30">
+                                  <Crown className="h-2 w-2 xs:h-3 xs:w-3 mr-1" />
+                                  Premium
+                                </Badge>}
+                            </div>}
                         </div>
                       </div>
-                    </div>
-                  </div> : <div className="flex items-center space-x-1 xs:space-x-2">
+
+                      {/* Wallet balance */}
+                      <button
+                        onClick={() => setShowCoinStore(true)}
+                        className="flex items-center justify-between w-full my-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg xs:rounded-xl bg-muted/50 hover:bg-muted/70 transition-colors"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Coins className="h-4 w-4 text-primary" />
+                          <span className="text-xs xs:text-sm">Wallet</span>
+                        </span>
+                        <span className="text-xs xs:text-sm font-semibold">{wallet?.balance ?? 0}</span>
+                      </button>
+
+                      {/* Quick Links */}
+                      <div className="py-1 xs:py-2 space-y-1">
+                        <DropdownMenuItem asChild className="cursor-pointer rounded-lg xs:rounded-xl px-2 xs:px-3 py-1.5 xs:py-2">
+                          <Link to="/profile" className="flex items-center space-x-2 xs:space-x-3">
+                            <User className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
+                            <span className="text-xs xs:text-sm">Profile</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild className="cursor-pointer rounded-lg xs:rounded-xl px-2 xs:px-3 py-1.5 xs:py-2">
+                          <Link to="/settings" className="flex items-center space-x-2 xs:space-x-3">
+                            <Settings className="h-3 w-3 xs:h-4 xs:w-4 text-muted-foreground" />
+                            <span className="text-xs xs:text-sm">Settings</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <AdminOnly hide>
+                          <DropdownMenuItem asChild className="cursor-pointer rounded-lg xs:rounded-xl px-2 xs:px-3 py-1.5 xs:py-2">
+                            <Link to="/admin" className="flex items-center space-x-2 xs:space-x-3">
+                              <Shield className="h-3 w-3 xs:h-4 xs:w-4 text-manga-red" />
+                              <span className="text-xs xs:text-sm text-manga-red">Admin Panel</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        </AdminOnly>
+                        <AuthorOnly hide>
+                          <DropdownMenuItem asChild className="cursor-pointer rounded-lg xs:rounded-xl px-2 xs:px-3 py-1.5 xs:py-2">
+                            <Link to="/author" className="flex items-center space-x-2 xs:space-x-3">
+                              <Edit className="h-3 w-3 xs:h-4 xs:w-4 text-blue-500" />
+                              <span className="text-xs xs:text-sm text-blue-600">Author Dashboard</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        </AuthorOnly>
+                      </div>
+
+                      {/* Sign Out */}
+                      <div className="pt-2 xs:pt-3 border-t border-border/30">
+                        <DropdownMenuItem
+                          onClick={signOut}
+                          className="cursor-pointer rounded-lg xs:rounded-xl px-2 xs:px-3 py-1.5 xs:py-2 hover:bg-destructive/10 focus:bg-destructive/10"
+                        >
+                          <LogOut className="h-3 w-3 xs:h-4 xs:w-4 text-destructive mr-2 xs:mr-3" />
+                          <span className="text-xs xs:text-sm text-destructive">Sign Out</span>
+                        </DropdownMenuItem>
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu> : <div className="flex items-center space-x-1 xs:space-x-2">
                     <Button variant="ghost" size="sm" onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))} className="rounded-lg xs:rounded-xl h-6 xs:h-8 sm:h-9 text-xs xs:text-sm px-2 xs:px-3">
                       Sign In
                     </Button>
@@ -256,6 +281,31 @@ const CreativeNavBar = () => {
 
                 {/* Mobile User Actions */}
                 {user ? <div className="pt-3 xs:pt-4 border-t border-border/30 space-y-2">
+                    <button
+                      onClick={() => {
+                        setShowCoinStore(true);
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center justify-between w-full px-3 py-2 rounded-xl bg-background/50 border border-border/50 hover:bg-background/70 transition-colors text-sm xs:text-base h-8 xs:h-10"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Coins className="h-3 w-3 xs:h-4 xs:w-4 text-primary" />
+                        Wallet
+                      </span>
+                      <span className="font-semibold">{wallet?.balance ?? 0}</span>
+                    </button>
+                    <Link to="/profile" onClick={() => setIsMenuOpen(false)}>
+                      <Button variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-background/70 rounded-xl text-sm xs:text-base h-8 xs:h-10 justify-start">
+                        <User className="h-3 w-3 xs:h-4 xs:w-4 mr-2" />
+                        Profile
+                      </Button>
+                    </Link>
+                    <Link to="/settings" onClick={() => setIsMenuOpen(false)}>
+                      <Button variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-background/70 rounded-xl text-sm xs:text-base h-8 xs:h-10 justify-start">
+                        <Settings className="h-3 w-3 xs:h-4 xs:w-4 mr-2" />
+                        Settings
+                      </Button>
+                    </Link>
                     <AdminOnly hide>
                       <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
                         <Button variant="outline" className="w-full bg-background/50 border-border/50 hover:bg-background/70 rounded-xl text-sm xs:text-base h-8 xs:h-10">

@@ -71,8 +71,8 @@ export const BlogSection = () => {
   }
 
   return (
-    <section className="w-full">
-      <div className="flex items-center justify-between mb-6">
+    <section className="w-full container mx-auto px-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <BookOpen className="h-5 w-5 text-primary" />
@@ -80,7 +80,7 @@ export const BlogSection = () => {
           </div>
           <p className="text-muted-foreground">Stay updated with our latest news and insights</p>
         </div>
-        <Button variant="outline" asChild>
+        <Button variant="outline" asChild className="w-full sm:w-auto">
           <Link to="/blog">
             View All
             <ChevronRight className="h-4 w-4 ml-1" />

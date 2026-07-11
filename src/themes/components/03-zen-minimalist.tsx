@@ -9,30 +9,6 @@ import heroBg from '@/assets/hero-bg.jpg';
 export const ZenMinimalistHomepage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Clean Header */}
-      <header className="border-b border-border/50">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Circle className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-light tracking-wide">ZEN</span>
-            </div>
-            
-            <nav className="hidden md:flex items-center space-x-12">
-              <Link to="/chapters" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
-                CHAPTERS
-              </Link>
-              <Link to="/profile" className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
-                PROFILE
-              </Link>
-              <Button variant="ghost" size="sm" className="font-medium">
-                SIGN IN
-              </Button>
-            </nav>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="py-32">
         <div className="container mx-auto px-4">

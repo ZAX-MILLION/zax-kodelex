@@ -158,12 +158,12 @@ const Browse = () => {
         {/* Multi-Series Status */}
         <Card className={`mb-6 ${allSeries.length > 0 ? 'border-green-200 bg-green-50 dark:bg-green-950/20' : 'border-orange-200 bg-orange-50 dark:bg-orange-950/20'}`}>
           <CardHeader>
-            <CardTitle className={`flex items-center justify-between ${allSeries.length > 0 ? 'text-green-800 dark:text-green-200' : 'text-orange-800 dark:text-orange-200'}`}>
-              <div className="flex items-center gap-2">
-                <Database className="h-5 w-5" />
-                {allSeries.length > 0 ? 'Multi-Series Data Active' : 'Demo Mode - Sample Data'}
+            <CardTitle className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${allSeries.length > 0 ? 'text-green-800 dark:text-green-200' : 'text-orange-800 dark:text-orange-200'}`}>
+              <div className="flex items-center gap-2 min-w-0">
+                <Database className="h-5 w-5 shrink-0" />
+                <span className="truncate">{allSeries.length > 0 ? 'Multi-Series Data Active' : 'Demo Mode - Sample Data'}</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 shrink-0">
                 <Button
                   variant="outline"
                   size="sm"
@@ -201,9 +201,9 @@ const Browse = () => {
 
         {/* Filters and Search */}
         <div className="mb-6 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col lg:flex-row lg:flex-wrap gap-4">
             {/* Search */}
-            <div className="relative flex-1">
+            <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search series, authors..."
@@ -215,7 +215,7 @@ const Browse = () => {
 
             {/* Category Filter */}
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-[200px]">
+              <SelectTrigger className="w-full lg:w-[200px]">
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
@@ -238,7 +238,7 @@ const Browse = () => {
             {/* Content Type Filter */}
             {config.showContentTypeFilter && (
               <Select value={contentType} onValueChange={setContentType}>
-                <SelectTrigger className="w-full md:w-[150px]">
+                <SelectTrigger className="w-full lg:w-[150px]">
                   <SelectValue placeholder="Content Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -251,7 +251,7 @@ const Browse = () => {
 
             {/* Sort */}
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-[180px]">
+              <SelectTrigger className="w-full lg:w-[180px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -420,7 +420,7 @@ const SeriesListItem = ({ series }: { series: typeof mockSeries[0] }) => (
             {series.description}
           </p>
           
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div className="flex flex-wrap gap-1">
               {series.categories.slice(0, 3).map((cat, i) => (
                 <Badge 
@@ -434,7 +434,7 @@ const SeriesListItem = ({ series }: { series: typeof mockSeries[0] }) => (
               ))}
             </div>
             
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Star className="h-3 w-3" />
                 {series.rating?.toFixed(1) || 'N/A'}
