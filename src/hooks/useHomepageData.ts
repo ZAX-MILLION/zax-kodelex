@@ -132,7 +132,7 @@ export const useSeriesData = () => {
   ) => {
     try {
       // Get total count first
-      let countQuery = supabase.from('manga_meta').select('*', { count: 'exact', head: true });
+      const countQuery = supabase.from('manga_meta').select('*', { count: 'exact', head: true });
       const { count, error: countError } = await countQuery;
       if (countError) throw countError;
       setTotalCount(count || 0);

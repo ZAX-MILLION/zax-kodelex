@@ -14,15 +14,7 @@ interface AnalyticsEvent {
 
 export const useAnalyticsTracking = () => {
   const { user } = useAuth();
-  
-  // Safely handle router context - may not exist during installation
-  let location;
-  try {
-    location = useLocation();
-  } catch (error) {
-    // Router context not available, use fallback
-    location = { pathname: window.location.pathname };
-  }
+  const location = useLocation();
   const sessionIdRef = useRef<string>(generateSessionId());
   const pageStartTimeRef = useRef<number>(Date.now());
   const eventQueueRef = useRef<AnalyticsEvent[]>([]);

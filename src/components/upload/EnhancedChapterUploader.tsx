@@ -200,7 +200,7 @@ export const EnhancedChapterUploader: React.FC<EnhancedChapterUploaderProps> = (
     setIsUploading(true);
 
     try {
-      let pageUrls: string[] = [];
+      const pageUrls: string[] = [];
       
       // Upload images for manga
       if (seriesType === 'manga' && chapterData.pages.length > 0) {

@@ -175,7 +175,7 @@ export const UserAnalytics = () => {
       const dailyUsers = dailyMap.get(dateStr)?.size || 0;
       
       // Calculate weekly active users (7-day rolling window)
-      let weeklyUsers = new Set();
+      const weeklyUsers = new Set();
       for (let i = 0; i < 7; i++) {
         const checkDate = format(subDays(d, i), 'yyyy-MM-dd');
         const users = dailyMap.get(checkDate);

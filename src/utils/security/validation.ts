@@ -25,7 +25,7 @@ export const VALIDATION_PATTERNS = {
   slug: /^[a-z0-9-]+$/,
   hexColor: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
   noHtml: /^[^<>]*$/,
-  safeText: /^[\w\s\.\,\!\?\-\(\)\'\"]+$/
+  safeText: /^[\w\s.,!?\-()'"']+$/
 };
 
 // Validation schemas for different data types
@@ -208,7 +208,7 @@ export class SecurityValidator {
   static preventSqlInjection(input: string): boolean {
     const sqlPatterns = [
       /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/i,
-      /(\'|\"|;|--|\||\*)/,
+      /('|"|;|--|\||\*)/,
       /(\b(OR|AND)\b.*=.*)/i
     ];
 

@@ -102,6 +102,9 @@ export const useUploadSystem = () => {
       const hash = await calculateFileHash(file);
 
       // Store metadata in upload_metadata table
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      const uploaderId = authUser?.id ?? null;
+
       const { error: metadataError } = await supabase
         .from('upload_metadata')
         .insert({
@@ -110,7 +113,7 @@ export const useUploadSystem = () => {
           file_size: file.size,
           file_type: file.type.split('/')[0], // 'image', 'application', etc.
           mime_type: file.type,
-          uploader_id: (await supabase.auth.getUser()).data.user?.id!,
+          uploader_id: uploaderId,
           upload_context: metadata.uploadContext,
           hash_value: hash,
           metadata: {

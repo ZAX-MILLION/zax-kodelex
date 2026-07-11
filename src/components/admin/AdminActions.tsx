@@ -148,7 +148,7 @@ export const AdminActions = () => {
     // Date filter
     if (dateFilter !== "all") {
       const now = new Date();
-      let cutoffDate = new Date();
+      const cutoffDate = new Date();
       
       switch (dateFilter) {
         case "today":

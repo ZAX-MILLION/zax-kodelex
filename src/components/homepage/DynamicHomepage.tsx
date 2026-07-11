@@ -152,7 +152,7 @@ const WidgetRenderer: React.FC<{ widget: WidgetConfig }> = ({ widget }) => {
           </Card>
         );
 
-      case 'random-pick':
+      case 'random-pick': {
         const randomSeries = latestSeries[Math.floor(Math.random() * latestSeries.length)];
         return randomSeries ? (
           <Card>
@@ -183,6 +183,7 @@ const WidgetRenderer: React.FC<{ widget: WidgetConfig }> = ({ widget }) => {
             </CardContent>
           </Card>
         ) : null;
+      }
 
       default:
         return (

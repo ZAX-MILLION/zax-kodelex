@@ -35,7 +35,7 @@ export const usePerformanceMonitor = (): PerformanceMonitorResult => {
         let fcp = 0;
         let lcp = 0;
         let cls = 0;
-        let fid = 0;
+        const fid = 0;
 
         // First Contentful Paint
         const fcpEntry = performance.getEntriesByName('first-contentful-paint')[0];

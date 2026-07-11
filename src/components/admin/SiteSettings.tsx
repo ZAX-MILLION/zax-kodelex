@@ -94,7 +94,8 @@ export const SiteSettings = () => {
       const b = parseInt(hex.slice(5, 7), 16) / 255;
       const max = Math.max(r, g, b);
       const min = Math.min(r, g, b);
-      let h, s, l = (max + min) / 2;
+      let h: number, s: number;
+      const l = (max + min) / 2;
       if (max === min) {
         h = s = 0;
       } else {

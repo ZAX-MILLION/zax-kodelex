@@ -465,8 +465,8 @@ export const runComprehensiveDataReset = async () => {
     // Phase 4: Generate chapters for each series
     console.log('📄 Phase 4: Generating chapters...');
     let totalChapters = 0;
-    let allChapters = [];
-    let allPages = [];
+    const allChapters = [];
+    const allPages = [];
 
     for (const series of allSeriesData) {
       const chapterCount = getRandomChapterCount();
@@ -500,7 +500,7 @@ export const runComprehensiveDataReset = async () => {
 
     // Phase 5: Generate view data for trending
     console.log('👁️ Phase 5: Generating view data...');
-    let allViews = [];
+    const allViews = [];
     
     for (const series of allSeriesData) {
       const views = generateViewData(series.id, Math.floor(series.view_count / 10)); // Generate 10% of view_count as actual view records
