@@ -7,6 +7,15 @@ export const cleanupDemoData = async () => {
     // Delete in order to avoid foreign key constraints
     
     // 1. Delete chapter-related data first
+    const { error: pricesError } = await supabase
+      .from('chapter_prices')
+      .delete()
+      .neq('id', '00000000-0000-0000-0000-000000000000');
+
+    if (pricesError) {
+      console.warn('Warning cleaning chapter_prices:', pricesError);
+    }
+
     const { error: chaptersError } = await supabase
       .from('chapters')
       .delete()

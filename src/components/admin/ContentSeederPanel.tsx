@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { cleanupDemoData, confirmAndCleanup } from '@/utils/cleanupDemoData';
-import { seedRealisticContent } from '@/utils/seedRealisticContent';
+import { seedDemoLibrary } from '@/utils/seedDemoLibrary';
 import { 
   Database, 
   Trash2, 
@@ -60,19 +60,22 @@ export const ContentSeederPanel: React.FC = () => {
 
   const handleSeedContent = async () => {
     setIsLoading(true);
-    setOperation('Seeding realistic content...');
+    setOperation('Seeding demo library (20 series × 20 chapters)...');
     
     try {
-      const result = await seedRealisticContent();
+      const result = await seedDemoLibrary();
+      const summary = result.stats
+        ? `${result.stats.series} series, ${result.stats.chapters} chapters (${result.stats.lockedChapters} locked)`
+        : (result.success ? 'Success' : 'Failed');
       setLastResult({
         success: result.success,
-        message: result.message || (result.success ? 'Success' : 'Failed')
+        message: summary
       });
       
       if (result.success) {
         toast({
           title: "Content Seeded",
-          description: result.message || "Realistic content has been added successfully.",
+          description: `Demo library created: ${summary}`,
         });
       } else {
         toast({
@@ -100,7 +103,7 @@ export const ContentSeederPanel: React.FC = () => {
 
   const handleCompleteReset = async () => {
     const confirmed = window.confirm(
-      'This will delete ALL existing content and replace it with new realistic content. This action cannot be undone. Continue?'
+      'This will delete ALL existing content and replace it with 20 demo series (400 chapters). This action cannot be undone. Continue?'
     );
     
     if (!confirmed) return;
@@ -116,16 +119,18 @@ export const ContentSeederPanel: React.FC = () => {
       }
 
       // Then seed new content
-      const seedResult = await seedRealisticContent();
+      const seedResult = await seedDemoLibrary();
       setLastResult({
         success: seedResult.success,
-        message: seedResult.message || (seedResult.success ? 'Success' : 'Failed')
+        message: seedResult.success
+          ? `Created ${seedResult.stats?.series ?? 20} series with ${seedResult.stats?.chapters ?? 400} chapters`
+          : 'Failed'
       });
       
       if (seedResult.success) {
         toast({
           title: "Complete Reset Successful",
-          description: "All content has been replaced with realistic data.",
+          description: `Demo library seeded: ${seedResult.stats?.series ?? 20} series, ${seedResult.stats?.chapters ?? 400} chapters.`,
         });
       } else {
         toast({
