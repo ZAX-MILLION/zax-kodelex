@@ -9,22 +9,14 @@ import Footer from './Footer';
 import ThemeSelector from './ThemeSelector';
 import BackToTop from './BackToTop';
 import CreativeNavBar from './CreativeNavBar';
-import kodeLexLogo from '@/assets/kodelex-logo.png';
+import zaxMillionLogo from '@/assets/zax-million-logo.png';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  // Safely handle router context - may not exist during installation
-  let location;
-  try {
-    location = useLocation();
-  } catch (error) {
-    // Router context not available, use fallback
-    location = { pathname: window.location.pathname } as any;
-  }
-  
+  const location = useLocation();
   const { user, isAdmin, signOut, isLoading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   

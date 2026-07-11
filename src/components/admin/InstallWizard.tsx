@@ -31,7 +31,7 @@ export const InstallWizard = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isInstalling, setIsInstalling] = useState(false);
   const [config, setConfig] = useState<InstallConfig>({
-    siteName: 'KODELEX Manga Reader',
+    siteName: 'Zax Million Manga Reader',
     siteDescription: 'Professional manga and novel reading platform',
     adminEmail: '',
     adminPassword: '',

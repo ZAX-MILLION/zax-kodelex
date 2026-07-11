@@ -77,9 +77,9 @@ INSERT INTO public.child_themes (
   theme_config
 ) VALUES (
   'default',
-  'KODELEX Default',
+  'Zax Million Default',
   'The original dark theme with warm amber accents',
-  'KODELEX',
+  'Zax Million',
   true,
   '{
     "colors": {

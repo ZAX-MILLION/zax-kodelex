@@ -58,7 +58,7 @@ interface FooterSettings {
 }
 
 const defaultFooterSettings: FooterSettings = {
-  brandName: 'KODELEX',
+  brandName: 'Zax Million',
   brandDescription: 'Premium manga reading platform with high-quality translations and an amazing community.',
   sections: [
     {
@@ -77,7 +77,7 @@ const defaultFooterSettings: FooterSettings = {
       title: 'Community',
       icon: 'Users',
       links: [
-        { id: '5', label: 'Discord Server', url: 'https://discord.gg/kodelex', isExternal: true },
+        { id: '5', label: 'Discord Server', url: 'https://discord.gg/zaxmillion', isExternal: true },
         { id: '6', label: 'Forums', url: '/community', isExternal: false },
         { id: '7', label: 'Support Us', url: '/support', isExternal: false },
         { id: '8', label: 'Send Feedback', url: '/feedback', isExternal: false },
@@ -96,9 +96,9 @@ const defaultFooterSettings: FooterSettings = {
     }
   ],
   socialLinks: [
-    { id: '1', platform: 'GitHub', url: 'https://github.com/kodelex', icon: 'Github' },
-    { id: '2', platform: 'Twitter', url: 'https://twitter.com/kodelex', icon: 'Twitter' },
-    { id: '3', platform: 'Email', url: 'mailto:contact@kodelex.com', icon: 'Mail' },
+    { id: '1', platform: 'GitHub', url: 'https://github.com/zaxmillion', icon: 'Github' },
+    { id: '2', platform: 'Twitter', url: 'https://twitter.com/zaxmillion', icon: 'Twitter' },
+    { id: '3', platform: 'Email', url: 'mailto:contact@zaxmillion.com', icon: 'Mail' },
   ],
   copyrightText: 'All rights reserved.',
   version: 'v1.0.0',

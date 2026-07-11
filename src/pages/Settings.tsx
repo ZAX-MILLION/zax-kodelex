@@ -117,7 +117,7 @@ const Settings = () => {
   };
 
   const themes = [
-    { value: 'default', label: 'KODELEX Default' },
+    { value: 'default', label: 'Zax Million Default' },
     { value: 'cyberpunk', label: 'Cyberpunk Neon' },
     { value: 'zen', label: 'Zen Minimalist' },
     { value: 'sakura', label: 'Shiranami Sakura' }

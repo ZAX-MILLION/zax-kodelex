@@ -40,7 +40,7 @@ interface Theme {
 const defaultThemes: Theme[] = [
   {
     id: 'default',
-    name: 'KODELEX Dark',
+    name: 'Zax Million Dark',
     description: 'Eye-friendly dark theme with warm amber accents',
     primary: '35 85% 65%',
     secondary: '230 15% 16%',

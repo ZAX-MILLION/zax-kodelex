@@ -55,7 +55,7 @@ const PWAInstaller: React.FC = () => {
       setDeferredPrompt(null);
       toast({
         title: "App Installed!",
-        description: "KODELEX Manga Reader has been installed to your device.",
+        description: "Zax Million Manga Reader has been installed to your device.",
       });
     };
 
@@ -77,7 +77,7 @@ const PWAInstaller: React.FC = () => {
     if (outcome === 'accepted') {
       toast({
         title: "Installing...",
-        description: "KODELEX Manga Reader is being installed to your device.",
+        description: "Zax Million Manga Reader is being installed to your device.",
       });
     }
     

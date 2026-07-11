@@ -68,7 +68,7 @@ const FeedbackPage = () => {
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold">Send Feedback</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              We value your feedback! Help us improve KODELEX by sharing your thoughts, 
+              We value your feedback! Help us improve Zax Million by sharing your thoughts, 
               reporting bugs, or suggesting new features.
             </p>
           </div>
@@ -199,7 +199,7 @@ const FeedbackPage = () => {
                           {type.value === 'bug' && 'Report technical issues or errors'}
                           {type.value === 'feature' && 'Suggest new features or improvements'}
                           {type.value === 'general' && 'Share your thoughts and opinions'}
-                          {type.value === 'compliment' && 'Tell us what you love about KODELEX'}
+                          {type.value === 'compliment' && 'Tell us what you love about Zax Million'}
                         </div>
                       </div>
                     </div>
@@ -216,15 +216,15 @@ const FeedbackPage = () => {
                   <div>
                     <div className="font-medium">Email Support</div>
                     <div className="text-sm text-muted-foreground">
-                      <a href="mailto:support@kodelex.com" className="text-primary hover:underline">
-                        support@kodelex.com
+                      <a href="mailto:support@zaxmillion.com" className="text-primary hover:underline">
+                        support@zaxmillion.com
                       </a>
                     </div>
                   </div>
                   <div>
                     <div className="font-medium">Discord Community</div>
                     <div className="text-sm text-muted-foreground">
-                      <a href="https://discord.gg/kodelex" className="text-primary hover:underline">
+                      <a href="https://discord.gg/zaxmillion" className="text-primary hover:underline">
                         Join our Discord server
                       </a>
                     </div>

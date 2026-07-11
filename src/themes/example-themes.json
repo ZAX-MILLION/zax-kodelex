@@ -3,7 +3,7 @@
     "name": "crimson-night",
     "display_name": "Crimson Night",
     "description": "Dark theme with blood-red accents, perfect for action manga",
-    "author": "KODELEX",
+    "author": "Zax Million",
     "version": "1.0.0",
     "theme_config": {
       "colors": {
@@ -35,7 +35,7 @@
     "name": "ocean-breeze",
     "display_name": "Ocean Breeze",
     "description": "Cool blue theme inspired by calm seas",
-    "author": "KODELEX",
+    "author": "Zax Million",
     "version": "1.0.0",
     "theme_config": {
       "colors": {
@@ -67,7 +67,7 @@
     "name": "sunset-manga",
     "display_name": "Sunset Manga",
     "description": "Warm golden theme perfect for romance and slice-of-life",
-    "author": "KODELEX",
+    "author": "Zax Million",
     "version": "1.0.0",
     "theme_config": {
       "colors": {
@@ -99,7 +99,7 @@
     "name": "forest-zen",
     "display_name": "Forest Zen",
     "description": "Nature-inspired green theme for peaceful reading",
-    "author": "KODELEX",
+    "author": "Zax Million",
     "version": "1.0.0",
     "theme_config": {
       "colors": {
@@ -131,7 +131,7 @@
     "name": "cyber-purple",
     "display_name": "Cyber Purple",
     "description": "Futuristic purple theme for sci-fi and cyberpunk manga",
-    "author": "KODELEX",
+    "author": "Zax Million",
     "version": "1.0.0",
     "theme_config": {
       "colors": {

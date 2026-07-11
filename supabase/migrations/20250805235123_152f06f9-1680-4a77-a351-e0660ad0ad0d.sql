@@ -249,10 +249,10 @@ INSERT INTO public.theme_settings (
   is_default,
   category
 ) VALUES (
-  'kodelex-default',
-  'KODELEX Default Dark',
+  'zaxmillion-default',
+  'Zax Million Default Dark',
   'The original dark theme with warm amber accents and modern design',
-  'KODELEX Team',
+  'Zax Million Team',
   true,
   true,
   'dark'

@@ -127,7 +127,7 @@ const Help = () => {
               <div className="flex items-center gap-3 p-3 border rounded-lg">
                 <div className="w-6 h-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded"></div>
                 <div>
-                  <div className="font-medium">KODELEX Default</div>
+                  <div className="font-medium">Zax Million Default</div>
                   <div className="text-sm text-muted-foreground">Warm amber accents on dark background</div>
                 </div>
               </div>
@@ -372,7 +372,7 @@ const Help = () => {
               <CardContent className="space-y-2">
                 <ul className="space-y-1 text-sm">
                   <li>• Use the contact form on our website</li>
-                  <li>• Email: support@kodeleximanga.com</li>
+                  <li>• Email: support@zaxmillionimanga.com</li>
                   <li>• Include your license key in requests</li>
                   <li>• Describe the issue in detail</li>
                 </ul>

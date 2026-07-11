@@ -246,7 +246,7 @@ export const ModernAdminSidebar = () => {
                 <Home className="h-6 w-6 text-white" />
               </div>
               <div>
-                <span className="font-bold text-lg text-white group-hover:text-primary transition-colors">Kodelex</span>
+                <span className="font-bold text-lg text-white group-hover:text-primary transition-colors">Zax Million</span>
                 <p className="text-xs text-slate-400">Admin Panel</p>
               </div>
             </Link>

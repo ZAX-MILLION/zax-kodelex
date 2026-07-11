@@ -134,7 +134,7 @@ const CommunityPage = () => {
                   Connect instantly with other manga fans, get real-time updates, and participate in live discussions.
                 </p>
                 <Button asChild className="w-full">
-                  <a href="https://discord.gg/kodelex" target="_blank" rel="noopener noreferrer">
+                  <a href="https://discord.gg/zaxmillion" target="_blank" rel="noopener noreferrer">
                     Join Discord Server
                     <ExternalLink className="h-4 w-4 ml-2" />
                   </a>

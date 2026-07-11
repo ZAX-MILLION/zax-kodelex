@@ -226,10 +226,10 @@ const Contact = () => {
                   Send us an email and we'll respond within 24 hours
                 </p>
                 <a 
-                  href="mailto:contact@kodelex.com" 
+                  href="mailto:contact@zaxmillion.com" 
                   className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
-                  contact@kodelex.com
+                  contact@zaxmillion.com
                 </a>
               </CardContent>
             </Card>

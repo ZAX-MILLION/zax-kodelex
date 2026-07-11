@@ -82,7 +82,7 @@ const SupportWidget = ({ className = '' }: SupportWidgetProps) => {
             className="flex items-center gap-3 text-primary hover:text-destructive font-semibold group"
           >
             <Heart className="h-5 w-5 fill-current group-hover:scale-110 transition-transform" />
-            <span>Support Kodelex</span>
+            <span>Support Zax Million</span>
             <ExternalLink className="h-3 w-3 opacity-60" />
           </Button>
 

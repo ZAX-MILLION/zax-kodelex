@@ -66,8 +66,8 @@ const CACHE_KEY = 'theme_engine_cache';
 const CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour in milliseconds
 
 const DEFAULT_THEME: Partial<ThemeSettings> = {
-  theme_name: 'kodelex-fallback',
-  display_name: 'KODELEX Fallback',
+  theme_name: 'zaxmillion-fallback',
+  display_name: 'Zax Million Fallback',
   version: '1.0.0',
   slider_settings: {
     autoSlideInterval: 5000,
@@ -205,8 +205,8 @@ export const useThemeEngine = () => {
     
     return {
       id: data.id || 'fallback',
-      theme_name: data.name || 'kodelex-fallback',
-      display_name: data.display_name || 'KODELEX Fallback',
+      theme_name: data.name || 'zaxmillion-fallback',
+      display_name: data.display_name || 'Zax Million Fallback',
       description: data.description || '',
       author: data.author || '',
       version: data.version || '1.0.0',

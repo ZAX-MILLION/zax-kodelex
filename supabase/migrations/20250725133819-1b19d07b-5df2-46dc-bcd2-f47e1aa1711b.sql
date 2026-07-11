@@ -18,7 +18,7 @@ INSERT INTO manga_meta (
   'ongoing',
   ARRAY['Action', 'Adventure', 'Supernatural', 'Drama'],
   ARRAY['samurai', 'spirits', 'sword', 'fantasy', 'japanese'],
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-covers/crimson-blade-cover.jpg',
+  '/src/assets/manga-covers/crimson-blade-cover.jpg',
   'T',
   'en'
 ), (
@@ -29,7 +29,7 @@ INSERT INTO manga_meta (
   'ongoing',
   ARRAY['Fantasy', 'Magic', 'School', 'Adventure'],
   ARRAY['academy', 'magic', 'friendship', 'crystals', 'spells'],
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-covers/mystic-academy-cover.jpg',
+  '/src/assets/manga-covers/mystic-academy-cover.jpg',
   'T',
   'en'
 ), (
@@ -40,7 +40,7 @@ INSERT INTO manga_meta (
   'completed',
   ARRAY['Fantasy', 'Adventure', 'Dragons', 'Medieval'],
   ARRAY['knights', 'dragons', 'quest', 'medieval', 'legacy'],
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-covers/dragons-legacy-cover.jpg',
+  '/src/assets/manga-covers/dragons-legacy-cover.jpg',
   'T',
   'en'
 );
@@ -58,38 +58,38 @@ INSERT INTO chapters (
 ) VALUES (
   1,
   'The Awakening',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p5.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p5.jpg"]'::jsonb,
   5,
   1,
   '2024-01-15',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg'
+  '/src/assets/manga-pages/crimson-blade-ch1-p1.jpg'
 ), (
   2,
   'First Steps',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg"]'::jsonb,
   4,
   2,
   '2024-01-22',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg'
+  '/src/assets/manga-pages/crimson-blade-ch1-p1.jpg'
 ), (
   3,
   'The Hidden Village',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p5.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p5.jpg"]'::jsonb,
   5,
   3,
   '2024-01-29',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg'
+  '/src/assets/manga-pages/crimson-blade-ch1-p1.jpg'
 );
 
 -- Insert chapters for Mystic Academy
@@ -104,35 +104,35 @@ INSERT INTO chapters (
 ) VALUES (
   1,
   'Welcome to Mystic Academy',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/mystic-academy-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg"]'::jsonb,
   4,
   4,
   '2024-02-01',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg'
+  '/src/assets/manga-pages/mystic-academy-ch1-p1.jpg'
 ), (
   2,
   'The First Spell',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/mystic-academy-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg"]'::jsonb,
   4,
   5,
   '2024-02-08',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg'
+  '/src/assets/manga-pages/mystic-academy-ch1-p1.jpg'
 ), (
   3,
   'Hidden Secrets',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p5.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/mystic-academy-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p5.jpg"]'::jsonb,
   3,
   6,
   '2024-02-15',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg'
+  '/src/assets/manga-pages/mystic-academy-ch1-p1.jpg'
 );
 
 -- Insert chapters for Dragon's Legacy
@@ -147,35 +147,35 @@ INSERT INTO chapters (
 ) VALUES (
   1,
   'The Dragon Awakens',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg"]'::jsonb,
   4,
   7,
   '2024-01-01',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg'
+  '/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg'
 ), (
   2,
   'The Knight''s Oath',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p5.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/mystic-academy-ch1-p1.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p5.jpg",
+    "/src/assets/manga-pages/mystic-academy-ch1-p1.jpg"]'::jsonb,
   4,
   8,
   '2024-01-08',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg'
+  '/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg'
 ), (
   3,
   'The Final Battle',
-  '["https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
-    "https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/crimson-blade-ch1-p4.jpg"]'::jsonb,
+  '["/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p1.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p2.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p3.jpg",
+    "/src/assets/manga-pages/crimson-blade-ch1-p4.jpg"]'::jsonb,
   5,
   9,
   '2024-01-15',
-  'https://bb99e03c-3f05-4769-8218-c085add740b9.lovableproject.com/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg'
+  '/src/assets/manga-pages/dragons-legacy-ch1-p1.jpg'
 );

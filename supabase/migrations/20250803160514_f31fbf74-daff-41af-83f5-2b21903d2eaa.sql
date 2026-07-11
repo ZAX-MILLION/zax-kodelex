@@ -28,10 +28,10 @@ USING (is_enabled = true);
 
 -- Insert default social media platforms
 INSERT INTO public.social_media_settings (platform_name, platform_url, icon_type, platform_color, display_order) VALUES
-('Patreon', 'https://patreon.com/kodelex', 'lucide', '#ff424d', 1),
-('Discord', 'https://discord.gg/kodelex', 'lucide', '#5865f2', 2),
-('PayPal', 'https://paypal.me/kodelex', 'lucide', '#0070ba', 3),
-('Ko-fi', 'https://ko-fi.com/kodelex', 'lucide', '#ff5f5f', 4);
+('Patreon', 'https://patreon.com/zaxmillion', 'lucide', '#ff424d', 1),
+('Discord', 'https://discord.gg/zaxmillion', 'lucide', '#5865f2', 2),
+('PayPal', 'https://paypal.me/zaxmillion', 'lucide', '#0070ba', 3),
+('Ko-fi', 'https://ko-fi.com/zaxmillion', 'lucide', '#ff5f5f', 4);
 
 -- Create trigger for updated_at
 CREATE TRIGGER update_social_media_settings_updated_at

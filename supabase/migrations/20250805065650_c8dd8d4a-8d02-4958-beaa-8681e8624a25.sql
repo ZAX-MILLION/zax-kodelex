@@ -34,7 +34,7 @@ Digital platforms have democratized manga creation. Independent artists can now 
 As we look ahead, emerging technologies like AI-assisted translation, augmented reality features, and interactive storytelling elements promise to further evolve the medium. The manga industry is embracing these changes, creating richer, more accessible experiences for both creators and readers.
 
 The digital revolution in manga is just beginning, and the possibilities are limitless.',
-  '/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
+  '/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
   ARRAY['manga', 'digital', 'technology', 'industry'],
   'published',
   NOW() - INTERVAL '2 days',
@@ -86,7 +86,7 @@ Notable series like *Tower of God*, *The God of High School*, and *Solo Leveling
 Each format brings unique storytelling techniques and cultural perspectives to the global comic landscape. Understanding these differences enhances appreciation for the diverse artistic traditions that continue to evolve and influence each other.
 
 As digital platforms break down geographical barriers, readers worldwide can experience the full spectrum of Asian comic artistry, creating a truly global comic culture.',
-  '/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
+  '/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
   ARRAY['manhwa', 'manga', 'manhua', 'comparison', 'culture'],
   'published',
   NOW() - INTERVAL '5 days',
@@ -157,7 +157,7 @@ Include currently publishing series to experience the community excitement:
 ## Conclusion
 
 The perfect reading list is personal and ever-evolving. Start with your interests, remain open to exploration, and remember that the journey of discovery is just as important as the destination. Happy reading!',
-  '/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
+  '/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
   ARRAY['reading list', 'recommendations', 'manga', 'guide'],
   'published',
   NOW() - INTERVAL '1 week',
@@ -227,7 +227,7 @@ Studying the panel work of masters like Naoki Urasawa (*Monster*), Kentaro Miura
 Understanding manga''s visual language deepens appreciation for the medium''s artistry. Next time you read, pay attention to how panel choices affect your emotional response—you''ll discover a whole new layer of storytelling sophistication.
 
 The best manga creators are not just artists or writers, but visual orchestrators who conduct symphonies of emotion through careful panel composition.',
-  '/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
+  '/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
   ARRAY['manga', 'visual storytelling', 'panels', 'art', 'technique'],
   'published',
   NOW() - INTERVAL '10 days',
@@ -318,7 +318,7 @@ The webtoon format has facilitated unprecedented cultural exchange:
 Korea''s webtoon revolution demonstrates how technological innovation can transform artistic expression. By solving practical problems with creative solutions, Korean creators didn''t just adapt to the digital age—they defined it.
 
 Today, as readers worldwide scroll through colorful vertical panels on their phones, they''re participating in a comic revolution that began in Seoul''s digital studios. The webtoon format has become the new global standard, proving that innovation often comes from constraints, and the future of comics is limited only by imagination.',
-  '/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
+  '/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
   ARRAY['webtoons', 'korea', 'digital comics', 'innovation', 'mobile'],
   'published',
   NOW() - INTERVAL '2 weeks',
@@ -435,7 +435,7 @@ As platforms expand internationally:
 The transformation of manga reading from a solitary activity to a community experience represents one of digital media''s greatest successes. By understanding that readers seek connection as much as content, modern platforms have created vibrant ecosystems that benefit creators, readers, and the medium itself.
 
 The future of manga lies not just in technological advancement, but in the continued cultivation of communities that celebrate storytelling, creativity, and the shared human experience of getting lost in a great story.',
-  '/lovable-uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
+  '/uploads/537fec86-cd2c-4480-809c-038fd0e611e2.png',
   ARRAY['community', 'digital platforms', 'reader engagement', 'social features', 'manga'],
   'published',
   NOW() - INTERVAL '3 weeks',

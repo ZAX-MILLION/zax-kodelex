@@ -16,7 +16,7 @@ const Blog = () => {
     return (
       <div className="min-h-screen bg-background">
         <SEOHelmet 
-          title={`Blog Post - KODELEX`}
+          title={`Blog Post - Zax Million`}
           description="Read our latest blog post"
         />
         <AnimatedBackground />
@@ -39,8 +39,8 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHelmet 
-        title="Blog - KODELEX"
-        description="Latest news, updates, and insights from KODELEX"
+        title="Blog - Zax Million"
+        description="Latest news, updates, and insights from Zax Million"
       />
       <AnimatedBackground />
       <div className="container mx-auto px-4 py-8">
