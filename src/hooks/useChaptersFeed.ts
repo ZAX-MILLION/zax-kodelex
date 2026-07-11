@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import {
+  activateDemoMode,
+  getDemoChapterFeed,
+  shouldUseDemoData,
+} from '@/utils/demoLibraryData';
 
 export interface ChapterFeedItem {
   chapter_id: string;
@@ -30,6 +35,12 @@ export const useChaptersFeed = (daysBack = 30, limit = 10) => {
         });
 
       if (error) throw error;
+
+      if (shouldUseDemoData(data)) {
+        activateDemoMode();
+        setChapters(getDemoChapterFeed(limit));
+        return;
+      }
 
       const formattedChapters: ChapterFeedItem[] = data?.map((item: any) => ({
         chapter_id: item.chapter_id,
@@ -79,11 +90,8 @@ export const useChaptersFeed = (daysBack = 30, limit = 10) => {
         setChapters(fallbackChapters);
       } catch (fallbackErr) {
         console.error('Fallback select query also failed:', fallbackErr);
-        toast({
-          title: "Error",
-          description: "Failed to load latest chapters feed",
-          variant: "destructive"
-        });
+        activateDemoMode();
+        setChapters(getDemoChapterFeed(limit));
       }
     } finally {
       setLoading(false);

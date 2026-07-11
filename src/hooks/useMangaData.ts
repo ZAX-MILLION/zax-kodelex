@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import {
+  activateDemoMode,
+  getDemoSeriesList,
+  shouldUseDemoData,
+} from '@/utils/demoLibraryData';
 
 export interface Chapter {
   id: string;
@@ -41,9 +46,21 @@ export const useMultiSeriesData = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching series:', error);
-        setError('Failed to load series');
+      if (shouldUseDemoData(data, error)) {
+        activateDemoMode();
+        setAllSeries(
+          getDemoSeriesList().map((series) => ({
+            id: series.id,
+            title: series.title,
+            author: series.author,
+            artist: series.artist,
+            status: series.status,
+            genres: series.genres,
+            tags: series.tags,
+            description: series.description,
+            cover_image_url: series.cover_image_url,
+          }))
+        );
         return;
       }
 
@@ -64,7 +81,20 @@ export const useMultiSeriesData = () => {
       setAllSeries(formattedSeries);
     } catch (err) {
       console.error('Error fetching series:', err);
-      setError('Failed to load series');
+      activateDemoMode();
+      setAllSeries(
+        getDemoSeriesList().map((series) => ({
+          id: series.id,
+          title: series.title,
+          author: series.author,
+          artist: series.artist,
+          status: series.status,
+          genres: series.genres,
+          tags: series.tags,
+          description: series.description,
+          cover_image_url: series.cover_image_url,
+        }))
+      );
     }
   };
 

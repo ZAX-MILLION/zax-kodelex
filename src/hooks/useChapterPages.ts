@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import {
+  activateDemoMode,
+  getDemoChapterById,
+  isDemoChapterId,
+} from '@/utils/demoLibraryData';
 
 export const useChapterPages = (chapterId?: string) => {
   const [pages, setPages] = useState<string[]>([]);
@@ -9,6 +14,14 @@ export const useChapterPages = (chapterId?: string) => {
   const fetchChapterPages = async () => {
     if (!chapterId) {
       setPages([]);
+      return;
+    }
+
+    if (isDemoChapterId(chapterId)) {
+      activateDemoMode();
+      const chapter = getDemoChapterById(chapterId);
+      setPages(chapter?.pages || []);
+      setLoading(false);
       return;
     }
 
@@ -24,6 +37,12 @@ export const useChapterPages = (chapterId?: string) => {
 
       if (error) {
         console.error('Error fetching chapter pages:', error);
+        const demoChapter = getDemoChapterById(chapterId);
+        if (demoChapter) {
+          activateDemoMode();
+          setPages(demoChapter.pages);
+          return;
+        }
         setError('Failed to load chapter pages');
         return;
       }

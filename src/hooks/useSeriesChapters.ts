@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import {
+  activateDemoMode,
+  getDemoChaptersForSeries,
+  isDemoSeriesId,
+  shouldUseDemoData,
+} from '@/utils/demoLibraryData';
 
 export interface SeriesChapter {
   id: string;
@@ -37,9 +43,20 @@ export const useSeriesChapters = (seriesId?: string) => {
         .eq('series_id', seriesId)
         .order('chapter_number', { ascending: true });
 
-      if (error) {
-        console.error('Error fetching series chapters:', error);
-        setError('Failed to load chapters');
+      if (shouldUseDemoData(data, error) || isDemoSeriesId(seriesId)) {
+        activateDemoMode();
+        const demoChapters = getDemoChaptersForSeries(seriesId).map((chapter) => ({
+          id: chapter.id,
+          series_id: chapter.series_id,
+          chapter_number: chapter.chapter_number,
+          title: chapter.title,
+          pages: chapter.pages,
+          page_count: chapter.page_count,
+          release_date: chapter.release_date,
+          is_locked: chapter.is_locked,
+          sort_order: chapter.sort_order,
+        }));
+        setChapters(demoChapters);
         return;
       }
 
@@ -77,12 +94,22 @@ export const useSeriesChapters = (seriesId?: string) => {
       setChapters(formattedChapters);
     } catch (err) {
       console.error('Error fetching series chapters:', err);
-      setError('Failed to load chapters');
-      toast({
-        title: "Error",
-        description: "Failed to load chapters",
-        variant: "destructive"
-      });
+      if (seriesId) {
+        activateDemoMode();
+        setChapters(
+          getDemoChaptersForSeries(seriesId).map((chapter) => ({
+            id: chapter.id,
+            series_id: chapter.series_id,
+            chapter_number: chapter.chapter_number,
+            title: chapter.title,
+            pages: chapter.pages,
+            page_count: chapter.page_count,
+            release_date: chapter.release_date,
+            is_locked: chapter.is_locked,
+            sort_order: chapter.sort_order,
+          }))
+        );
+      }
     } finally {
       setLoading(false);
     }

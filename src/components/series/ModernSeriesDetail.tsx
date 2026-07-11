@@ -10,6 +10,12 @@ import { Star, Eye, BookOpen, Heart, Share2 } from 'lucide-react';
 import LazyImage from '@/components/LazyImage';
 import ModernChapterGrid from './ModernChapterGrid';
 import { getOptimizedImageUrl, getFallbackCoverImage } from '@/utils/imageOptimization';
+import {
+  activateDemoMode,
+  getDemoChaptersForSeries,
+  getDemoSeriesById,
+  isDemoSeriesId,
+} from '@/utils/demoLibraryData';
 interface MangaSeries {
   id: string;
   title: string;
@@ -65,21 +71,57 @@ const ModernSeriesDetail = () => {
     try {
       setLoading(true);
 
-      // Fetch series data
+      if (isDemoSeriesId(id)) {
+        const demoSeries = getDemoSeriesById(id);
+        if (demoSeries) {
+          activateDemoMode();
+          setSeries({
+            id: demoSeries.id,
+            title: demoSeries.title,
+            description: demoSeries.description,
+            author: demoSeries.author,
+            artist: demoSeries.artist || demoSeries.author,
+            cover_image_url: demoSeries.cover_image_url,
+            status: demoSeries.status,
+            genres: demoSeries.genres,
+            tags: demoSeries.tags,
+            rating_average: demoSeries.rating_average,
+            rating_count: demoSeries.rating_count,
+            view_count: demoSeries.view_count,
+            created_at: demoSeries.created_at,
+            updated_at: demoSeries.updated_at,
+            age_rating: demoSeries.age_rating,
+            publication_date: demoSeries.publication_date,
+          });
+          setChapters(
+            getDemoChaptersForSeries(id).map((chapter) => ({
+              id: chapter.id,
+              title: chapter.title,
+              chapter_number: chapter.chapter_number,
+              page_count: chapter.page_count,
+              release_date: chapter.release_date,
+              view_count: chapter.view_count,
+              is_locked: chapter.is_locked,
+              unlock_cost: chapter.unlock_cost,
+              thumbnail_url: demoSeries.cover_image_url,
+            }))
+          );
+          return;
+        }
+      }
+
       const {
         data: seriesData,
         error: seriesError
       } = await supabase.from('manga_meta').select('*').eq('id', id).single();
       if (seriesError) throw seriesError;
 
-      // Increment view count
       if (seriesData) {
         await supabase.from('manga_meta').update({
           view_count: (seriesData.view_count || 0) + 1
         }).eq('id', id);
       }
 
-      // Fetch chapters using RPC to include locked rows for guests
       const { data: chaptersData, error: chaptersError } = await supabase
         .rpc('get_series_chapter_listings', { series_id_param: id });
 
@@ -87,8 +129,6 @@ const ModernSeriesDetail = () => {
 
       const chaptersWithCost = chaptersData || [];
 
-
-      // Check if user has bookmarked this series
       if (user) {
         const {
           data: bookmarkData
@@ -99,6 +139,42 @@ const ModernSeriesDetail = () => {
       setChapters(chaptersWithCost || []);
     } catch (error) {
       console.error('Error fetching series data:', error);
+      const demoSeries = id ? getDemoSeriesById(id) : undefined;
+      if (demoSeries) {
+        activateDemoMode();
+        setSeries({
+          id: demoSeries.id,
+          title: demoSeries.title,
+          description: demoSeries.description,
+          author: demoSeries.author,
+          artist: demoSeries.artist || demoSeries.author,
+          cover_image_url: demoSeries.cover_image_url,
+          status: demoSeries.status,
+          genres: demoSeries.genres,
+          tags: demoSeries.tags,
+          rating_average: demoSeries.rating_average,
+          rating_count: demoSeries.rating_count,
+          view_count: demoSeries.view_count,
+          created_at: demoSeries.created_at,
+          updated_at: demoSeries.updated_at,
+          age_rating: demoSeries.age_rating,
+          publication_date: demoSeries.publication_date,
+        });
+        setChapters(
+          getDemoChaptersForSeries(demoSeries.id).map((chapter) => ({
+            id: chapter.id,
+            title: chapter.title,
+            chapter_number: chapter.chapter_number,
+            page_count: chapter.page_count,
+            release_date: chapter.release_date,
+            view_count: chapter.view_count,
+            is_locked: chapter.is_locked,
+            unlock_cost: chapter.unlock_cost,
+            thumbnail_url: demoSeries.cover_image_url,
+          }))
+        );
+        return;
+      }
       toast({
         title: "Error",
         description: "Failed to load series data",

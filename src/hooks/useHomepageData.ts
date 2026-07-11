@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { getFallbackCoverImage, isValidImageUrl } from '@/utils/imageOptimization';
+import {
+  activateDemoMode,
+  getDemoSeriesList,
+  shouldUseDemoData,
+} from '@/utils/demoLibraryData';
 
 export interface HomepageWidget {
   id: string;
@@ -157,6 +162,37 @@ export const useSeriesData = () => {
 
       const { data, error } = await query.range(offset, offset + limit - 1);
 
+      if (shouldUseDemoData(data, error)) {
+        activateDemoMode();
+        const demoSeries = getDemoSeriesList()
+          .slice()
+          .sort((a, b) => {
+            if (filter === 'trending') return b.view_count - a.view_count;
+            if (filter === 'new' || filter === 'latest') {
+              return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+            }
+            return 0;
+          })
+          .slice(offset, offset + limit)
+          .map((item) => ({
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            artist: item.artist,
+            status: item.status,
+            genres: item.genres,
+            description: item.description,
+            cover_image_url: item.cover_image_url,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            view_count: item.view_count,
+            latest_chapter: 20,
+          }));
+        setTotalCount(getDemoSeriesList().length);
+        setSeries(demoSeries);
+        return;
+      }
+
       if (error) throw error;
 
       // Get latest chapter data for each series
@@ -201,11 +237,23 @@ export const useSeriesData = () => {
       setSeries(formattedSeries);
     } catch (err) {
       console.error('Error fetching series:', err);
-      toast({
-        title: "Error",
-        description: "Failed to load series data",
-        variant: "destructive"
-      });
+      activateDemoMode();
+      const demoSeries = getDemoSeriesList().slice(0, limit).map((item) => ({
+        id: item.id,
+        title: item.title,
+        author: item.author,
+        artist: item.artist,
+        status: item.status,
+        genres: item.genres,
+        description: item.description,
+        cover_image_url: item.cover_image_url,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+        view_count: item.view_count,
+        latest_chapter: 20,
+      }));
+      setTotalCount(getDemoSeriesList().length);
+      setSeries(demoSeries);
     } finally {
       setLoading(false);
     }
@@ -252,60 +300,51 @@ export const useTrendingSeries = (daysBack = 7, limit = 12) => {
       const { data: trendingData, error: trendingError } = await supabase
         .rpc('get_trending_series', { days_back: daysBack, limit_count: limit });
 
-      if (trendingError) {
+      if (trendingError || shouldUseDemoData(trendingData, trendingError)) {
         console.error('Trending series error:', trendingError);
-        // Fallback to popular series by view count
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('manga_meta')
-          .select('*')
-          .order('view_count', { ascending: false })
-          .limit(limit);
-        
-        if (fallbackError) throw fallbackError;
-        
-        const fallbackSeries: SeriesCard[] = fallbackData?.map(item => ({
-          id: item.id,
-          title: item.title,
-          author: item.author,
-          artist: item.artist,
-          status: item.status,
-          genres: item.genres,
-          description: item.description,
-          cover_image_url: isValidImageUrl(item.cover_image_url) ? item.cover_image_url : getFallbackCoverImage(item.id),
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-          view_count: item.view_count || 0,
-          latest_chapter: 0
-        })) || [];
-        
+        activateDemoMode();
+        const fallbackSeries: SeriesCard[] = getDemoSeriesList()
+          .slice()
+          .sort((a, b) => b.view_count - a.view_count)
+          .slice(0, limit)
+          .map((item) => ({
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            artist: item.artist,
+            status: item.status,
+            genres: item.genres,
+            description: item.description,
+            cover_image_url: item.cover_image_url,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            view_count: item.view_count,
+            latest_chapter: 20,
+          }));
         setTrendingSeries(fallbackSeries);
         return;
       }
 
       if (!trendingData || trendingData.length === 0) {
-        // Fallback to recent series if no trending data
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('manga_meta')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(limit);
-
-        if (fallbackError) throw fallbackError;
-        
-        const formattedSeries: SeriesCard[] = fallbackData?.map(item => ({
-          id: item.id,
-          title: item.title,
-          author: item.author,
-          artist: item.artist,
-          status: item.status,
-          genres: item.genres,
-          description: item.description,
-          cover_image_url: isValidImageUrl(item.cover_image_url) ? item.cover_image_url : getFallbackCoverImage(item.id),
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-          view_count: 0
-        })) || [];
-
+        activateDemoMode();
+        const formattedSeries: SeriesCard[] = getDemoSeriesList()
+          .slice()
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          .slice(0, limit)
+          .map((item) => ({
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            artist: item.artist,
+            status: item.status,
+            genres: item.genres,
+            description: item.description,
+            cover_image_url: item.cover_image_url,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            view_count: 0,
+            latest_chapter: 20,
+          }));
         setTrendingSeries(formattedSeries);
         return;
       }
@@ -350,6 +389,27 @@ export const useTrendingSeries = (daysBack = 7, limit = 12) => {
       setTrendingSeries(formattedSeries);
     } catch (err) {
       console.error('Error fetching trending series:', err);
+      activateDemoMode();
+      setTrendingSeries(
+        getDemoSeriesList()
+          .slice()
+          .sort((a, b) => b.view_count - a.view_count)
+          .slice(0, limit)
+          .map((item) => ({
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            artist: item.artist,
+            status: item.status,
+            genres: item.genres,
+            description: item.description,
+            cover_image_url: item.cover_image_url,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            view_count: item.view_count,
+            latest_chapter: 20,
+          }))
+      );
     } finally {
       setLoading(false);
     }

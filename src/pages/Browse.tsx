@@ -342,7 +342,7 @@ const Browse = () => {
 };
 
 const SeriesCard = ({ series }: { series: typeof mockSeries[0] }) => (
-  <Link to={`/series/${series.slug}`}>
+  <Link to={`/series/${series.id || series.slug}`}>
     <Card className="group cursor-pointer hover:shadow-lg transition-all duration-200">
       <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
         <LazyImage
@@ -393,7 +393,7 @@ const SeriesCard = ({ series }: { series: typeof mockSeries[0] }) => (
 );
 
 const SeriesListItem = ({ series }: { series: typeof mockSeries[0] }) => (
-  <Link to={`/series/${series.slug}`}>
+  <Link to={`/series/${series.id || series.slug}`}>
     <Card className="group cursor-pointer hover:shadow-md transition-all duration-200">
       <CardContent className="p-4">
         <div className="flex gap-4">

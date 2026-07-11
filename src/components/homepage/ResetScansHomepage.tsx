@@ -37,6 +37,8 @@ import SupportWidget from './SupportWidget';
 import { FeedSection } from './FeedSection';
 import { BlogSection } from './BlogSection';
 import SearchBar from '@/components/SearchBar';
+import DemoModeBanner from './DemoModeBanner';
+import { isDemoSeriesId } from '@/utils/demoLibraryData';
 
 // Component removed - now using ResetScansMangaCard
 
@@ -86,8 +88,13 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
     );
   }
 
+  const showDemoBanner = !loading && latestSeries.length > 0 && latestSeries.every((s) => isDemoSeriesId(s.id));
+
   return (
     <div className={`space-y-8 ${className}`}>
+      <div className="container mx-auto px-4 pt-4">
+        <DemoModeBanner visible={showDemoBanner} />
+      </div>
       {/* Hero Slider - Full Width */}
       <HeroSlider
         slidesCount={16}

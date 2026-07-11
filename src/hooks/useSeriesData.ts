@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import {
+  activateDemoMode,
+  getDemoSeriesList,
+  shouldUseDemoData,
+} from '@/utils/demoLibraryData';
 
 export interface SeriesCard {
   id: string;
@@ -77,14 +82,23 @@ export const useSeriesData = () => {
 
       const { data, error } = await query;
 
-      if (error) {
-        console.error('Error fetching series:', error);
-        setError('Failed to load series');
-        toast({
-          title: "Error",
-          description: "Failed to load series data",
-          variant: "destructive",
-        });
+      if (shouldUseDemoData(data, error)) {
+        activateDemoMode();
+        const demoSeries = getDemoSeriesList()
+          .slice()
+          .sort((a, b) => {
+            if (type === 'trending' || type === 'popular') {
+              return b.view_count - a.view_count;
+            }
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          })
+          .slice(0, limit)
+          .map((series) => ({
+            ...series,
+            latest_chapter: 20,
+            chapter_count: 20,
+          }));
+        setSeries(demoSeries);
         return;
       }
 
@@ -111,12 +125,13 @@ export const useSeriesData = () => {
       setSeries(seriesWithChapters);
     } catch (err) {
       console.error('Error fetching series:', err);
-      setError('Failed to load series');
-      toast({
-        title: "Error",
-        description: "Failed to load series data",
-        variant: "destructive",
-      });
+      activateDemoMode();
+      const demoSeries = getDemoSeriesList().slice(0, limit).map((series) => ({
+        ...series,
+        latest_chapter: 20,
+        chapter_count: 20,
+      }));
+      setSeries(demoSeries);
     } finally {
       setLoading(false);
     }
@@ -167,9 +182,19 @@ export const useTrendingSeries = () => {
         .order('view_count', { ascending: false })
         .limit(10);
 
-      if (error) {
-        console.error('Error fetching trending series:', error);
-        setError('Failed to load trending series');
+      if (shouldUseDemoData(data, error)) {
+        activateDemoMode();
+        setTrendingSeries(
+          getDemoSeriesList()
+            .slice()
+            .sort((a, b) => b.view_count - a.view_count)
+            .slice(0, 10)
+            .map((series) => ({
+              ...series,
+              latest_chapter: 20,
+              chapter_count: 20,
+            }))
+        );
         return;
       }
 
@@ -182,7 +207,18 @@ export const useTrendingSeries = () => {
       setTrendingSeries(formattedData);
     } catch (err) {
       console.error('Error fetching trending series:', err);
-      setError('Failed to load trending series');
+      activateDemoMode();
+      setTrendingSeries(
+        getDemoSeriesList()
+          .slice()
+          .sort((a, b) => b.view_count - a.view_count)
+          .slice(0, 10)
+          .map((series) => ({
+            ...series,
+            latest_chapter: 20,
+            chapter_count: 20,
+          }))
+      );
     } finally {
       setLoading(false);
     }
