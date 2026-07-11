@@ -243,7 +243,7 @@ const Buy = () => {
 
       // Simulate download
       const link = document.createElement('a');
-      link.href = 'data:text/plain;charset=utf-8,Manga Reader Theme Download%0AThis is a demo download.%0AIn production, this would be the actual theme files.';
+      link.href = 'data:text/plain;charset=utf-8,Zax Million Theme Download%0AThis is a demo download.%0AIn production, this would be the actual theme files.';
       link.download = 'manga-reader-theme.txt';
       link.click();
 
@@ -261,8 +261,8 @@ const Buy = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/50">
         <SEOHelmet 
-          title="Purchase Complete - Manga Reader Theme"
-          description="Your purchase is complete! Download your Manga Reader Theme license and files."
+          title="Purchase Complete - Zax Million Theme"
+          description="Your purchase is complete! Download your Zax Million Theme license and files."
         />
         
         <div className="container mx-auto px-4 py-8">
@@ -275,7 +275,7 @@ const Buy = () => {
                 Purchase Complete!
               </h1>
               <p className="text-lg text-muted-foreground">
-                Thank you for purchasing the Manga Reader Theme
+                Thank you for purchasing the Zax Million Theme
               </p>
             </div>
 
@@ -333,8 +333,8 @@ const Buy = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/50">
       <SEOHelmet 
-        title="Buy Manga Reader Theme - Premium React Template"
-        description="Purchase the premium Manga Reader Theme. Beautiful, responsive, and feature-rich React template for manga reading websites."
+        title="Buy Zax Million Theme - Premium React Template"
+        description="Purchase the premium Zax Million Theme. Beautiful, responsive, and feature-rich React template for manga reading websites."
         keywords="manga reader theme, react template, manga website template, premium theme"
       />
       
@@ -342,7 +342,7 @@ const Buy = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            Get Your Manga Reader Theme
+            Get Your Zax Million Theme
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Professional, responsive, and feature-rich React template for creating stunning manga reading websites

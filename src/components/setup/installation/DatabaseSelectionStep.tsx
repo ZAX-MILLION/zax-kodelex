@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Database, Cloud, Server, CheckCircle, ArrowRight } from 'lucide-react';
-import type { InstallationData } from '@/pages/Installation';
+import type { InstallationData } from '@/types/installation';
 
 interface DatabaseSelectionStepProps {
   data: InstallationData;

@@ -201,7 +201,7 @@ const Contests: React.FC = () => {
   return (
     <>
       <EnhancedSEOHelmet
-        title="Contests - Win Coins & Prizes | Manga Reader"
+        title="Contests - Win Coins & Prizes | Zax Million"
         description="Participate in exciting contests to win coins, premium access, and exclusive rewards. Join the manga community competitions!"
         keywords="manga contests, win coins, manga prizes, community competitions"
       />

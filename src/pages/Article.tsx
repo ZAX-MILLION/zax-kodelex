@@ -103,7 +103,7 @@ const Article = () => {
   return (
     <>
       <EnhancedSEOHelmet 
-        title={`${article.title} - Manga Reader`}
+        title={`${article.title} - Zax Million`}
         description={article.content.replace(/<[^>]*>/g, '').substring(0, 160)}
         keywords={['manga', 'article', ...article.tags].join(', ')}
         image={`${window.location.origin}${article.image}`}

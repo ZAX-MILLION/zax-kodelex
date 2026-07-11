@@ -85,7 +85,7 @@ const Chapters = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHelmet 
-        title="All Chapters - Manga Reader"
+        title="All Chapters - Zax Million"
         description="Browse and read all available manga chapters. Find your next favorite chapter with our comprehensive chapter library."
         keywords="manga chapters, read manga, manga library, chapter list"
       />

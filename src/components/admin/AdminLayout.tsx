@@ -1,5 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { redirectToLogin } from '@/utils/authRedirect';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ModernAdminSidebar } from "./ModernAdminSidebar";
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,6 @@ import { Plus, User, Bell, Settings, Home } from "lucide-react";
 import { useState } from "react";
 import { ChapterUploadModal } from "./ChapterUploadModal";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 
 interface AdminLayoutProps {
@@ -15,13 +15,21 @@ interface AdminLayoutProps {
 }
 
 export const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const { user, isAdmin, userProfile } = useAuth();
+  const { user, isAdmin, isLoading, userProfile } = useAuth();
   const { toast } = useToast();
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  // Redirect if not admin
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
   if (!user || !isAdmin) {
-    return <Navigate to="/login" replace />;
+    redirectToLogin();
+    return null;
   }
 
   const handleQuickUpload = () => {

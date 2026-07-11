@@ -15,8 +15,8 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['zax-million-favicon.png', 'robots.txt'],
       manifest: {
-        name: 'Zax Million Manga Reader',
-        short_name: 'Manga Reader',
+        name: 'Zax Million',
+        short_name: 'Zax Million',
         description: 'Premium manga reading experience by Zax Million',
         theme_color: '#d4a574',
         background_color: '#1a1a1a',

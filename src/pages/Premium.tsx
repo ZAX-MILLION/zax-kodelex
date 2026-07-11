@@ -66,7 +66,7 @@ const Premium = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <SEOHelmet 
-        title="Premium Features - Manga Reader"
+        title="Premium Features - Zax Million"
         description="Discover the ultimate manga reading experience with Premium. Ad-free reading, early access, exclusive themes, and more."
         keywords="manga premium features, ad-free manga, early access chapters, premium themes"
       />

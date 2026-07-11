@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { seedComprehensiveMangaData } from '@/utils/seedComprehensiveMangaData';
+import { seedComprehensiveMangaData } from '@/utils/seed/seedComprehensiveMangaData';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Database, Trash2, BookOpen, Eye } from 'lucide-react';
 

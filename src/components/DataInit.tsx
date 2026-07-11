@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Database, Play } from 'lucide-react';
-import { quickDatabaseReset } from '@/utils/quickDataReset';
+import { quickDatabaseReset } from '@/utils/seed/quickDataReset';
 import { useToast } from '@/hooks/use-toast';
 
 export const DataInit = () => {

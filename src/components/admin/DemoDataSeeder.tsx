@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { seedDemoLibrary } from '@/utils/seedDemoLibrary';
+import { seedDemoLibrary } from '@/utils/seed/seedDemoLibrary';
 import { Database, Sparkles, CheckCircle2, Lock } from 'lucide-react';
 
 export const DemoDataSeeder: React.FC = () => {

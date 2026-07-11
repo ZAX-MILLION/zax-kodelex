@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, Database, Settings, Eye, RefreshCw } from 'lucide-react';
 import { useMultiSeriesMode } from '@/hooks/useMultiSeriesMode';
-import { seedMultiSeriesData, validateMultiSeriesData } from '@/utils/seedMultiSeriesData';
+import { seedMultiSeriesData, validateMultiSeriesData } from '@/utils/seed/seedMultiSeriesData';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 

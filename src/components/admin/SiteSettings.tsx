@@ -55,7 +55,7 @@ interface GlobalSettings {
 
 export const SiteSettings = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
-    site_title: "Manga Reader",
+    site_title: "Zax Million",
     logo_url: null,
     theme_color: "#dc2626",
     primary_color: "#f59e0b",

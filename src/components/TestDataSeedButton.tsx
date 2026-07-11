@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { seedComprehensiveData } from '@/utils/seedComprehensiveData';
+import { seedComprehensiveData } from '@/utils/seed/seedComprehensiveData';
 import { useToast } from '@/hooks/use-toast';
 import { Database, Loader2 } from 'lucide-react';
 

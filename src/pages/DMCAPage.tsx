@@ -23,8 +23,8 @@ If you believe that content on our site infringes your copyright, you may submit
 ## Contact Information
 
 Please send DMCA notices to:
-- **Email**: dmca@yoursite.com
-- **Address**: [Your Company Address]
+- **Email**: contact@zaxmillion.com
+- **Address**: Zax Million, Online Service
 
 ## Counter-Notification
 
@@ -38,7 +38,7 @@ If you believe your content was removed in error, you may submit a counter-notif
   return (
     <>
       <EnhancedSEOHelmet 
-        title="DMCA Policy - Manga Reader"
+        title="DMCA Policy - Zax Million"
         description="Digital Millennium Copyright Act (DMCA) policy and copyright information for our manga reading platform."
         keywords="dmca, copyright, takedown, policy, intellectual property"
       />

@@ -87,7 +87,7 @@ const CreativeNavBar = () => {
               <h1 className="text-sm xs:text-lg sm:text-2xl font-bold bg-gradient-to-r from-foreground via-primary to-manga-gold bg-clip-text text-transparent">
                 Zax Million
               </h1>
-              <p className="text-xs xs:text-xs sm:text-xs text-muted-foreground -mt-0.5 xs:-mt-1 hidden sm:block">Manga Reader</p>
+              <p className="text-xs xs:text-xs sm:text-xs text-muted-foreground -mt-0.5 xs:-mt-1 hidden sm:block">Zax Million</p>
             </div>
           </Link>
 

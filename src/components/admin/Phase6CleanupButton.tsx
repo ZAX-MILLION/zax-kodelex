@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { runPhase6Cleanup } from '@/utils/phase6Cleanup';
+import { runPhase6Cleanup } from '@/utils/seed/phase6Cleanup';
 import { 
   Database, 
   RefreshCw, 

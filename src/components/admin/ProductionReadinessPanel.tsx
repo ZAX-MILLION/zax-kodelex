@@ -20,7 +20,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { validateProductionReadiness, cleanupMockData, enableProductionMode } from '@/utils/cleanupMockData';
+import { validateProductionReadiness, cleanupMockData, enableProductionMode } from '@/utils/seed/cleanupMockData';
 import { configManager } from '@/utils/configManager';
 
 

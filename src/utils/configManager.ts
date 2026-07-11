@@ -153,7 +153,7 @@ class ConfigManager {
   private getDefaultConfig(): AppConfig {
     return {
       site: {
-        siteName: 'MangaReader Pro',
+        siteName: 'Zax Million',
         siteDescription: 'Professional manga reading platform',
         siteUrl: window.location.origin,
         adminEmail: '',

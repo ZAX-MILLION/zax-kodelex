@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { WelcomeStep } from '@/components/installation/WelcomeStep';
-import { DatabaseSelectionStep } from '@/components/installation/DatabaseSelectionStep';
-import { EnvironmentSetupStep } from '@/components/installation/EnvironmentSetupStep';
-import { SiteConfigStep } from '@/components/installation/SiteConfigStep';
-import { AdminAccountStep } from '@/components/installation/AdminAccountStep';
-import { CompletionStep } from '@/components/installation/CompletionStep';
-import { supabase } from '@/integrations/supabase/client';
-import type { InstallationData } from '@/pages/Installation';
+import { WelcomeStep } from '@/components/setup/installation/WelcomeStep';
+import { DatabaseSelectionStep } from '@/components/setup/installation/DatabaseSelectionStep';
+import { EnvironmentSetupStep } from '@/components/setup/installation/EnvironmentSetupStep';
+import { SiteConfigStep } from '@/components/setup/installation/SiteConfigStep';
+import { AdminAccountStep } from '@/components/setup/installation/AdminAccountStep';
+import { CompletionStep } from '@/components/setup/installation/CompletionStep';
+import { createSupabaseClient } from '@/integrations/supabase/client';
+import { persistSupabaseCredentials } from '@/integrations/supabase/config';
+import type { InstallationData } from '@/types/installation';
 
 export const SetupWizard = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -16,19 +17,19 @@ export const SetupWizard = () => {
     databaseType: 'supabase',
     supabaseConfig: {
       url: '',
-      anonKey: ''
+      anonKey: '',
     },
     adminAccount: {
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     },
-    themeMode: 'single-series',
+    themeMode: 'multi-series',
     basicSettings: {
-      siteName: 'MangaReader Pro',
-      contactEmail: '',
-      siteDescription: 'Professional manga reading platform'
-    }
+      siteName: 'Zax Million',
+      contactEmail: 'contact@zaxmillion.com',
+      siteDescription: 'Premium manga reading platform by Zax Million',
+    },
   });
 
   const handleNext = () => {
@@ -46,42 +47,74 @@ export const SetupWizard = () => {
   const handleComplete = async () => {
     try {
       const isPreview = window.location.hostname.includes('preview--');
-      
+
       if (isPreview) {
-        // In preview mode, just set local skip flag
         localStorage.setItem('skipSetup', 'true');
         window.location.href = '/';
         return;
       }
 
-      // For real installations, save to Supabase
-      const { error } = await supabase
-        .from('install_status')
-        .upsert({
-          is_installed: true,
-          installed_at: new Date().toISOString(),
-          installed_by: null, // Will be set when auth is implemented
-          license_key: installationData.licenseKey || null,
-          domain: window.location.hostname
-        });
-
-      if (error) {
-        console.error('Failed to complete installation:', error);
+      const { url, anonKey } = installationData.supabaseConfig;
+      if (!url || !anonKey) {
+        console.error('Missing Supabase credentials');
         return;
       }
 
-      // Set local skip flag and redirect
-      localStorage.setItem('skipSetup', 'true');
+      persistSupabaseCredentials(url, anonKey);
+      const setupClient = createSupabaseClient(url, anonKey);
+
+      const { email, password } = installationData.adminAccount;
+      const username = email.split('@')[0] || 'admin';
+
+      const { data: signUpData, error: signUpError } = await setupClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { username, name: username },
+        },
+      });
+
+      if (signUpError) {
+        console.error('Failed to create admin account:', signUpError);
+        return;
+      }
+
+      if (signUpData.user && signUpData.session) {
+        await setupClient
+          .from('profiles')
+          .update({ role: 'admin', username })
+          .eq('user_id', signUpData.user.id);
+      }
+
+      await setupClient.from('install_status').upsert({
+        is_installed: true,
+        installed_at: new Date().toISOString(),
+        installed_by: signUpData.user?.id ?? null,
+        license_key: installationData.licenseKey || null,
+        domain: window.location.hostname,
+      });
+
+      localStorage.setItem('installation_complete', 'true');
       localStorage.setItem('installation_data', JSON.stringify(installationData));
-      
-      window.location.href = '/admin';
+
+      if (installationData.basicSettings.siteName) {
+        localStorage.setItem(
+          'seo_settings',
+          JSON.stringify({
+            siteTitle: installationData.basicSettings.siteName,
+            siteDescription: installationData.basicSettings.siteDescription,
+          })
+        );
+      }
+
+      window.location.href = signUpData.session ? '/admin' : '/';
     } catch (error) {
       console.error('Installation completion failed:', error);
     }
   };
 
   const updateData = (data: Partial<InstallationData>) => {
-    setInstallationData(prev => ({ ...prev, ...data }));
+    setInstallationData((prev) => ({ ...prev, ...data }));
   };
 
   const steps = [
@@ -90,7 +123,7 @@ export const SetupWizard = () => {
     { title: 'Environment', component: EnvironmentSetupStep },
     { title: 'Site Config', component: SiteConfigStep },
     { title: 'Admin Account', component: AdminAccountStep },
-    { title: 'Complete', component: CompletionStep }
+    { title: 'Complete', component: CompletionStep },
   ];
 
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -99,8 +132,8 @@ export const SetupWizard = () => {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold mb-2">Setup Wizard</h1>
-          <p className="text-muted-foreground">Configure your manga reader platform</p>
+          <h1 className="text-2xl font-bold mb-2">Zax Million Setup</h1>
+          <p className="text-muted-foreground">Configure your manga reading platform</p>
         </div>
 
         <Card className="mb-6">
@@ -109,9 +142,7 @@ export const SetupWizard = () => {
               <CardTitle className="text-lg">
                 Step {currentStep + 1} of {steps.length}: {steps[currentStep].title}
               </CardTitle>
-              <span className="text-sm text-muted-foreground">
-                {Math.round(progress)}% Complete
-              </span>
+              <span className="text-sm text-muted-foreground">{Math.round(progress)}% Complete</span>
             </div>
             <Progress value={progress} className="mt-2" />
           </CardHeader>
@@ -119,47 +150,41 @@ export const SetupWizard = () => {
 
         <Card>
           <CardContent className="p-6">
-            {currentStep === 0 && (
-              <WelcomeStep onNext={handleNext} />
-            )}
+            {currentStep === 0 && <WelcomeStep onNext={handleNext} />}
             {currentStep === 1 && (
-              <DatabaseSelectionStep 
-                data={installationData} 
-                onUpdate={updateData} 
-                onNext={handleNext} 
-              />
+              <DatabaseSelectionStep data={installationData} onUpdate={updateData} onNext={handleNext} />
             )}
             {currentStep === 2 && (
-              <EnvironmentSetupStep 
-                data={installationData} 
-                onUpdate={updateData} 
-                onNext={handleNext} 
-                onPrev={handlePrev} 
+              <EnvironmentSetupStep
+                data={installationData}
+                onUpdate={updateData}
+                onNext={handleNext}
+                onPrev={handlePrev}
               />
             )}
             {currentStep === 3 && (
-              <SiteConfigStep 
-                data={installationData} 
-                onUpdate={updateData} 
-                onNext={handleNext} 
-                onPrev={handlePrev} 
+              <SiteConfigStep
+                data={installationData}
+                onUpdate={updateData}
+                onNext={handleNext}
+                onPrev={handlePrev}
               />
             )}
             {currentStep === 4 && (
-              <AdminAccountStep 
-                data={installationData} 
-                onUpdate={updateData} 
-                onNext={handleNext} 
-                onPrev={handlePrev} 
+              <AdminAccountStep
+                data={installationData}
+                onUpdate={updateData}
+                onNext={handleNext}
+                onPrev={handlePrev}
               />
             )}
             {currentStep === 5 && (
-              <CompletionStep 
-                data={installationData} 
+              <CompletionStep
+                data={installationData}
                 onUpdate={updateData}
                 onNext={handleComplete}
                 onPrev={handlePrev}
-                isLast={true}
+                isLast
               />
             )}
           </CardContent>

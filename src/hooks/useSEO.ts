@@ -50,7 +50,7 @@ interface PageSEORule {
 export const useSEO = () => {
   const location = useLocation();
   const [seoSettings, setSEOSettings] = useState<SEOSettings>({
-    siteTitle: 'Manga Reader',
+    siteTitle: 'Zax Million',
     siteDescription: 'Professional manga reading platform with premium features',
     siteUrl: window.location.origin,
     defaultImage: '/manga-cover.jpg',

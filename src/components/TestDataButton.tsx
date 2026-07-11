@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { seedTestData } from '@/utils/seedTestData';
+import { seedTestData } from '@/utils/seed/seedTestData';
 import { Database, Loader2 } from 'lucide-react';
 
 const TestDataButton = () => {

@@ -12,81 +12,35 @@ import { useMultiSeriesData } from '@/hooks/useMangaData';
 import { useMultiSeriesMode } from '@/hooks/useMultiSeriesMode';
 import { MultiSeriesControls } from '@/components/MultiSeriesControls';
 
-// Mock data for demonstration - replace with real data after migration
-const mockSeries = [
-  {
-    id: '1',
-    title: 'Crimson Blade Chronicles',
-    slug: 'crimson-blade',
-    description: 'An epic tale of sword and sorcery in a mystical realm.',
-    cover_image_url: '/manga-covers/crimson-blade-cover.jpg',
-    author: 'Akira Yoshida',
-    status: 'ongoing',
-    genres: ['Action', 'Fantasy'],
-    rating: 4.8,
-    total_chapters: 45,
-    view_count: 15420,
-    categories: [
-      { name: 'Action', color: '#ef4444' },
-      { name: 'Fantasy', color: '#06b6d4' }
-    ]
-  },
-  {
-    id: '2',
-    title: 'Mystic Academy',
-    slug: 'mystic-academy',
-    description: 'Students discover their magical abilities in this supernatural school.',
-    cover_image_url: '/manga-covers/mystic-academy-cover.jpg',
-    author: 'Yuki Tanaka',
-    status: 'ongoing',
-    genres: ['Romance', 'Supernatural'],
-    rating: 4.6,
-    total_chapters: 32,
-    view_count: 12890,
-    categories: [
-      { name: 'Romance', color: '#ec4899' },
-      { name: 'Supernatural', color: '#8b5cf6' }
-    ]
-  },
-  {
-    id: '3',
-    title: 'Dragon\'s Legacy',
-    slug: 'dragons-legacy',
-    description: 'The last dragon rider seeks to restore balance to the world.',
-    cover_image_url: '/manga-covers/dragons-legacy-cover.jpg',
-    author: 'Hiroshi Sato',
-    status: 'completed',
-    genres: ['Adventure', 'Drama'],
-    rating: 4.9,
-    total_chapters: 78,
-    view_count: 28350,
-    categories: [
-      { name: 'Adventure', color: '#f59e0b' },
-      { name: 'Drama', color: '#8b5cf6' }
-    ]
-  }
-];
-
-const mockCategories = [
-  { id: '1', name: 'Action', slug: 'action', color: '#ef4444' },
-  { id: '2', name: 'Romance', slug: 'romance', color: '#ec4899' },
-  { id: '3', name: 'Fantasy', slug: 'fantasy', color: '#06b6d4' },
-  { id: '4', name: 'Drama', slug: 'drama', color: '#8b5cf6' },
-  { id: '5', name: 'Adventure', slug: 'adventure', color: '#f59e0b' },
-  { id: '6', name: 'Supernatural', slug: 'supernatural', color: '#8b5cf6' }
-];
+// Category color map for genre badges
+const genreColors: Record<string, string> = {
+  Action: '#ef4444',
+  Romance: '#ec4899',
+  Fantasy: '#06b6d4',
+  Drama: '#8b5cf6',
+  Adventure: '#f59e0b',
+  Supernatural: '#8b5cf6',
+};
 
 const Browse = () => {
   const [searchParams] = useSearchParams();
   const { allSeries, loading, error, refreshData } = useMultiSeriesData();
   const { config } = useMultiSeriesMode();
-  const [categories] = useState(mockCategories);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [contentType, setContentType] = useState<string>('all');
   const [sortBy, setSortBy] = useState('title');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showControls, setShowControls] = useState(false);
+
+  const categories = Array.from(
+    new Set(allSeries.flatMap((s) => s.genres || []))
+  ).map((name, index) => ({
+    id: String(index + 1),
+    name,
+    slug: name.toLowerCase(),
+    color: genreColors[name] || '#6b7280',
+  }));
 
   // Update search term when URL params change
   useEffect(() => {
@@ -96,8 +50,7 @@ const Browse = () => {
     }
   }, [searchParams]);
 
-  // Use real data if available, fallback to mock data
-  const series = allSeries.length > 0 ? allSeries.map(s => ({
+  const series = allSeries.map((s) => ({
     id: s.id,
     title: s.title,
     slug: s.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -106,14 +59,15 @@ const Browse = () => {
     author: s.author || 'Unknown Author',
     status: s.status,
     genres: s.genres || [],
-    rating: 4.5, // Default rating
-    total_chapters: 25, // Default chapter count
-    view_count: Math.floor(Math.random() * 100000),
-    categories: (s.genres || []).map(genre => ({ 
-      name: genre, 
-      color: mockCategories.find(c => c.name === genre)?.color || '#6b7280' 
-    }))
-  })) : mockSeries;
+    content_type: s.content_type || 'manga',
+    rating: s.rating_average || 4.5,
+    total_chapters: s.chapter_count || 0,
+    view_count: s.view_count || 0,
+    categories: (s.genres || []).map((genre) => ({
+      name: genre,
+      color: genreColors[genre] || '#6b7280',
+    })),
+  }));
 
   const filteredSeries = series.filter(s => {
     const matchesSearch = s.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -123,9 +77,10 @@ const Browse = () => {
     const matchesCategory = !selectedCategory || 
                            s.categories.some(cat => cat.name === selectedCategory);
 
-    const matchesContentType = contentType === 'all' ||
-                               (contentType === 'manga' && Math.random() > 0.5) ||
-                               (contentType === 'novel' && Math.random() <= 0.5);
+    const matchesContentType =
+      contentType === 'all' ||
+      (contentType === 'manga' && (s as { content_type?: string }).content_type !== 'novel') ||
+      (contentType === 'novel' && (s as { content_type?: string }).content_type === 'novel');
     
     return matchesSearch && matchesCategory && matchesContentType;
   });
@@ -341,7 +296,23 @@ const Browse = () => {
   );
 };
 
-const SeriesCard = ({ series }: { series: typeof mockSeries[0] }) => (
+type BrowseSeriesItem = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  cover_image_url: string;
+  author: string;
+  status: string;
+  genres: string[];
+  content_type?: string;
+  rating: number;
+  total_chapters: number;
+  view_count: number;
+  categories: { name: string; color: string }[];
+};
+
+const SeriesCard = ({ series }: { series: BrowseSeriesItem }) => (
   <Link to={`/series/${series.id || series.slug}`}>
     <Card className="group cursor-pointer hover:shadow-lg transition-all duration-200">
       <div className="aspect-[3/4] overflow-hidden rounded-t-lg">
@@ -392,7 +363,7 @@ const SeriesCard = ({ series }: { series: typeof mockSeries[0] }) => (
   </Link>
 );
 
-const SeriesListItem = ({ series }: { series: typeof mockSeries[0] }) => (
+const SeriesListItem = ({ series }: { series: BrowseSeriesItem }) => (
   <Link to={`/series/${series.id || series.slug}`}>
     <Card className="group cursor-pointer hover:shadow-md transition-all duration-200">
       <CardContent className="p-4">

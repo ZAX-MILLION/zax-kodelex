@@ -32,7 +32,12 @@ const Layout = ({ children }: LayoutProps) => {
   }, []);
   
   if (isReaderPage) {
-    return <>{children}</>;
+    return (
+      <>
+        {children}
+        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      </>
+    );
   }
 
   return (

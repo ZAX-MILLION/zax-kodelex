@@ -31,6 +31,10 @@ export interface MangaInfo {
   cover_image_url?: string;
   meta_title?: string;
   meta_description?: string;
+  content_type?: 'manga' | 'novel';
+  rating_average?: number;
+  chapter_count?: number;
+  view_count?: number;
 }
 
 export const useMultiSeriesData = () => {

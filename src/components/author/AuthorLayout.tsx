@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { redirectToLogin } from '@/utils/authRedirect';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AuthorSidebar } from './AuthorSidebar';
 import { AuthorHeader } from './AuthorHeader';
@@ -24,7 +24,8 @@ export const AuthorLayout = ({ children }: AuthorLayoutProps) => {
   const isAuthor = userProfile?.role === 'author' || userProfile?.role === 'admin';
   
   if (!user || !isAuthor) {
-    return <Navigate to="/login" replace />;
+    redirectToLogin();
+    return null;
   }
 
   return (

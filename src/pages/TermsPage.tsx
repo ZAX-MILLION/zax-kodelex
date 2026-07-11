@@ -56,8 +56,8 @@ We reserve the right to modify these terms at any time. Changes become effective
 ## Contact Information
 
 Questions about these terms should be sent to:
-- **Email**: legal@yoursite.com
-- **Address**: [Your Company Address]
+- **Email**: contact@zaxmillion.com
+- **Address**: Zax Million, Online Service
 
 ---
 
@@ -67,7 +67,7 @@ Questions about these terms should be sent to:
   return (
     <>
       <EnhancedSEOHelmet 
-        title="Terms of Service - Manga Reader"
+        title="Terms of Service - Zax Million"
         description="Terms of service and usage guidelines for our manga reading platform."
         keywords="terms, service, agreement, usage, guidelines, legal"
       />

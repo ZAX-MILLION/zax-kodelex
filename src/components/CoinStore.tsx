@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCoinWallet } from '@/hooks/useCoinWallet';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { openAuthModal } from '@/utils/authRedirect';
 
 interface CoinPackage {
   id: string;
@@ -126,8 +127,8 @@ const CoinStore = () => {
             <p className="text-muted-foreground mb-4">
               Please sign in to purchase coins and unlock premium content
             </p>
-            <Button asChild>
-              <a href="/login">Sign In</a>
+            <Button onClick={() => openAuthModal()}>
+              Sign In
             </Button>
           </CardContent>
         </Card>

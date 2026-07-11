@@ -52,8 +52,8 @@ You have the right to:
 ## Contact Us
 
 For privacy-related questions, contact us at:
-- **Email**: privacy@yoursite.com
-- **Address**: [Your Company Address]
+- **Email**: contact@zaxmillion.com
+- **Address**: Zax Million, Online Service
 
 ---
 
@@ -63,7 +63,7 @@ For privacy-related questions, contact us at:
   return (
     <>
       <EnhancedSEOHelmet 
-        title="Privacy Policy - Manga Reader"
+        title="Privacy Policy - Zax Million"
         description="Privacy policy and data protection information for our manga reading platform."
         keywords="privacy, policy, data protection, personal information, gdpr"
       />

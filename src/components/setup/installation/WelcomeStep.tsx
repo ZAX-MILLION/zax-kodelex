@@ -52,11 +52,11 @@ export const WelcomeStep = ({ onNext }: WelcomeStepProps) => {
         <div className="mb-4">
           <BookOpen className="h-16 w-16 mx-auto text-primary" />
         </div>
-        <h1 className="text-3xl font-bold mb-2">Welcome to MangaReader Pro</h1>
+        <h1 className="text-3xl font-bold mb-2">Welcome to Zax Million</h1>
         <p className="text-lg text-muted-foreground">
-          Professional manga reading platform with advanced features
+          Premium manga reading platform — set up your site in minutes
         </p>
-        <Badge variant="secondary" className="mt-2">Version 2.0</Badge>
+        <Badge variant="secondary" className="mt-2">v1.0.0</Badge>
       </div>
 
       <Card>

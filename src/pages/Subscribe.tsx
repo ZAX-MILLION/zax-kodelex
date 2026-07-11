@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { redirectToLogin } from '@/utils/authRedirect';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +16,7 @@ const Subscribe = () => {
 
   const handleSubscribe = async () => {
     if (!user) {
-      window.location.href = '/login';
+      redirectToLogin();
       return;
     }
 
@@ -51,7 +52,7 @@ const Subscribe = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
       <SEOHelmet 
-        title="Subscribe to Premium - Manga Reader"
+        title="Subscribe to Premium - Zax Million"
         description="Upgrade to Premium for ad-free reading, early access to chapters, premium themes, and more exclusive features."
         keywords="manga premium, subscription, ad-free manga, early access chapters"
       />

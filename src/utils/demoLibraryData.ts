@@ -81,7 +81,14 @@ export function isDemoModeActive() {
   return demoModeActive;
 }
 
+export function isDemoModeEnabled(): boolean {
+  return import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true';
+}
+
 export function shouldUseDemoData<T>(data: T[] | null | undefined, error?: unknown): boolean {
+  if (!isDemoModeEnabled()) {
+    return false;
+  }
   return !!error || !data || data.length === 0;
 }
 

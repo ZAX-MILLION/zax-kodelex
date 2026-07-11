@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
+import { openAuthModal } from '@/utils/authRedirect';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { BadgeSystem, checkAndAwardBadges, type UserBadge } from '@/components/badges/BadgeSystem';
@@ -223,7 +224,7 @@ const Profile = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-background">
-        <SEOHelmet title="Profile - Login Required" />
+        <SEOHelmet title="Profile - Zax Million" />
         <div className="container mx-auto px-6 py-16 text-center">
           <div className="space-y-6">
             <User className="h-24 w-24 mx-auto text-muted-foreground/50" />
@@ -231,6 +232,7 @@ const Profile = () => {
               <h1 className="text-3xl font-bold text-foreground mb-2">Please Sign In</h1>
               <p className="text-muted-foreground">You need to be logged in to view your profile</p>
             </div>
+            <Button onClick={() => openAuthModal()}>Sign In</Button>
           </div>
         </div>
       </div>
@@ -240,7 +242,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHelmet 
-        title="Profile - Manga Reader"
+        title="Profile - Zax Million"
         description="Manage your manga reading profile, view achievements, and customize your reading experience."
         keywords="manga profile, reading history, achievements, user settings"
       />

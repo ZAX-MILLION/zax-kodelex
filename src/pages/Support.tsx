@@ -16,6 +16,8 @@ declare global {
   }
 }
 
+const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+
 const Support = () => {
   const [amount, setAmount] = useState('5.00');
   const [email, setEmail] = useState('');
@@ -26,9 +28,10 @@ const Support = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Load PayPal SDK
+    if (!PAYPAL_CLIENT_ID) return;
+
     const script = document.createElement('script');
-    script.src = "https://www.paypal.com/sdk/js?client-id=sb&currency=USD&disable-funding=credit,card";
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD&disable-funding=credit,card`;
     script.async = true;
     script.onload = () => {
       setPaypalLoaded(true);
@@ -37,7 +40,9 @@ const Support = () => {
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
   }, []);
 
@@ -254,18 +259,23 @@ const Support = () => {
                 </div>
               </div>
 
-              {/* PayPal Button */}
-              <div className="border-t pt-4">
-                <div 
-                  id="paypal-button-container" 
-                  className={`min-h-[50px] ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}
-                />
-                {!paypalLoaded && (
-                  <div className="text-center text-muted-foreground py-4">
-                    Loading PayPal...
-                  </div>
-                )}
-              </div>
+              {PAYPAL_CLIENT_ID ? (
+                <div className="border-t pt-4">
+                  <div
+                    id="paypal-button-container"
+                    className={`min-h-[50px] ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}
+                  />
+                  {!paypalLoaded && (
+                    <div className="text-center text-muted-foreground py-4">
+                      Loading PayPal...
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground border-t pt-4">
+                  PayPal donations are not configured. Use Ko-fi above to support Zax Million.
+                </p>
+              )}
             </div>
           </Card>
 

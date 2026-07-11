@@ -7,6 +7,7 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { useCoinWallet } from '@/hooks/useCoinWallet';
 import { PremiumOnly, RoleGuard } from '@/components/auth/RoleGuard';
 import { Coins, Download, Eye, Clock, Star, AlertCircle, Crown, TrendingUp, Shield } from 'lucide-react';
+import { openAuthModal } from '@/utils/authRedirect';
 import { Link } from 'react-router-dom';
 
 interface UsageStats {
@@ -55,8 +56,8 @@ const MonetizationDashboard = () => {
           <p className="text-muted-foreground mb-4">
             Sign in to access monetization features and track your usage
           </p>
-          <Button asChild>
-            <Link to="/login">Sign In</Link>
+          <Button onClick={() => openAuthModal()}>
+            Sign In
           </Button>
         </CardContent>
       </Card>

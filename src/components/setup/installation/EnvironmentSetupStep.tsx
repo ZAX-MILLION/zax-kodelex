@@ -17,7 +17,8 @@ import {
   Info,
   ExternalLink 
 } from 'lucide-react';
-import type { InstallationData } from '@/pages/Installation';
+import { createClient } from '@supabase/supabase-js';
+import type { InstallationData } from '@/types/installation';
 
 interface EnvironmentSetupStepProps {
   data: InstallationData;
@@ -81,25 +82,27 @@ export const EnvironmentSetupStep = ({
     setTestResult(null);
 
     try {
-      // Simulate connection test
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
       if (isSupabase) {
-        // Simulate Supabase test
-        if (data.supabaseConfig?.url?.includes('supabase.co')) {
-          setTestResult('success');
-        } else {
-          throw new Error('Invalid Supabase URL');
+        const url = data.supabaseConfig?.url?.trim();
+        const anonKey = data.supabaseConfig?.anonKey?.trim();
+        if (!url || !anonKey) {
+          throw new Error('Missing Supabase credentials');
         }
+
+        const testClient = createClient(url, anonKey);
+        const { error } = await testClient.from('install_status').select('is_installed').limit(1);
+        if (error) {
+          throw error;
+        }
+        setTestResult('success');
       } else {
-        // Simulate MySQL test
-        if (data.mysqlConfig?.host && data.mysqlConfig?.database) {
-          setTestResult('success');
-        } else {
+        if (!data.mysqlConfig?.host || !data.mysqlConfig?.database) {
           throw new Error('Invalid MySQL configuration');
         }
+        setTestResult('success');
       }
     } catch (error) {
+      console.error('Connection test failed:', error);
       setTestResult('error');
     } finally {
       setTesting(false);

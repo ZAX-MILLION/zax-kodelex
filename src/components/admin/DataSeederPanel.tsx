@@ -12,7 +12,7 @@ import {
   RefreshCw,
   Info
 } from 'lucide-react';
-import { executeDataReset } from '@/utils/dbSeederTool';
+import { executeDataReset } from '@/utils/seed/dbSeederTool';
 import { useToast } from '@/hooks/use-toast';
 
 export const DataSeederPanel = () => {

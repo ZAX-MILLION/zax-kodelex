@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { runCuratedReset10x10 } from '@/utils/curatedReset10x10';
+import { runCuratedReset10x10 } from '@/utils/seed/curatedReset10x10';
 import { Database, RefreshCw, CheckCircle, AlertTriangle, BookOpen, FileText, Lock } from 'lucide-react';
 
 export const CuratedReset10x10: React.FC = () => {

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { seedChapterData } from '@/utils/seedChapterData';
+import { seedChapterData } from '@/utils/seed/seedChapterData';
 import { Database, Loader2, Plus, Trash2 } from 'lucide-react';
 
 const ChapterDataSeeder = () => {

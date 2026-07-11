@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/hooks/useSubscription';
-import { seedTestUsers, grantTestPremium, testUsers } from '@/utils/seedTestUsers';
+import { seedTestUsers, grantTestPremium, testUsers } from '@/utils/seed/seedTestUsers';
 import { Shield, CheckCircle, XCircle, AlertTriangle, Users, Lock, Crown, Settings, Edit, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

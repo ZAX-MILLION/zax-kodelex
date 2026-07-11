@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { cleanupDemoData, confirmAndCleanup } from '@/utils/cleanupDemoData';
-import { seedDemoLibrary } from '@/utils/seedDemoLibrary';
+import { cleanupDemoData, confirmAndCleanup } from '@/utils/seed/cleanupDemoData';
+import { seedDemoLibrary } from '@/utils/seed/seedDemoLibrary';
 import { 
   Database, 
   Trash2, 

@@ -68,8 +68,8 @@ Different cookies have different retention periods:
 ## Contact Us
 
 For questions about our cookie policy, contact us at:
-- **Email**: privacy@yoursite.com
-- **Address**: [Your Company Address]
+- **Email**: contact@zaxmillion.com
+- **Address**: Zax Million, Online Service
 
 ---
 
@@ -79,7 +79,7 @@ For questions about our cookie policy, contact us at:
   return (
     <>
       <EnhancedSEOHelmet 
-        title="Cookie Policy - Manga Reader"
+        title="Cookie Policy - Zax Million"
         description="Cookie policy and information about how we use cookies on our manga reading platform."
         keywords="cookies, policy, privacy, tracking, analytics, preferences"
       />

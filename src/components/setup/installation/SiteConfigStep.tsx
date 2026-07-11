@@ -9,7 +9,7 @@ import {
   ArrowLeft, 
   Settings
 } from 'lucide-react';
-import type { InstallationData } from '@/pages/Installation';
+import type { InstallationData } from '@/types/installation';
 
 interface SiteConfigStepProps {
   data: InstallationData;

@@ -18,11 +18,11 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import type { SetupData } from '@/pages/Setup';
+import type { InstallationData } from '@/types/installation';
 
 interface CompletionStepProps {
-  data: SetupData;
-  onUpdate: (updates: Partial<SetupData>) => void;
+  data: InstallationData;
+  onUpdate: (updates: Partial<InstallationData>) => void;
   onNext: () => void;
   onPrev: () => void;
   isLast: boolean;
