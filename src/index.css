@@ -1,0 +1,329 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Manga Reader Design System - Modern dark theme with Japanese aesthetics */
+
+@layer base {
+  :root {
+    /* RTL/LTR Support */
+    --font-language: 'Noto Sans', sans-serif;
+    /* Improved warm theme with better contrast */
+    --background: 220 13% 18%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 13% 16%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 220 13% 15%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Warm orange primary for better contrast */
+    --primary: 25 95% 53%;
+    --primary-foreground: 220 13% 18%;
+
+    --secondary: 220 13% 22%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 220 13% 20%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 220 13% 24%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 26%;
+    --input: 220 13% 20%;
+    --ring: 25 95% 53%;
+
+    /* Refined manga colors */
+    --manga-red: 0 72% 51%;
+    --manga-red-hover: 0 72% 46%;
+    --manga-gold: 25 95% 53%;
+    --manga-blue: 210 100% 60%;
+    --reader-bg: 220 13% 15%;
+    --chapter-progress: 142 76% 36%;
+    
+    /* Subtle gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 13% 18%), hsl(220 13% 22%));
+    --gradient-card: linear-gradient(145deg, hsl(220 13% 16%), hsl(220 13% 14%));
+    --gradient-accent: linear-gradient(90deg, hsl(25 95% 53%), hsl(33 100% 50%));
+    --gradient-surface: linear-gradient(180deg, hsl(220 13% 20%), hsl(220 13% 16%));
+    
+    /* Refined shadows */
+    --shadow-manga: 0 8px 25px -5px hsl(0 0% 0% / 0.3);
+    --shadow-card: 0 4px 15px -2px hsl(0 0% 0% / 0.2);
+    --shadow-glow: 0 0 20px hsl(25 95% 53% / 0.15);
+    --shadow-hover: 0 6px 20px -3px hsl(0 0% 0% / 0.25);
+    
+    /* Smooth transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-gentle: all 0.2s ease-out;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Admin Dashboard Theme Variants */
+  .admin-theme-white {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+  }
+
+  .admin-theme-dark {
+    /* Uses existing dark theme */
+  }
+
+  .admin-theme-custom {
+    --primary: var(--admin-custom-primary);
+    --primary-foreground: var(--admin-custom-primary-foreground);
+    --ring: var(--admin-custom-primary);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-language);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* RTL Support */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+  
+  [dir="ltr"] {
+    direction: ltr;
+  }
+  
+  /* Direction-aware utilities */
+  [dir="rtl"] .rtl\:text-right {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .rtl\:text-left {
+    text-align: left;
+  }
+  
+  [dir="rtl"] .rtl\:mr-auto {
+    margin-right: auto;
+  }
+  
+  [dir="rtl"] .rtl\:ml-auto {
+    margin-left: auto;
+  }
+  
+  [dir="rtl"] .rtl\:flex-row-reverse {
+    flex-direction: row-reverse;
+  }
+  
+  /* RTL spacing adjustments */
+  [dir="rtl"] .rtl\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+  }
+}
+
+@layer components {
+  /* Mouse movement animations */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+  .hover-lift:hover {
+    @apply transform -translate-y-1 shadow-lg;
+  }
+  
+  /* Interactive card animations */
+  .interactive-card {
+    @apply transition-all duration-300 ease-out transform-gpu;
+  }
+  .interactive-card:hover {
+    @apply shadow-lg scale-[1.02];
+  }
+  
+  /* Smooth mouse following effects */
+  .mouse-reactive {
+    @apply transition-transform duration-300 ease-out;
+  }
+  
+  /* Hide scrollbar while keeping functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
+
+  /* Ultra small screen utilities for 240px+ screens */
+  .text-xs-smaller {
+    font-size: 0.6rem;
+    line-height: 0.75rem;
+  }
+  
+  .p-xs {
+    padding: 0.25rem;
+  }
+  
+  .px-xs {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  
+  .py-xs {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+  
+  .m-xs {
+    margin: 0.25rem;
+  }
+  
+  .mx-xs {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+  
+  .my-xs {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .gap-xs {
+    gap: 0.25rem;
+  }
+  
+  .space-x-xs > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 0.25rem;
+  }
+  
+  .space-y-xs > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.25rem;
+  }
+
+  /* Responsive text scaling for very small screens */
+  @media (max-width: 320px) {
+    .responsive-text-xs {
+      font-size: 0.65rem;
+      line-height: 0.85rem;
+    }
+    
+    .responsive-text-sm {
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+    
+    .responsive-text-base {
+      font-size: 0.8rem;
+      line-height: 1.1rem;
+    }
+    
+    .responsive-text-lg {
+      font-size: 0.9rem;
+      line-height: 1.2rem;
+    }
+    
+    .responsive-text-xl {
+      font-size: 1rem;
+      line-height: 1.3rem;
+    }
+  }
+
+  /* Responsive containers for ultra small screens */
+  @media (max-width: 320px) {
+    .container {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+  
+  /* Force all elements to respect viewport width */
+  img, video, iframe, canvas, svg {
+    max-width: 100vw !important;
+    height: auto;
+    box-sizing: border-box;
+  }
+  
+  /* Prevent any container from exceeding viewport */
+  .webtoon-container {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
