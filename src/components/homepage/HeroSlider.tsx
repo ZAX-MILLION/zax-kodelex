@@ -67,7 +67,7 @@ export const HeroSlider = ({
                     type="button"
                     aria-label="Show trending series"
                     onClick={() => setCurrentFilter('trending')}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`min-h-11 min-w-11 w-11 h-11 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       currentFilter === 'trending' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -87,7 +87,7 @@ export const HeroSlider = ({
                     type="button"
                     aria-label="Show latest series"
                     onClick={() => setCurrentFilter('new')}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`min-h-11 min-w-11 w-11 h-11 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       currentFilter === 'new' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -107,7 +107,7 @@ export const HeroSlider = ({
                     type="button"
                     aria-label="Show random series"
                     onClick={() => setCurrentFilter('random')}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`min-h-11 min-w-11 w-11 h-11 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       currentFilter === 'random' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -199,8 +199,8 @@ export const HeroSlider = ({
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex absolute left-2 lg:-left-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
-            <CarouselNext className="hidden md:flex absolute right-2 lg:-right-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
+            <CarouselPrevious className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm min-h-11 min-w-11" />
+            <CarouselNext className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm min-h-11 min-w-11" />
           </Carousel>
         </div>
       </div>

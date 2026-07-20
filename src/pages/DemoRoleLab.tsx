@@ -100,14 +100,13 @@ const DemoRoleLab = () => {
             return (
               <Card
                 key={option.id}
-                className={`cursor-pointer transition-all hover:shadow-md ${
+                className={`transition-all hover:shadow-md focus-within:ring-2 focus-within:ring-ring ${
                   selected ? 'ring-2 ring-primary border-primary' : ''
                 }`}
-                onClick={() => setActiveRole(option.id)}
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-center gap-2">
-                    <Icon className="h-5 w-5 text-primary" />
+                    <Icon className="h-5 w-5 text-primary" aria-hidden />
                     <CardTitle className="text-lg">{option.label}</CardTitle>
                   </div>
                   <CardDescription>{option.description}</CardDescription>
@@ -116,11 +115,9 @@ const DemoRoleLab = () => {
                   <Button
                     size="sm"
                     variant={selected ? 'default' : 'outline'}
-                    className="w-full"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveRole(option.id);
-                    }}
+                    className="w-full min-h-11"
+                    aria-pressed={selected}
+                    onClick={() => setActiveRole(option.id)}
                   >
                     {selected ? 'Active' : 'Simulate'}
                   </Button>
@@ -162,8 +159,8 @@ const DemoRoleLab = () => {
                     <Link to="/demo/checkout">Open demo checkout</Link>
                   </Button>
                 )}
-                <Button variant="outline" onClick={clearRole}>
-                  Reset to Guest
+                <Button variant="outline" onClick={clearRole} className="min-h-11">
+                  Reset Demo
                 </Button>
               </div>
             </CardContent>

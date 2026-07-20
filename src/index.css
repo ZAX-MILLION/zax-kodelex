@@ -231,10 +231,22 @@
     display: none;  /* Safari and Chrome */
   }
 
-  /* Visible focus for keyboard users */
-  :focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 2px;
+  /* Touch + safe-area helpers for Seamless V2 responsive polish */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .safe-pt {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-pb {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .overscroll-x-contain {
+    overscroll-behavior-x: contain;
   }
 
   @media (prefers-reduced-motion: reduce) {

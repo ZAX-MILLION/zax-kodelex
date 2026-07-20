@@ -29,7 +29,7 @@ const Browse = () => {
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [contentType, setContentType] = useState<string>('all');
-  const [sortBy, setSortBy] = useState('title');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'title');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showControls, setShowControls] = useState(false);
 
@@ -42,11 +42,18 @@ const Browse = () => {
     color: genreColors[name] || '#6b7280',
   }));
 
-  // Update search term when URL params change
+  // Update search/sort when URL params change
   useEffect(() => {
     const search = searchParams.get('search');
     if (search) {
       setSearchTerm(search);
+    }
+    const sort = searchParams.get('sort');
+    if (sort) {
+      if (sort === 'latest' || sort === 'updated' || sort === 'created_at') setSortBy('created_at');
+      else if (sort === 'popular' || sort === 'views' || sort === 'view_count') setSortBy('view_count');
+      else if (sort === 'rating') setSortBy('rating');
+      else setSortBy(sort);
     }
   }, [searchParams]);
 

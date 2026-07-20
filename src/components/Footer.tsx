@@ -154,9 +154,10 @@ const Footer = () => {
               <a 
                 key={social.id}
                 href={social.url} 
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="inline-flex items-center justify-center min-h-11 min-w-11 text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`${social.platform} (opens in a new tab)`}
               >
                 {getSocialIcon(social.icon)}
               </a>

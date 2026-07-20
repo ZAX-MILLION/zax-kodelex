@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Filter, Star, Clock, BookOpen, Eye, X, Plus, Minus } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { isSupabaseConfigured, supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import LazyImage from '@/components/LazyImage';
 import { formatDistanceToNow } from 'date-fns';
@@ -14,6 +14,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { appConfig } from '@/config/env';
+import {
+  activateDemoMode,
+  getDemoChaptersForSeries,
+  getDemoSeriesList,
+} from '@/utils/demoLibraryData';
 
 interface Chapter {
   id: string;
@@ -42,6 +55,39 @@ interface SeriesData {
 
 type GenreState = 'normal' | 'include' | 'exclude';
 
+function mapDemoSeriesCatalogue(): SeriesData[] {
+  activateDemoMode();
+  return getDemoSeriesList().map((item) => {
+    const chapters = getDemoChaptersForSeries(item.id);
+    return {
+      id: item.id,
+      title: item.title,
+      author: item.author,
+      status: item.status,
+      genres: item.genres,
+      description: item.description,
+      cover_image_url: item.cover_image_url,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+      view_count: item.view_count,
+      rating_average: item.rating_average,
+      rating_count: item.rating_count,
+      latest_chapters: chapters
+        .slice()
+        .reverse()
+        .slice(0, 2)
+        .map((chapter) => ({
+          id: chapter.id,
+          chapter_number: chapter.chapter_number,
+          title: chapter.title,
+          release_date: chapter.release_date,
+          is_locked: chapter.is_locked,
+        })),
+      total_chapters: chapters.length,
+    };
+  });
+}
+
 const SeriesPage = () => {
   const [series, setSeries] = useState<SeriesData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,6 +110,22 @@ const SeriesPage = () => {
   const fetchSeries = async () => {
     try {
       setLoading(true);
+
+      if (appConfig.isDemo || !isSupabaseConfigured) {
+        const demo = mapDemoSeriesCatalogue().filter((item) => {
+          if (!searchTerm.trim()) return true;
+          const q = searchTerm.toLowerCase();
+          return (
+            item.title.toLowerCase().includes(q) ||
+            (item.author || '').toLowerCase().includes(q) ||
+            (item.description || '').toLowerCase().includes(q)
+          );
+        });
+        setAllSeriesData(demo);
+        setSeries(demo);
+        setTotalCount(demo.length);
+        return;
+      }
       
       let query = supabase
         .from('manga_meta')
@@ -116,6 +178,13 @@ const SeriesPage = () => {
       setTotalCount(seriesWithChaptersFiltered.length);
     } catch (error) {
       console.error('Error fetching series:', error);
+      const demo = mapDemoSeriesCatalogue();
+      if (demo.length > 0 && (appConfig.isDemo || !isSupabaseConfigured)) {
+        setAllSeriesData(demo);
+        setSeries(demo);
+        setTotalCount(demo.length);
+        return;
+      }
       toast({
         title: "Error",
         description: "Failed to load series data",
@@ -199,13 +268,13 @@ const SeriesPage = () => {
   const activeFilterCount = Object.values(genreStates).filter(state => state !== undefined).length;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="space-y-8">
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Header */}
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold">All Manga Series</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center space-y-3 sm:space-y-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">All Manga Series</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-1">
               Discover and explore our complete collection of manga series. From action-packed adventures to heartwarming romances.
             </p>
             <div className="text-sm text-muted-foreground">
@@ -215,20 +284,65 @@ const SeriesPage = () => {
 
           {/* Search and Filters */}
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input 
                   placeholder="Search series by title, author, or description..." 
-                  className="pl-10"
+                  className="pl-10 min-h-11"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  aria-label="Search series"
                 />
               </div>
+
+              {/* Mobile filters: sheet */}
+              <div className="sm:hidden">
+                <Sheet open={showFilters} onOpenChange={setShowFilters}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" className="w-full min-h-11 justify-center gap-2">
+                      <Filter className="h-4 w-4" />
+                      Filters
+                      {activeFilterCount > 0 && (
+                        <Badge variant="secondary">{activeFilterCount}</Badge>
+                      )}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-2xl">
+                    <SheetHeader>
+                      <SheetTitle>Genre filters</SheetTitle>
+                    </SheetHeader>
+                    <div className="mt-4 space-y-4 pb-[env(safe-area-inset-bottom)]">
+                      <Button variant="ghost" size="sm" onClick={clearAllFilters} className="min-h-11">
+                        Clear all
+                      </Button>
+                      <div className="grid grid-cols-2 gap-2">
+                        {allGenres.map((genre) => {
+                          const state = genreStates[genre] || 'normal';
+                          return (
+                            <Button
+                              key={genre}
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleGenreClick(genre)}
+                              className={`min-h-11 text-xs justify-start ${getGenreColor(state)}`}
+                            >
+                              {getGenreIcon(state)}
+                              <span className="ml-1">{genre}</span>
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
               
+              {/* Tablet/desktop filters: popover */}
+              <div className="hidden sm:block">
               <Popover open={showFilters} onOpenChange={setShowFilters}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
+                  <Button variant="outline" className="flex items-center gap-2 min-h-11">
                     <Filter className="h-4 w-4" />
                     Filters
                     {activeFilterCount > 0 && (
@@ -246,7 +360,7 @@ const SeriesPage = () => {
                         variant="ghost" 
                         size="sm" 
                         onClick={clearAllFilters}
-                        className="text-xs"
+                        className="text-xs min-h-11"
                       >
                         Clear All
                       </Button>
@@ -267,7 +381,7 @@ const SeriesPage = () => {
                             variant="outline"
                             size="sm"
                             onClick={() => handleGenreClick(genre)}
-                            className={`text-xs justify-start ${getGenreColor(state)}`}
+                            className={`text-xs justify-start min-h-11 ${getGenreColor(state)}`}
                           >
                             {getGenreIcon(state)}
                             <span className="ml-1">{genre}</span>
@@ -278,6 +392,7 @@ const SeriesPage = () => {
                   </div>
                 </PopoverContent>
               </Popover>
+              </div>
             </div>
             
             {/* Active Filters Display */}
@@ -351,8 +466,8 @@ const SeriesPage = () => {
                       
                       {/* Status Badge */}
                       <div className="absolute top-2 left-2">
-                        <Badge className={`text-xs ${
-                          item.status === 'ongoing' ? 'bg-green-500' : 'bg-blue-500'
+                        <Badge className={`text-xs text-white border-0 ${
+                          item.status === 'ongoing' ? 'bg-emerald-800 hover:bg-emerald-800' : 'bg-sky-800 hover:bg-sky-800'
                         }`}>
                           {item.status === 'ongoing' ? 'ONGOING' : 'COMPLETED'}
                         </Badge>

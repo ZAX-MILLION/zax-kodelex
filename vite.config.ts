@@ -84,9 +84,14 @@ export default defineConfig(() => {
 
   return {
     base: process.env.VITE_BASE || '/',
+    appType: 'spa' as const,
     server: {
       host: "::",
       port: 8080,
+    },
+    preview: {
+      host: '127.0.0.1',
+      port: 4173,
     },
     plugins,
     resolve: {

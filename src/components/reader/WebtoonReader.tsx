@@ -160,7 +160,7 @@ export const WebtoonReader = ({
 
   return (
     <div className="min-h-screen bg-background">
-      <Card className="fixed top-0 left-0 right-0 z-50 rounded-none border-b bg-background/95 backdrop-blur-sm">
+      <Card className="fixed top-0 left-0 right-0 z-50 rounded-none border-b bg-background/95 backdrop-blur-sm pt-[env(safe-area-inset-top)]">
         <div className="w-full px-2 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between gap-1 sm:gap-2">
             <div className="flex items-center gap-1 sm:gap-2 min-w-0">
@@ -246,9 +246,11 @@ export const WebtoonReader = ({
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   className="block mx-auto h-auto w-full"
                   style={{
-                    maxWidth: boxedWidth ? '100%' : '100vw',
+                    maxWidth: '100%',
+                    width: '100%',
+                    height: 'auto',
                     objectFit: getObjectFit(imageFit),
-                    transform: `scale(${imageScale / 100})`,
+                    transform: `scale(${Math.min(imageScale, 100) / 100})`,
                     transformOrigin: 'top center',
                   }}
                   onError={(e) => {
@@ -323,7 +325,7 @@ export const WebtoonReader = ({
         </div>
       </div>
 
-      <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-none border-t bg-background/95 backdrop-blur-sm">
+      <Card className="fixed bottom-0 left-0 right-0 z-50 rounded-none border-t bg-background/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]">
         <div className="w-full px-2 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between gap-2">
             <Button

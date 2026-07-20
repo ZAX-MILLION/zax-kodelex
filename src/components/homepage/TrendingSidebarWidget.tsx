@@ -131,9 +131,9 @@ const TrendingSidebarWidget = ({
                   </span>
                   {item.status && (
                     <span className={`text-xs px-1.5 py-0.5 rounded ${
-                      item.status === 'ongoing' ? 'bg-green-500/10 text-green-600' :
-                      item.status === 'completed' ? 'bg-blue-500/10 text-blue-600' :
-                      'bg-orange-500/10 text-orange-600'
+                      item.status === 'ongoing' ? 'bg-emerald-800 text-white' :
+                      item.status === 'completed' ? 'bg-sky-800 text-white' :
+                      'bg-amber-800 text-white'
                     }`}>
                       {item.status}
                     </span>

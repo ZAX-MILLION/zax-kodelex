@@ -224,7 +224,7 @@ export function SeamlessHomepage({ className = '' }: { className?: string }) {
                 </p>
               )}
             </div>
-            <aside className="rounded-2xl border border-border/50 bg-card/50 p-5 sm:p-6 space-y-5">
+            <div className="rounded-2xl border border-border/50 bg-card/50 p-5 sm:p-6 space-y-5">
               <div>
                 <h3 className="font-semibold flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-primary" />
@@ -250,7 +250,7 @@ export function SeamlessHomepage({ className = '' }: { className?: string }) {
                   ))}
                 </ul>
               </div>
-            </aside>
+            </div>
           </div>
         </div>
       </section>
@@ -319,7 +319,7 @@ export function SeamlessHomepage({ className = '' }: { className?: string }) {
               <FeedSection />
             </div>
           </div>
-          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start" role="complementary" aria-label="Trending">
+          <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
             <TrendingSidebarWidget
               todaySeries={trendingSeries.slice(0, 3)}
               weekSeries={trendingSeries.slice(0, 5)}
