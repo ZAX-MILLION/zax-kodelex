@@ -1,0 +1,130 @@
+{
+  "audit_meta": {
+    "project_name": "Zax Million",
+    "package_name": "zax-million",
+    "version": "1.0.0",
+    "license": "MIT",
+    "audit_date": "2026-07-20",
+    "audit_phase": "Phase 1 — Pre-upgrade investigation only",
+    "repository": "https://github.com/ZAX-MILLION/zax-kodelex",
+    "git_branch": "main",
+    "git_head": "b8c42a02135a4890cf83ba88280349f2e60da307",
+    "git_head_message": "Speed up the public demo and surface the live link in the README.",
+    "remote_origin": "https://github.com/ZAX-MILLION/zax-kodelex.git"
+  },
+  "public_urls": {
+    "user_site_root": {
+      "url": "https://zax-million.github.io/",
+      "status": "404 Not Found",
+      "notes": "No site deployed at GitHub user/org root. Expected for project-site Pages setup."
+    },
+    "project_site_demo": {
+      "url": "https://zax-million.github.io/zax-kodelex/",
+      "status": "200 OK — live demo",
+      "deploy_trigger": "push to main → .github/workflows/deploy-pages.yml",
+      "build_flags": {
+        "VITE_DEMO_MODE": "true",
+        "VITE_SKIP_SETUP": "true",
+        "VITE_BASE": "/zax-kodelex/"
+      }
+    }
+  },
+  "file_inventory": {
+    "total_files_excluding_node_modules_git_dist": 634,
+    "total_size_mb_excluding_node_modules_git_dist": 30.85,
+    "by_directory": {
+      "src": { "files": 487, "size_mb": 24.12 },
+      "docs": { "files": 21, "size_mb": 3.73 },
+      "public": { "files": 15, "size_mb": 1.93 },
+      "supabase": { "files": 91, "size_mb": 0.34 },
+      "github": { "files": 1, "size_mb": 0 }
+    },
+    "counts": {
+      "pages_tsx": 39,
+      "admin_components_tsx": 113,
+      "supabase_migrations": 82,
+      "supabase_edge_functions": 8
+    },
+    "duplicate_basenames_in_src": [
+      { "name": "use-toast.ts", "count": 2, "paths": ["src/hooks/use-toast.ts", "src/components/ui/use-toast.ts"] },
+      { "name": "Home.tsx", "count": 2, "paths": ["src/pages/Home.tsx", "src/themes/components/Home.tsx"] },
+      { "name": "WordPressCrawler.tsx", "count": 2, "paths": ["src/pages/WordPressCrawler.tsx", "src/components/crawlers/WordPressCrawler.tsx"] },
+      { "name": "ChapterEditor.tsx", "count": 2, "note": "different directories under src/" },
+      { "name": "CoinAnalytics.tsx", "count": 2, "note": "page vs component variant" }
+    ]
+  },
+  "stack": {
+    "frontend": ["React 18.3", "TypeScript 5.5", "Vite 5.4", "Tailwind CSS 3.4", "shadcn/ui (Radix)", "TanStack Query 5", "React Router 6", "react-helmet-async", "vite-plugin-pwa"],
+    "backend": ["Supabase (Postgres, Auth, Storage, Edge Functions)"],
+    "payments": ["PayPal (edge functions + optional VITE_PAYPAL_CLIENT_ID)", "Ko-fi link (Support page)", "Simulated Stripe/PayPal on /buy (theme license — not production-ready)"],
+    "dev_server_port": 8080
+  },
+  "build_metrics": {
+    "standard_build": {
+      "status": "pass",
+      "duration_seconds": 40.66,
+      "dist_total_mb": 4.23,
+      "pwa_enabled": true,
+      "pwa_precache_entries": 91,
+      "pwa_precache_kib": 4327.28,
+      "largest_chunks_kb": {
+        "Admin_js": 920,
+        "index_js": 671.62,
+        "ui_js": 194.54,
+        "index_css": 150.83
+      },
+      "gzip_largest_kb": {
+        "Admin_js": 228.51,
+        "index_js": 190.99,
+        "ui_js": 62.24,
+        "index_css": 22.93
+      }
+    },
+    "demo_build": {
+      "status": "pass",
+      "duration_seconds": 25.71,
+      "env": { "VITE_DEMO_MODE": "true", "VITE_SKIP_SETUP": "true", "VITE_BASE": "/zax-kodelex/" },
+      "pwa_enabled": false,
+      "notes": "PWA plugin skipped when VITE_DEMO_MODE=true (vite.config.ts)"
+    },
+    "lint": { "errors": 0, "warnings": 478, "status": "pass_with_warnings" },
+    "typecheck": { "command": "tsc -b", "status": "pass" }
+  },
+  "routes": [
+    "/", "/home", "/login", "/reset-password", "/reader/:chapterId", "/reader/:seriesId/:chapterNumber",
+    "/profile", "/admin/*", "/author/*", "/support", "/subscribe", "/premium", "/buy", "/contests",
+    "/coins", "/monetization", "/series", "/series/:id", "/browse", "/categories", "/authors", "/trending",
+    "/contact", "/help", "/search", "/dmca", "/privacy", "/terms", "/cookies", "/disclaimer", "/acceptable-use",
+    "/article/:id", "/feedback", "/community", "/coin-analytics", "/wordpress-crawler",
+    "/read/:seriesSlug/:chapterSlug", "/series/:id/chapter/:chapterNumber", "/blog", "/blog/:slug",
+    "/settings", "/chapters"
+  ],
+  "auth_roles": ["admin", "editor", "author", "member", "user", "uploader", "seo_manager"],
+  "env_vars_public": [
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_DEMO_MODE",
+    "VITE_SKIP_SETUP",
+    "VITE_PAYPAL_CLIENT_ID",
+    "VITE_SITE_URL",
+    "VITE_SENTRY_DSN",
+    "VITE_BASE"
+  ],
+  "edge_functions": [
+    "paypal-purchase-coins",
+    "paypal-subscribe",
+    "paypal-webhook",
+    "paypal-coin-webhook",
+    "check-subscription",
+    "security-middleware",
+    "cloudflare-operations",
+    "scheduled-deduplication"
+  ],
+  "support_contacts": {
+    "email": "ZAXMIllion@proton.me",
+    "kofi": "https://ko-fi.com/zaxmi"
+  },
+  "pre_existing_untracked": ["docs/RESPONSIVE_FIX_PLAN.md"],
+  "audit_artifacts_created_under": "docs/audits/pre-upgrade/",
+  "application_files_modified": 0
+}
