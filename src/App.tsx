@@ -44,6 +44,8 @@ import DMCAPage from './pages/DMCAPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import CookiesPage from './pages/CookiesPage';
+import DisclaimerPage from './pages/DisclaimerPage';
+import AcceptableUsePage from './pages/AcceptableUsePage';
 import Article from './pages/Article';
 import Feedback from './pages/Feedback';
 import Community from './pages/Community';
@@ -119,6 +121,8 @@ function AppContent() {
               <Route path="/privacy" element={<AppShell><PrivacyPage /></AppShell>} />
               <Route path="/terms" element={<AppShell><TermsPage /></AppShell>} />
               <Route path="/cookies" element={<AppShell><CookiesPage /></AppShell>} />
+              <Route path="/disclaimer" element={<AppShell><DisclaimerPage /></AppShell>} />
+              <Route path="/acceptable-use" element={<AppShell><AcceptableUsePage /></AppShell>} />
               <Route path="/article/:id" element={<AppShell><Article /></AppShell>} />
               <Route path="/feedback" element={<AppShell><Feedback /></AppShell>} />
               <Route path="/community" element={<AppShell><Community /></AppShell>} />

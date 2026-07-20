@@ -93,6 +93,8 @@ const defaultFooterSettings: FooterSettings = {
         { id: '11', label: 'Terms of Service', url: '/terms', isExternal: false },
         { id: '12', label: 'Cookie Policy', url: '/cookies', isExternal: false },
         { id: '13', label: 'DMCA Policy', url: '/dmca', isExternal: false },
+        { id: '14', label: 'Disclaimer', url: '/disclaimer', isExternal: false },
+        { id: '15', label: 'Acceptable Use', url: '/acceptable-use', isExternal: false },
       ]
     }
   ],

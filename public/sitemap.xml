@@ -13,4 +13,6 @@
   <url><loc>https://zaxmillion.com/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://zaxmillion.com/dmca</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://zaxmillion.com/cookies</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://zaxmillion.com/disclaimer</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://zaxmillion.com/acceptable-use</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>

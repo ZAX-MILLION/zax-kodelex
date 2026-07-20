@@ -1,0 +1,39 @@
+# NOTICE
+
+## Ownership
+
+Except for third-party open-source libraries listed in `package.json`
+(each under its own license), this project is proprietary:
+
+**Copyright © 2026 Zax Million. All rights reserved.**
+
+See the root `LICENSE` file.
+
+## Not a permission to infringe copyrights
+
+Making this code available does **not** authorize anyone to host,
+share, or sell copyrighted manga, comics, or other works without the
+rights holder’s permission.
+
+Anyone who uses this software for piracy or other illegal activity
+does so **at their own risk and responsibility**. Zax Million does
+not endorse or accept liability for such misuse.
+
+## Demo / sample media
+
+Sample covers and pages included for development or demos are for
+illustration. Replace them with content you have rights to use before
+any public commercial launch.
+
+## Legal documents
+
+- [Terms of Service](legal/terms-of-service.md)
+- [Acceptable Use Policy](legal/acceptable-use.md)
+- [Disclaimer](legal/disclaimer.md)
+- [DMCA / Copyright](legal/dmca.md)
+- [Privacy Policy](legal/privacy.md)
+- [Cookie Policy](legal/cookies.md)
+
+## Contact
+
+contact@zaxmillion.com

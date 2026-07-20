@@ -90,4 +90,6 @@ public/           Static assets, sitemap, robots.txt
 
 ## License
 
-© 2026 Zax Million. All rights reserved.
+© 2026 Zax Million. All rights reserved. See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+**This project must not be used for copyright piracy or other illegal activity.** Users and self-hosters are solely responsible for their content and deployments. Legal pages: [docs/legal](docs/legal/).
