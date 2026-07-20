@@ -147,6 +147,21 @@ const DemoRoleLab = () => {
                 <Button asChild>
                   <Link to="/">View homepage as this role</Link>
                 </Button>
+                {profile.role === 'uploader' && (
+                  <Button asChild variant="secondary">
+                    <Link to="/demo/uploader">Open uploader simulation</Link>
+                  </Button>
+                )}
+                {profile.role === 'admin' && (
+                  <Button asChild variant="secondary">
+                    <Link to="/demo/admin">Open admin simulation</Link>
+                  </Button>
+                )}
+                {profile.role === 'buyer' && (
+                  <Button asChild variant="secondary">
+                    <Link to="/demo/checkout">Open demo checkout</Link>
+                  </Button>
+                )}
                 <Button variant="outline" onClick={clearRole}>
                   Reset to Guest
                 </Button>

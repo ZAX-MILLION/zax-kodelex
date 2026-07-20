@@ -1,161 +1,162 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import { getSubscriptionPlan } from '../_shared/catalog.ts';
+import {
+  getPayPalAccessToken,
+  requirePayPalCredentials,
+  resolvePayPalBaseUrl,
+} from '../_shared/paypal.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// PayPal API Configuration
-const PAYPAL_CLIENT_ID = Deno.env.get('PAYPAL_CLIENT_ID');
-const PAYPAL_CLIENT_SECRET = Deno.env.get('PAYPAL_CLIENT_SECRET');
-const PAYPAL_API_BASE = Deno.env.get('PAYPAL_ENVIRONMENT') === 'live' 
-  ? 'https://api-m.paypal.com' 
-  : 'https://api-m.sandbox.paypal.com';
-
-// Initialize Supabase client
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-interface SubscribeRequest {
-  userId: string;
-  planId: string;
-  returnUrl: string;
-  cancelUrl: string;
-}
-
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { 
-      status: 405, 
-      headers: corsHeaders 
-    });
+    return new Response('Method not allowed', { status: 405, headers: corsHeaders });
   }
 
   try {
-    const { userId, planId, returnUrl, cancelUrl }: SubscribeRequest = await req.json();
+    if (Deno.env.get('DISABLE_PAYMENTS') === 'true' || Deno.env.get('APP_ENV') === 'demo') {
+      return new Response(JSON.stringify({ error: 'Payments disabled', code: 'DEMO_BLOCKED' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 403,
+      });
+    }
 
-    if (!userId || !planId) {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Unauthorized', code: 'UNAUTHORIZED' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 401,
+      });
+    }
+
+    const supabaseUser = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    );
+    const token = authHeader.replace('Bearer ', '');
+    const {
+      data: { user },
+    } = await supabaseUser.auth.getUser(token);
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized', code: 'UNAUTHORIZED' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 401,
+      });
+    }
+
+    const body = await req.json();
+    const catalogPlanId = String(body.planId || body.productId || '');
+    const plan = getSubscriptionPlan(catalogPlanId);
+    if (!plan) {
+      return new Response(JSON.stringify({ error: 'Invalid plan', code: 'INVALID_PRODUCT' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      });
+    }
+
+    // Map catalogue id → PayPal Billing Plan ID (configured in dashboard)
+    const paypalPlanId =
+      Deno.env.get(`PAYPAL_PLAN_${catalogPlanId.toUpperCase()}`) ||
+      Deno.env.get('PAYPAL_PLAN_ID_MONTHLY') ||
+      Deno.env.get('PAYPAL_PLAN_ID');
+
+    if (!paypalPlanId) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
-        { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+        JSON.stringify({
+          error: 'PayPal billing plan not configured for this product',
+          code: 'CONFIG_INCOMPLETE',
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 503,
+        }
       );
     }
 
-    // Get PayPal access token
-    const accessToken = await getPayPalAccessToken();
-    if (!accessToken) {
-      throw new Error('Failed to get PayPal access token');
-    }
+    const { clientId, clientSecret } = requirePayPalCredentials();
+    const { baseUrl, mode } = resolvePayPalBaseUrl();
+    const accessToken = await getPayPalAccessToken(baseUrl, clientId, clientSecret);
+    const origin = req.headers.get('origin') || Deno.env.get('SITE_URL') || 'https://zaxmillion.com';
 
-    // Create subscription
-    const subscription = await createPayPalSubscription({
-      planId,
-      userId,
-      returnUrl,
-      cancelUrl,
-      accessToken
-    });
+    const subscriptionData = {
+      plan_id: paypalPlanId,
+      custom_id: `${user.id}|${plan.id}`,
+      application_context: {
+        brand_name: 'Zax Million',
+        locale: 'en-US',
+        shipping_preference: 'NO_SHIPPING',
+        user_action: 'SUBSCRIBE_NOW',
+        return_url: body.returnUrl || `${origin}/subscribe/success`,
+        cancel_url: body.cancelUrl || `${origin}/subscribe/cancel`,
+      },
+    };
 
-    return new Response(JSON.stringify(subscription), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders },
-    });
-
-  } catch (error) {
-    console.error('Error creating PayPal subscription:', error);
-    return new Response(
-      JSON.stringify({ error: 'Failed to create subscription' }),
-      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
-    );
-  }
-};
-
-async function getPayPalAccessToken(): Promise<string | null> {
-  try {
-    const auth = btoa(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`);
-    
-    const response = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
+    const response = await fetch(`${baseUrl}/v1/billing/subscriptions`, {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
       },
-      body: 'grant_type=client_credentials',
+      body: JSON.stringify(subscriptionData),
     });
 
     if (!response.ok) {
-      throw new Error(`PayPal auth failed: ${response.status}`);
+      console.error(await response.text());
+      throw new Error('PayPal subscription creation failed');
     }
 
-    const data = await response.json();
-    return data.access_token;
+    const subscription = await response.json();
+
+    const supabaseService = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      { auth: { persistSession: false } }
+    );
+
+    await supabaseService.from('user_subscriptions').upsert({
+      user_id: user.id,
+      plan: 'premium',
+      status: 'pending',
+      paypal_subscription_id: subscription.id,
+      metadata: {
+        catalog_plan_id: plan.id,
+        amount_usd: plan.amountUsd,
+        currency: plan.currency,
+        mode,
+      },
+      updated_at: new Date().toISOString(),
+    });
+
+    return new Response(
+      JSON.stringify({
+        ...subscription,
+        catalog_plan_id: plan.id,
+        amount_usd: plan.amountUsd,
+        mode,
+      }),
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
   } catch (error) {
-    console.error('Error getting PayPal access token:', error);
-    return null;
+    console.error('paypal-subscribe:', error);
+    const message = error instanceof Error ? error.message : 'Failed';
+    const code = message.includes('credentials') || message.includes('Live PayPal')
+      ? 'CONFIG_INCOMPLETE'
+      : 'INTERNAL';
+    return new Response(JSON.stringify({ error: message, code }), {
+      status: code === 'CONFIG_INCOMPLETE' ? 503 : 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
-}
-
-async function createPayPalSubscription({
-  planId,
-  userId,
-  returnUrl,
-  cancelUrl,
-  accessToken
-}: {
-  planId: string;
-  userId: string;
-  returnUrl: string;
-  cancelUrl: string;
-  accessToken: string;
-}) {
-  const subscriptionData = {
-    plan_id: planId,
-    custom_id: userId, // Store user ID for webhook processing
-    application_context: {
-      brand_name: 'Manga Reader Premium',
-      locale: 'en-US',
-      shipping_preference: 'NO_SHIPPING',
-      user_action: 'SUBSCRIBE_NOW',
-      payment_method: {
-        payer_selected: 'PAYPAL',
-        payee_preferred: 'IMMEDIATE_PAYMENT_REQUIRED',
-      },
-      return_url: returnUrl,
-      cancel_url: cancelUrl,
-    },
-    subscriber: {
-      name: {
-        given_name: 'Premium',
-        surname: 'User',
-      },
-    },
-  };
-
-  const response = await fetch(`${PAYPAL_API_BASE}/v1/billing/subscriptions`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Prefer': 'return=representation',
-    },
-    body: JSON.stringify(subscriptionData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.text();
-    console.error('PayPal subscription creation failed:', errorData);
-    throw new Error(`PayPal subscription creation failed: ${response.status}`);
-  }
-
-  return await response.json();
-}
-
-serve(handler);
+});

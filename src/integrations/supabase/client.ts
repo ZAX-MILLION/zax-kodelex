@@ -1,9 +1,9 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { resolveSupabaseConfig } from './config';
+import { hasSupabaseCredentials, resolveSupabaseConfig } from './config';
 
 const config = resolveSupabaseConfig();
 
-export const isSupabaseConfigured = Boolean(config.url && config.anonKey);
+export const isSupabaseConfigured = hasSupabaseCredentials();
 
 export const supabase: SupabaseClient = isSupabaseConfigured
   ? createClient(config.url, config.anonKey, {

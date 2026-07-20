@@ -61,6 +61,9 @@ const WordPressCrawler = lazy(() =>
 const Settings = lazy(() => import('./pages/Settings'));
 const Chapters = lazy(() => import('./pages/Chapters'));
 const DemoRoleLab = lazy(() => import('./pages/DemoRoleLab'));
+const DemoUploaderSim = lazy(() => import('./pages/demo/DemoUploaderSim'));
+const DemoAdminSim = lazy(() => import('./pages/demo/DemoAdminSim'));
+const DemoCheckoutSim = lazy(() => import('./pages/demo/DemoCheckoutSim'));
 
 function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
   return (
@@ -115,6 +118,9 @@ function AppContent() {
               <Route path="/buy" element={<PaymentsRouteGuard><AppShell><Buy /></AppShell></PaymentsRouteGuard>} />
               <Route path="/contests" element={<AppShell><Contests /></AppShell>} />
               <Route path="/demo" element={<AppShell><DemoRoleLab /></AppShell>} />
+              <Route path="/demo/uploader" element={<AppShell><DemoUploaderSim /></AppShell>} />
+              <Route path="/demo/admin" element={<AppShell><DemoAdminSim /></AppShell>} />
+              <Route path="/demo/checkout" element={<AppShell><DemoCheckoutSim /></AppShell>} />
               <Route path="/series" element={<AppShell><Series /></AppShell>} />
               <Route path="/series/:id" element={<AppShell><SeriesDetail /></AppShell>} />
               <Route path="/browse" element={<AppShell><Browse /></AppShell>} />

@@ -1,0 +1,95 @@
+{
+  "project": "zax-kodelex",
+  "branch": "upgrade/zax-seamless-v2",
+  "baselineTag": "pre-seamless-v2-b8c42a0",
+  "measuredAt": "2026-07-20T06:40:00Z",
+  "verdict": "READY FOR REVIEW",
+  "commands": {
+    "typecheck": { "command": "npm run typecheck", "result": "pass" },
+    "lint": { "command": "npm run lint", "result": "pass_with_warnings", "errors": 0, "warnings": 480 },
+    "unitTests": { "command": "npm test", "result": "pass", "passed": 16, "failed": 0 },
+    "demoBuild": { "command": "VITE_APP_ENV=demo VITE_DEMO_MODE=true npm run build", "result": "pass" },
+    "productionPlaceholderBuild": {
+      "command": "VITE_APP_ENV=production VITE_SITE_URL=https://example-prod.zaxmillion.com npm run build",
+      "result": "pass"
+    },
+    "e2e": { "result": "partial_playwright_smoke", "note": "No Playwright test suite previously existed; smoke via capture + network scripts" },
+    "lighthouse": {
+      "result": "blocked",
+      "reason": "chrome-launcher found no system Chrome in this agent environment; axe + Playwright Chromium used instead"
+    }
+  },
+  "bundlesDemo": {
+    "distTotalBytes": 4463530,
+    "chunkCount": 93,
+    "mainRaw": 551834,
+    "mainGzip": 159271,
+    "adminRaw": 511920,
+    "adminGzip": 119192,
+    "uiRaw": 194543,
+    "uiGzip": 62243,
+    "cssRaw": 154954,
+    "cssGzip": 23789,
+    "pwaPrecache": "disabled on demo builds"
+  },
+  "bundlesProduction": {
+    "distTotalBytes": 4495323,
+    "pwaPrecacheEntries": 111,
+    "pwaPrecacheKiB": 4358.53
+  },
+  "homepageNetworkDemo": {
+    "supabaseRequests": 0,
+    "paypalRequests": 0,
+    "adminChunkRequests": 0,
+    "evidence": "docs/releases/seamless-v2/network-homepage-demo.json"
+  },
+  "seo": {
+    "demoRobots": "User-agent: *\\nDisallow: /",
+    "productionRobotsSitemap": "https://example-prod.zaxmillion.com/sitemap.xml",
+    "evidenceFiles": [
+      "docs/releases/seamless-v2/robots-demo.txt",
+      "docs/releases/seamless-v2/robots-production.txt",
+      "docs/releases/seamless-v2/sitemap-demo.xml",
+      "docs/releases/seamless-v2/sitemap-production.xml"
+    ]
+  },
+  "accessibility": {
+    "tool": "axe-core 4.10.2 via Playwright",
+    "homepage": { "violations": 4, "passes": 41, "file": "docs/releases/seamless-v2/axe-homepage.json" },
+    "demoLab": { "violations": 3, "passes": 34, "file": "docs/releases/seamless-v2/axe-demo.json" }
+  },
+  "screenshots": {
+    "dir": "docs/releases/seamless-v2/screenshots",
+    "viewports": ["360x800", "390x844", "768x1024", "1440x900"],
+    "beforeSource": "https://zax-million.github.io/zax-kodelex/",
+    "afterSource": "local vite preview of branch build"
+  },
+  "payments": {
+    "serverCatalogue": true,
+    "licenseOrderFunction": true,
+    "webhookSignature": true,
+    "idempotencyTableMigration": true,
+    "unitTests": 12,
+    "liveE2E": "blocked_external_credentials"
+  },
+  "demoChecklist": {
+    "homepageLoads": true,
+    "noBlogFailureToast": true,
+    "roleLabWorks": true,
+    "adminSimNoRealAdmin": true,
+    "uploaderNoWrites": true,
+    "buyerNoGateway": true,
+    "paypalSdkAbsent": true,
+    "supabaseAbsent": true,
+    "resetDemo": true,
+    "noindexPrivateRoutes": true
+  },
+  "externalBlockers": [
+    "PayPal sandbox/live credentials + webhook IDs",
+    "Apply Supabase migrations on real project",
+    "Supabase dashboard security toggles",
+    "Owner legal approval of refund draft",
+    "Custom production domain / VITE_SITE_URL",
+    "Push/merge authorization (not performed)"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "url": "https://zax-million.github.io/zax-kodelex/",
+  "viewport": {
+    "name": "768x1024",
+    "width": 768,
+    "height": 1024
+  },
+  "errors": [
+    "WebSocket connection to 'wss://placeholder.supabase.co/realtime/v1/websocket?apikey=placeholder-key&vsn=1.0.0' failed: Error in connection establishment: net::ERR_NAME_NOT_RESOLVED",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Error loading translations: {message: TypeError: Failed to fetch, details: TypeError: Failed to fetch\n    at https://zax-mill…o/zax-kodelex/assets/index-Cr1FA30V.js:407:22732), hint: , code: }",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Error loading languages: {message: TypeError: Failed to fetch, details: TypeError: Failed to fetch\n    at https://zax-mill…o/zax-kodelex/assets/index-Cr1FA30V.js:407:22732), hint: , code: }",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Error fetching homepage settings: {message: TypeError: Failed to fetch, details: TypeError: Failed to fetch\n    at https://zax-mill…o/zax-kodelex/assets/index-Cr1FA30V.js:407:22732), hint: , code: }",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Error fetching social platforms: {message: TypeError: Failed to fetch, details: TypeError: Failed to fetch\n    at https://zax-mill…o/zax-kodelex/assets/index-Cr1FA30V.js:407:22732), hint: , code: }",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Error fetching homepage settings: {message: TypeError: Failed to fetch, details: TypeError: Failed to fetch\n    at https://zax-mill…o/zax-kodelex/assets/index-Cr1FA30V.js:407:22732), hint: , code: }",
+    "Failed to load resource: net::ERR_NAME_NOT_RESOLVED",
+    "Error fetching blog posts: {message: TypeError: Failed to fetch, details: TypeError: Failed to fetch\n    at https://zax-mill…o/zax-kodelex/assets/index-Cr1FA30V.js:407:22732), hint: , code: }",
+    "WebSocket connection to 'wss://placeholder.supabase.co/realtime/v1/websocket?apikey=placeholder-key&vsn=1.0.0' failed: Error in connection establishment: net::ERR_NAME_NOT_RESOLVED"
+  ]
+}

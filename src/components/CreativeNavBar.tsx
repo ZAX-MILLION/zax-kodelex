@@ -129,7 +129,7 @@ const CreativeNavBar = () => {
           {/* Search and User Actions */}
           <div className="flex items-center space-x-1 xs:space-x-2 sm:space-x-4">
             {/* Search Icon */}
-            <Button variant="ghost" size="sm" onClick={() => setShowInteractiveSearch(true)} className="h-11 w-11 min-h-[44px] min-w-[44px] p-0 rounded-lg hover:bg-muted/50">
+            <Button variant="ghost" size="sm" onClick={() => setShowInteractiveSearch(true)} className="h-11 w-11 min-h-[44px] min-w-[44px] p-0 rounded-lg hover:bg-muted/50" aria-label="Search">
               <Search className="h-3 w-3 xs:h-3.5 xs:w-3.5 sm:h-4 sm:w-4" />
             </Button>
             {currentSeriesId && (
@@ -276,7 +276,7 @@ const CreativeNavBar = () => {
               </>}
 
             {/* Mobile Menu Toggle */}
-            <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden h-8 w-8 xs:h-10 xs:w-10 sm:h-12 sm:w-12 p-0 rounded-lg xs:rounded-xl sm:rounded-2xl">
+            <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden h-8 w-8 xs:h-10 xs:w-10 sm:h-12 sm:w-12 p-0 rounded-lg xs:rounded-xl sm:rounded-2xl" aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}>
               {isMenuOpen ? <X className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5" /> : <Menu className="h-3 w-3 xs:h-4 xs:w-4 sm:h-5 sm:w-5" />}
             </Button>
           </div>

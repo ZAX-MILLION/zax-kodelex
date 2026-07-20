@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useLocation } from 'react-router-dom';
+import { appConfig } from '@/config/env';
 
 interface AnalyticsEvent {
   activity_type: string;
@@ -79,6 +80,8 @@ export const useAnalyticsTracking = () => {
 
   // Internal tracking function
   const trackEventInternal = async (event: AnalyticsEvent) => {
+    if (appConfig.isDemo || !isSupabaseConfigured) return;
+
     const optedOut = await checkOptOut();
     if (optedOut) return;
 

@@ -113,5 +113,22 @@ export function isAdminDisabled(): boolean {
 
 export function shouldNoIndexRoute(pathname: string): boolean {
   if (appConfig.shouldNoIndex) return true;
-  return pathname.startsWith('/demo');
+  const privatePrefixes = [
+    '/demo',
+    '/admin',
+    '/author',
+    '/login',
+    '/reset-password',
+    '/settings',
+    '/profile',
+    '/buy',
+    '/coins',
+    '/subscribe',
+    '/monetization',
+    '/coin-analytics',
+    '/wordpress-crawler',
+  ];
+  return privatePrefixes.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
 }
