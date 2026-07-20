@@ -116,7 +116,7 @@ export const AdminAccountStep = ({
             <Input
               id="admin-email-account"
               type="email"
-              placeholder="admin@yoursite.com"
+              placeholder="ZAXMIllion@proton.me"
               value={data.adminAccount.email}
               onChange={(e) => updateAdminAccount('email', e.target.value)}
             />

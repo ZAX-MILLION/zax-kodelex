@@ -55,7 +55,7 @@ If you believe that content on our site infringes your copyright, you may submit
 ## Contact Information
 
 Please send DMCA notices to:
-- **Email**: dmca@yoursite.com
+- **Email**: ZAXMIllion@proton.me
 - **Address**: [Your Company Address]
 
 ## Counter-Notification
@@ -111,7 +111,7 @@ You have the right to:
 ## Contact Us
 
 For privacy-related questions, contact us at:
-- **Email**: privacy@yoursite.com
+- **Email**: ZAXMIllion@proton.me
 - **Address**: [Your Company Address]', 'Privacy Policy', 'Privacy policy and data protection information'),
 
 ('terms', 'Terms of Service', '# Terms of Service
@@ -167,7 +167,7 @@ We reserve the right to modify these terms at any time. Changes become effective
 ## Contact Information
 
 Questions about these terms should be sent to:
-- **Email**: legal@yoursite.com
+- **Email**: ZAXMIllion@proton.me
 - **Address**: [Your Company Address]', 'Terms of Service', 'Terms of service and usage guidelines'),
 
 ('cookies', 'Cookie Policy', '# Cookie Policy
@@ -235,5 +235,5 @@ Different cookies have different retention periods:
 ## Contact Us
 
 For questions about our cookie policy, contact us at:
-- **Email**: privacy@yoursite.com
+- **Email**: ZAXMIllion@proton.me
 - **Address**: [Your Company Address]', 'Cookie Policy', 'Cookie policy and information about how we use cookies');
