@@ -175,8 +175,19 @@ function WebtoonReaderInner({
   }, [currentPage, onPageChange, settings.toolbarBehavior, forceBars]);
 
   useEffect(() => {
+    // Capture before Radix unmounts an open Select listbox on Escape.
+    let selectOpenOnEscape = false;
+    const onKeyCapture = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        selectOpenOnEscape = !!document.querySelector('[role="listbox"]');
+      }
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && settingsOpen) {
+        if (selectOpenOnEscape) {
+          selectOpenOnEscape = false;
+          return;
+        }
         setSettingsOpen(false);
         return;
       }
@@ -203,8 +214,12 @@ function WebtoonReaderInner({
         onNavigateHome();
       }
     };
+    window.addEventListener('keydown', onKeyCapture, true);
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKeyCapture, true);
+      window.removeEventListener('keydown', onKey);
+    };
   }, [
     settingsOpen,
     settings.readingMode,

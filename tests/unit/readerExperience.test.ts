@@ -103,5 +103,13 @@ describe('reader isolation', () => {
     // Escape must see an open listbox in capture phase before Radix unmounts it.
     expect(source).toContain("addEventListener('keydown', onKeyCapture, true)");
     expect(source).toContain("querySelector('[role=\"listbox\"]')");
+
+    const readerSource = readFileSync(
+      resolve(__dirname, '../../src/components/reader/WebtoonReader.tsx'),
+      'utf8'
+    );
+    // Parent reader shell must not close settings while a select listbox is open.
+    expect(readerSource).toContain("addEventListener('keydown', onKeyCapture, true)");
+    expect(readerSource).toContain('selectOpenOnEscape');
   });
 });
