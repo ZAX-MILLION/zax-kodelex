@@ -12,58 +12,63 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['zax-million-favicon.png', 'favicon.ico', 'robots.txt'],
-      manifest: {
-        name: 'Zax Million',
-        short_name: 'Zax Million',
-        description: 'Premium manga reading experience by Zax Million',
-        theme_color: '#1e3a8a',
-        background_color: '#1a1a1a',
-        display: 'standalone',
-        icons: [
-          {
-            src: 'zax-million-favicon.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'zax-million-favicon.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg}'],
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MB
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'images',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 365 days
-              }
-            }
-          }
-        ]
-      }
-    })
+    // Skip heavy PWA precache on public demo builds so first visit stays snappy
+    ...(process.env.VITE_DEMO_MODE === 'true'
+      ? []
+      : [
+          VitePWA({
+            registerType: 'autoUpdate' as const,
+            includeAssets: ['zax-million-favicon.png', 'favicon.ico', 'robots.txt'],
+            manifest: {
+              name: 'Zax Million',
+              short_name: 'Zax Million',
+              description: 'Premium manga reading experience by Zax Million',
+              theme_color: '#1e3a8a',
+              background_color: '#1a1a1a',
+              display: 'standalone' as const,
+              icons: [
+                {
+                  src: 'zax-million-favicon.png',
+                  sizes: '192x192',
+                  type: 'image/png',
+                },
+                {
+                  src: 'zax-million-favicon.png',
+                  sizes: '512x512',
+                  type: 'image/png',
+                },
+              ],
+            },
+            workbox: {
+              globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg}'],
+              maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+              runtimeCaching: [
+                {
+                  urlPattern: /^https:\/\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+                  handler: 'CacheFirst' as const,
+                  options: {
+                    cacheName: 'images',
+                    expiration: {
+                      maxEntries: 100,
+                      maxAgeSeconds: 60 * 60 * 24 * 30,
+                    },
+                  },
+                },
+                {
+                  urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+                  handler: 'CacheFirst' as const,
+                  options: {
+                    cacheName: 'google-fonts-cache',
+                    expiration: {
+                      maxEntries: 10,
+                      maxAgeSeconds: 60 * 60 * 24 * 365,
+                    },
+                  },
+                },
+              ],
+            },
+          }),
+        ]),
   ].filter(Boolean),
   resolve: {
     alias: {

@@ -5,8 +5,10 @@ import { getFallbackCoverImage, isValidImageUrl } from '@/utils/imageOptimizatio
 import {
   activateDemoMode,
   getDemoSeriesList,
+  isDemoModeEnabled,
   shouldUseDemoData,
 } from '@/utils/demoLibraryData';
+import { isSupabaseConfigured } from '@/integrations/supabase/client';
 
 export interface HomepageWidget {
   id: string;
@@ -136,6 +138,38 @@ export const useSeriesData = () => {
     offset = 0
   ) => {
     try {
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        activateDemoMode();
+        const demoSeries = getDemoSeriesList()
+          .slice()
+          .sort((a, b) => {
+            if (filter === 'trending') return b.view_count - a.view_count;
+            if (filter === 'new' || filter === 'latest') {
+              return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+            }
+            return 0;
+          })
+          .slice(offset, offset + limit)
+          .map((item) => ({
+            id: item.id,
+            title: item.title,
+            author: item.author,
+            artist: item.artist,
+            status: item.status,
+            genres: item.genres,
+            description: item.description,
+            cover_image_url: item.cover_image_url,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            view_count: item.view_count,
+            latest_chapter: 20,
+          }));
+        setTotalCount(getDemoSeriesList().length);
+        setSeries(demoSeries);
+        setLoading(false);
+        return;
+      }
+
       // Get total count first
       const countQuery = supabase.from('manga_meta').select('*', { count: 'exact', head: true });
       const { count, error: countError } = await countQuery;

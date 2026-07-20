@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
   activateDemoMode,
   getDemoChapterFeed,
+  isDemoModeEnabled,
   shouldUseDemoData,
 } from '@/utils/demoLibraryData';
 
@@ -27,6 +28,12 @@ export const useChaptersFeed = (daysBack = 30, limit = 10) => {
   const fetchChaptersFeed = async () => {
     try {
       setLoading(true);
+
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        activateDemoMode();
+        setChapters(getDemoChapterFeed(limit));
+        return;
+      }
       
       const { data, error } = await supabase
         .rpc('get_latest_chapters_feed_all', { 

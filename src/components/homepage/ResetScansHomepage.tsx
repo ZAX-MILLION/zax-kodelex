@@ -56,7 +56,7 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
   
   useEffect(() => {
     // Fetch data for different sections
-    fetchSeries('latest', 48); // Fetch more data for pagination
+    fetchSeries('latest', 12); // Keep homepage lean for fast first paint
   }, []);
 
   // Calculate pagination for latest comics
@@ -97,7 +97,7 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
       </div>
       {/* Hero Slider - Full Width */}
       <HeroSlider
-        slidesCount={16}
+        slidesCount={6}
         autoSlideInterval={5000}
         showFilters={true}
       />

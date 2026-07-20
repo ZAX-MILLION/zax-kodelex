@@ -2,6 +2,12 @@
 
 Premium manga reading platform built with React, Vite, Tailwind CSS, and Supabase.
 
+### Live demo
+
+**Try it now (no install):** [https://zax-million.github.io/zax-kodelex/](https://zax-million.github.io/zax-kodelex/)
+
+Demo mode shows the library UI and covers. Chapter page artwork is not included.
+
 ![Zax Million homepage](docs/screenshots/app-homepage.png)
 
 <p align="center"><em>Dark-mode manga library — featured series, latest comics, and trending</em></p>

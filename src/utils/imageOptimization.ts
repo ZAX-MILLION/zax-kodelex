@@ -44,6 +44,11 @@ export const getOptimizedImageUrl = (
     return getFallbackCoverImage();
   }
 
+  // Local demo covers / packaged assets: keep as-is
+  if (url.startsWith('/') || url.startsWith('./') || url.includes('/demo-covers/')) {
+    return url;
+  }
+
   // Handle picsum.photos URLs (our main image source)
   if (url.includes('picsum.photos')) {
     try {
@@ -107,6 +112,11 @@ export const getOptimizedImageUrl = (
  * Creates a srcset for responsive images
  */
 export const createImageSrcSet = (url: string, maxWidth = 800): string => {
+  // Local demo covers: single URL only (no picsum/unsplash srcset fan-out)
+  if (url?.startsWith('/demo-covers/') || url?.startsWith('/zax-million-favicon')) {
+    return `${url} ${Math.min(400, maxWidth)}w`;
+  }
+
   if (!url || url.includes('/placeholder.svg')) {
     const fallback = getFallbackCoverImage();
     return [

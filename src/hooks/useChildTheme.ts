@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { isDemoModeEnabled } from '@/utils/demoLibraryData';
 
 export interface ThemeConfig {
   colors: {
@@ -86,6 +87,15 @@ export const useChildTheme = () => {
     try {
       setLoading(true);
       setError(null);
+
+      // Demo / no backend: apply built-in theme immediately (no network wait)
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        const fallbackTheme = getBuiltInDefaultTheme();
+        setAvailableThemes([fallbackTheme]);
+        setCurrentTheme(fallbackTheme);
+        applyTheme(fallbackTheme);
+        return;
+      }
 
       // Get all available themes (not just active or default)
       const { data: dbThemes, error: themesError } = await supabase

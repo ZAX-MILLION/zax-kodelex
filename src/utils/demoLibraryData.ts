@@ -85,6 +85,11 @@ export function isDemoModeEnabled(): boolean {
   return import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true';
 }
 
+/** True when we should never hit Supabase (demo build or missing credentials). */
+export function shouldUseOfflineDemo(): boolean {
+  return isDemoModeEnabled();
+}
+
 export function shouldUseDemoData<T>(data: T[] | null | undefined, error?: unknown): boolean {
   if (!isDemoModeEnabled()) {
     return false;
@@ -101,7 +106,9 @@ function makeChapterId(seriesId: string, chapterNumber: number): string {
 }
 
 function getCoverUrl(index: number): string {
-  return `https://picsum.photos/seed/zax-cover-${index}/400/600`;
+  // Local covers — no slow external picsum redirects on the public demo
+  const base = import.meta.env.BASE_URL || '/';
+  return `${base}demo-covers/${(index % 8) + 1}.jpg`;
 }
 
 function getPageUrls(seriesIndex: number, chapterNum: number, pageCount: number): string[] {

@@ -1,11 +1,29 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
   activateDemoMode,
   getDemoSeriesList,
+  isDemoModeEnabled,
   shouldUseDemoData,
 } from '@/utils/demoLibraryData';
+
+function mapDemoSeries(limit: number, type: 'latest' | 'trending' | 'popular' = 'latest') {
+  return getDemoSeriesList()
+    .slice()
+    .sort((a, b) => {
+      if (type === 'trending' || type === 'popular') {
+        return b.view_count - a.view_count;
+      }
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    })
+    .slice(0, limit)
+    .map((series) => ({
+      ...series,
+      latest_chapter: 20,
+      chapter_count: 20,
+    }));
+}
 
 export interface SeriesCard {
   id: string;
@@ -41,6 +59,12 @@ export const useSeriesData = () => {
     try {
       setLoading(true);
       setError(null);
+
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        activateDemoMode();
+        setSeries(mapDemoSeries(limit, type));
+        return;
+      }
 
       let query = supabase
         .from('manga_meta')
@@ -163,6 +187,12 @@ export const useTrendingSeries = () => {
     try {
       setLoading(true);
       setError(null);
+
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        activateDemoMode();
+        setTrendingSeries(mapDemoSeries(10, 'trending'));
+        return;
+      }
 
       const { data, error } = await supabase
         .from('manga_meta')

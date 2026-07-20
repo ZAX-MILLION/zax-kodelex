@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
   activateDemoMode,
   getDemoSeriesList,
+  isDemoModeEnabled,
   shouldUseDemoData,
 } from '@/utils/demoLibraryData';
 
@@ -45,6 +46,24 @@ export const useMultiSeriesData = () => {
 
   const fetchAllSeries = async () => {
     try {
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        activateDemoMode();
+        setAllSeries(
+          getDemoSeriesList().map((series) => ({
+            id: series.id,
+            title: series.title,
+            author: series.author,
+            artist: series.artist,
+            status: series.status,
+            genres: series.genres,
+            tags: series.tags,
+            description: series.description,
+            cover_image_url: series.cover_image_url,
+          }))
+        );
+        return;
+      }
+
       const { data, error } = await supabase
         .from('manga_meta')
         .select('*')

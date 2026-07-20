@@ -4,7 +4,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Layout from './components/Layout';
-import React, { Suspense, ReactNode } from 'react';
+import React, { Suspense, ReactNode, lazy } from 'react';
 import { LoadingState } from './components/LoadingSpinner';
 import { AuthProvider } from './contexts/AuthContext';
 import { FeatureFlagProvider } from './contexts/FeatureFlagContext';
@@ -15,45 +15,49 @@ import { useColorScheme } from './hooks/useColorScheme';
 import { ThemeProvider } from './components/themes/ThemeProvider';
 import { EnhancedSEOHelmet } from './components/EnhancedSEOHelmet';
 import Home from './pages/Home';
-import Blog from './pages/Blog';
-import MangaReader from './pages/MangaReader';
-import Reader from './pages/Reader';
-import LoginRedirect from './pages/LoginRedirect';
-import ResetPassword from './pages/ResetPassword';
-import Profile from './pages/Profile';
-import Admin from './pages/Admin';
-import Author from './pages/Author';
-import Support from './pages/Support';
-import Subscribe from './pages/Subscribe';
-import Premium from './pages/Premium';
 import NotFound from './pages/NotFound';
 import { AnalyticsWrapper } from './components/AnalyticsWrapper';
-import Buy from './pages/Buy';
-import Contests from './pages/Contests';
-import Coins from './pages/Coins';
-import Monetization from './pages/Monetization';
-import Series from './pages/Series';
-import Browse from './pages/Browse';
-import Categories from './pages/Categories';
-import Contact from './pages/Contact';
-import Help from './pages/Help';
-import Search from './pages/Search';
-import SeriesDetail from './pages/SeriesDetail';
 import { InstallationGate } from './components/setup/InstallationGate';
-import DMCAPage from './pages/DMCAPage';
-import PrivacyPage from './pages/PrivacyPage';
-import TermsPage from './pages/TermsPage';
-import CookiesPage from './pages/CookiesPage';
-import DisclaimerPage from './pages/DisclaimerPage';
-import AcceptableUsePage from './pages/AcceptableUsePage';
-import Article from './pages/Article';
-import Feedback from './pages/Feedback';
-import Community from './pages/Community';
-import CoinAnalytics from './pages/CoinAnalytics';
-import { WordPressCrawler } from './pages/WordPressCrawler';
-import Settings from './pages/Settings';
-import Chapters from './pages/Chapters';
 import './utils/logger';
+
+// Lazy-load heavy routes so the homepage loads fast
+const Blog = lazy(() => import('./pages/Blog'));
+const MangaReader = lazy(() => import('./pages/MangaReader'));
+const Reader = lazy(() => import('./pages/Reader'));
+const LoginRedirect = lazy(() => import('./pages/LoginRedirect'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Admin = lazy(() => import('./pages/Admin'));
+const Author = lazy(() => import('./pages/Author'));
+const Support = lazy(() => import('./pages/Support'));
+const Subscribe = lazy(() => import('./pages/Subscribe'));
+const Premium = lazy(() => import('./pages/Premium'));
+const Buy = lazy(() => import('./pages/Buy'));
+const Contests = lazy(() => import('./pages/Contests'));
+const Coins = lazy(() => import('./pages/Coins'));
+const Monetization = lazy(() => import('./pages/Monetization'));
+const Series = lazy(() => import('./pages/Series'));
+const Browse = lazy(() => import('./pages/Browse'));
+const Categories = lazy(() => import('./pages/Categories'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Help = lazy(() => import('./pages/Help'));
+const Search = lazy(() => import('./pages/Search'));
+const SeriesDetail = lazy(() => import('./pages/SeriesDetail'));
+const DMCAPage = lazy(() => import('./pages/DMCAPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const CookiesPage = lazy(() => import('./pages/CookiesPage'));
+const DisclaimerPage = lazy(() => import('./pages/DisclaimerPage'));
+const AcceptableUsePage = lazy(() => import('./pages/AcceptableUsePage'));
+const Article = lazy(() => import('./pages/Article'));
+const Feedback = lazy(() => import('./pages/Feedback'));
+const Community = lazy(() => import('./pages/Community'));
+const CoinAnalytics = lazy(() => import('./pages/CoinAnalytics'));
+const WordPressCrawler = lazy(() =>
+  import('./pages/WordPressCrawler').then((m) => ({ default: m.WordPressCrawler }))
+);
+const Settings = lazy(() => import('./pages/Settings'));
+const Chapters = lazy(() => import('./pages/Chapters'));
 
 function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
   return (
@@ -98,11 +102,11 @@ function AppContent() {
               <Route path="/reader/:chapterId" element={<AppShell><Reader /></AppShell>} />
               <Route path="/reader/:seriesId/:chapterNumber" element={<AppShell><Reader /></AppShell>} />
               <Route path="/profile" element={<AppShell><Profile /></AppShell>} />
+              <Route path="/admin/*" element={<Admin />} />
+              <Route path="/author/*" element={<Author />} />
               <Route path="/support" element={<AppShell><Support /></AppShell>} />
               <Route path="/subscribe" element={<AppShell><Subscribe /></AppShell>} />
               <Route path="/premium" element={<AppShell><Premium /></AppShell>} />
-              <Route path="/admin/*" element={<Admin />} />
-              <Route path="/author/*" element={<Author />} />
               <Route path="/buy" element={<AppShell><Buy /></AppShell>} />
               <Route path="/contests" element={<AppShell><Contests /></AppShell>} />
               <Route path="/coins" element={<AppShell><Coins /></AppShell>} />
@@ -144,8 +148,10 @@ function AppContent() {
   );
 }
 
+const routerBasename = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || undefined;
+
 const App = () => (
-  <BrowserRouter>
+  <BrowserRouter basename={routerBasename}>
     <ErrorBoundary>
       <HelmetProvider>
         <TooltipProvider>

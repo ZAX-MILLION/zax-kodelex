@@ -1,25 +1,15 @@
-# Public demo on GitHub Pages
+# Live demo on GitHub Pages
 
-Yes — people can try a **demo website** for free using GitHub Pages (a free hosting feature on GitHub).
+**Public demo (open this):** https://zax-million.github.io/zax-kodelex/
 
-## What you get
+Anyone can try the site in a browser. Demo mode shows the library UI and covers. Chapter page artwork is not included.
 
-A public link like:
+## How updates work
 
-`https://zax-million.github.io/zax-kodelex/`
-
-It runs in **demo mode** (library UI + covers, no chapter page artwork).
-
-## One-time setup (you do this in GitHub)
-
-1. Open the repo → **Settings** → **Pages**
-2. Under **Build and deployment**, set **Source** to **GitHub Actions**
-3. Wait for the workflow **Deploy demo to GitHub Pages** to finish (Actions tab)
-
-After that, every push to `main` refreshes the demo.
+Every push to `main` runs **Deploy demo to GitHub Pages**. When it finishes (Actions tab), the link above updates.
 
 ## Notes
 
-- This is a **front-end demo**, not a full live product with your real database/payments.
-- For a real production site, use a host like Vercel/Netlify + Supabase.
-- MIT license covers the code; people still must not use it for piracy.
+- This is a front-end demo, not a full production app with your live database/payments.
+- For a real product site, use a host like Vercel/Netlify + Supabase.
+- MIT covers the code; people still must not use it for piracy.

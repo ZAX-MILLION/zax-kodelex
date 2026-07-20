@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDistanceToNow } from 'date-fns';
 import ChapterAccessHandler from '@/components/ChapterAccessHandler';
+import { getDemoChaptersForSeries, isDemoSeriesId } from '@/utils/demoLibraryData';
 interface ChapterInfo {
   id: string;
   chapter_number: number;
@@ -87,6 +88,22 @@ export const EnhancedMangaCard = ({
   useEffect(() => {
     const fetchChapters = async () => {
       try {
+        if (isDemoSeriesId(series.id)) {
+          const demoChapters = getDemoChaptersForSeries(series.id)
+            .slice()
+            .sort((a, b) => b.chapter_number - a.chapter_number)
+            .slice(0, 2)
+            .map((chapter) => ({
+              id: chapter.id,
+              chapter_number: chapter.chapter_number,
+              title: chapter.title,
+              created_at: chapter.created_at,
+              is_locked: chapter.is_locked,
+            }));
+          setChapters(demoChapters);
+          return;
+        }
+
         // Fetch latest 2 chapters for this series
         const {
           data,
