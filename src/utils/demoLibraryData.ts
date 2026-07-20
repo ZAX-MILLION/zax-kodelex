@@ -81,8 +81,10 @@ export function isDemoModeActive() {
   return demoModeActive;
 }
 
+import { isDemoModeEnabled as isDemoEnv } from '@/config/env';
+
 export function isDemoModeEnabled(): boolean {
-  return import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true';
+  return isDemoEnv();
 }
 
 /** True when we should never hit Supabase (demo build or missing credentials). */
