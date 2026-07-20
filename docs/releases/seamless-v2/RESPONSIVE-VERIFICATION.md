@@ -77,7 +77,11 @@ node scripts/responsive-verify.mjs http://127.0.0.1:4174
 
 ## Preview deployment
 
-Use Vercel/Netlify with **demo-only** env (`VITE_APP_ENV=demo`, payments/admin disabled). Do **not** attach production Supabase or live PayPal. Live GitHub Pages remains unchanged until ADMIN approves merge.
+**Live demo preview (for visual review only):** https://zax-kodelex.vercel.app  
+
+Deployment-specific URL: https://zax-kodelex-cklbcunnd-copasik299-8255s-projects.vercel.app  
+
+Built with `npm run build:demo` (payments/admin disabled). Do **not** attach production Supabase or live PayPal. Live GitHub Pages remains unchanged until ADMIN approves merge.
 
 ## Status
 
