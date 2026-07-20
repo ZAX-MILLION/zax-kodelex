@@ -1,0 +1,25 @@
+{
+  "url": "/demo",
+  "violations": [
+    {
+      "id": "button-name",
+      "impact": "critical",
+      "nodes": 1,
+      "help": "Buttons must have discernible text"
+    },
+    {
+      "id": "heading-order",
+      "impact": "moderate",
+      "nodes": 1,
+      "help": "Heading levels should only increase by one"
+    },
+    {
+      "id": "link-name",
+      "impact": "serious",
+      "nodes": 3,
+      "help": "Links must have discernible text"
+    }
+  ],
+  "violationCount": 3,
+  "passCount": 34
+}

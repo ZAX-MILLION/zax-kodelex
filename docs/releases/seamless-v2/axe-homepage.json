@@ -1,0 +1,30 @@
+{
+  "violationCount": 4,
+  "passCount": 41,
+  "violations": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "nodes": 5,
+      "help": "Elements must meet minimum color contrast ratio thresholds"
+    },
+    {
+      "id": "heading-order",
+      "impact": "moderate",
+      "nodes": 1,
+      "help": "Heading levels should only increase by one"
+    },
+    {
+      "id": "landmark-complementary-is-top-level",
+      "impact": "moderate",
+      "nodes": 2,
+      "help": "Aside should not be contained in another landmark"
+    },
+    {
+      "id": "link-name",
+      "impact": "serious",
+      "nodes": 3,
+      "help": "Links must have discernible text"
+    }
+  ]
+}
