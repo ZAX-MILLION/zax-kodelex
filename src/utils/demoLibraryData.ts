@@ -239,26 +239,23 @@ function buildDemoLibrary() {
 
     for (let ch = 1; ch <= CHAPTERS_PER_SERIES; ch++) {
       const isLocked = isChapterLocked(ch, lockedCount);
-      const pageCount = def.content_type === 'novel' ? 1 : 14 + (ch % 8);
       const releaseDate = new Date(Date.now() - (CHAPTERS_PER_SERIES - ch + index) * 2 * 24 * 60 * 60 * 1000);
-      const pages = def.content_type === 'novel'
-        ? []
-        : getPageUrls(index, ch, pageCount);
 
+      // Demo preview lists chapters but does not ship page artwork (keeps preview clean / legal-safe).
       chapters.push({
         id: makeChapterId(id, ch),
         series_id: id,
         chapter_number: ch,
         title: `Ch. ${ch}: ${CHAPTER_TITLE_POOL[ch - 1] || `Chapter ${ch}`}`,
-        pages,
-        page_count: pageCount,
+        pages: [],
+        page_count: 0,
         release_date: releaseDate.toISOString(),
         view_count: 200 + ch * 50 + index * 30,
         is_locked: isLocked,
         unlock_cost: isLocked ? getCoinCost(ch, lockedCount) : 0,
         sort_order: ch,
         content_type: def.content_type === 'novel' ? 'text' : 'image',
-        text_content: def.content_type === 'novel' ? generateNovelContent(def.title, ch) : undefined,
+        text_content: undefined,
         created_at: releaseDate.toISOString(),
       });
     }

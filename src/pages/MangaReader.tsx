@@ -332,8 +332,29 @@ const MangaReader = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="p-8 text-center max-w-md">
           <CardContent>
-            <h1 className="text-2xl font-bold mb-4">Chapter Not Found</h1>
-            <p className="text-muted-foreground mb-6">The chapter you're looking for doesn't exist or has been removed.</p>
+            <h1 className="text-2xl font-bold mb-4">Demo preview</h1>
+            <p className="text-muted-foreground mb-6">
+              Chapter reading is disabled in the demo. Explore the homepage and series library instead.
+            </p>
+            <Button onClick={() => navigate('/')} className="w-full">
+              <Home className="h-4 w-4 mr-2" />
+              Return Home
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!chapter.pages || chapter.pages.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="p-8 text-center max-w-md">
+          <CardContent>
+            <h1 className="text-2xl font-bold mb-4">Demo preview</h1>
+            <p className="text-muted-foreground mb-6">
+              Chapter pages are not included in the demo so the preview stays clean.
+            </p>
             <Button onClick={() => navigate('/')} className="w-full">
               <Home className="h-4 w-4 mr-2" />
               Return Home

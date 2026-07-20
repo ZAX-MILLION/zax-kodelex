@@ -220,9 +220,11 @@ const Reader = () => {
   if (pages.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-reader-bg">
-        <Card className="p-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">No Pages Available</h1>
-          <p className="text-muted-foreground mb-4">This chapter doesn't have any pages yet.</p>
+        <Card className="p-8 text-center max-w-md">
+          <h1 className="text-2xl font-bold mb-4">Demo preview</h1>
+          <p className="text-muted-foreground mb-4">
+            Chapter pages are not included in the demo. Browse series covers and the library UI instead.
+          </p>
           <Button onClick={() => navigate('/')} variant="manga">
             Back to Home
           </Button>

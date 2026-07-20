@@ -40,11 +40,11 @@ You agree to follow our [Acceptable Use Policy](acceptable-use.md). Prohibited a
 ## 6. Software, source code, and self-hosting
 
 If you obtain the software or source code (including from GitHub):
+- The code is licensed under the **MIT License** (see LICENSE). That covers the software only — not third-party manga/comic content.
 - It is provided **as is**, with no warranty.
-- You may not use it for any unlawful purpose.
+- You may not use it for any unlawful purpose, including copyright infringement.
 - You are solely responsible for your deployment, configuration, users, and content.
 - Publishing the repository does **not** grant permission to infringe copyrights or violate law.
-- Unless a separate written license says otherwise, all rights are reserved (see LICENSE).
 
 ## 7. Payments & virtual items
 

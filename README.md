@@ -62,9 +62,11 @@ See [docs/SETUP.md](docs/SETUP.md) for full production setup.
 ## Documentation
 
 - [Setup guide](docs/SETUP.md) — Supabase, migrations, edge functions, deployment
+- [Public demo on GitHub Pages](docs/GITHUB_PAGES_DEMO.md) — free demo site for visitors
 - [Theme system](docs/THEMES.md) — how child themes work, creating/importing themes
 - [Security checklist](docs/SECURITY_CHECKLIST.md)
 - [Lint audit](docs/LINT_AUDIT.md)
+- [Legal](docs/legal/) — Terms, Acceptable Use, Disclaimer, DMCA, Privacy
 
 ## Project structure
 
@@ -90,6 +92,7 @@ public/           Static assets, sitemap, robots.txt
 
 ## License
 
-© 2026 Zax Million. All rights reserved. See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+MIT License — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
 
-**This project must not be used for copyright piracy or other illegal activity.** Users and self-hosters are solely responsible for their content and deployments. Legal pages: [docs/legal](docs/legal/).
+**The MIT license covers the code only.** It does not allow hosting pirated manga or other illegal use. Users and self-hosters are responsible for their content. Legal pages: [docs/legal](docs/legal/).
+

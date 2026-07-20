@@ -93,7 +93,7 @@ export const SEOManager: React.FC = () => {
     site_keywords: 'manga, novel, webtoon, comics, read online, premium',
     site_url: 'https://yoursite.com',
     default_og_image: '/manga-cover.jpg',
-    favicon_url: '/favicon.ico',
+    favicon_url: '/zax-million-favicon.png',
     google_analytics_id: '',
     google_tag_manager_id: '',
     google_search_console_verification: '',
@@ -288,7 +288,7 @@ Sitemap: ${seoSettings.site_url}/sitemap.xml`;
                     id="favicon_url"
                     value={seoSettings.favicon_url}
                     onChange={(e) => setSeoSettings(prev => ({ ...prev, favicon_url: e.target.value }))}
-                    placeholder="/favicon.ico"
+                    placeholder="/zax-million-favicon.png"
                   />
                 </div>
               </div>

@@ -2,7 +2,7 @@
   "name": "zax-million",
   "private": true,
   "version": "1.0.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -27,7 +27,7 @@ const Browse = () => {
   const { allSeries, loading, error, refreshData } = useMultiSeriesData();
   const { config } = useMultiSeriesMode();
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [contentType, setContentType] = useState<string>('all');
   const [sortBy, setSortBy] = useState('title');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -74,7 +74,7 @@ const Browse = () => {
                          s.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          s.description?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesCategory = !selectedCategory || 
+    const matchesCategory = selectedCategory === 'all' ||
                            s.categories.some(cat => cat.name === selectedCategory);
 
     const matchesContentType =
@@ -175,7 +175,7 @@ const Browse = () => {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map(cat => (
                   <SelectItem key={cat.id} value={cat.name}>
                     <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ const Browse = () => {
         <div className="mb-6">
           <p className="text-sm text-muted-foreground">
             {sortedSeries.length} series found
-            {selectedCategory && ` in ${selectedCategory}`}
+            {selectedCategory !== 'all' && ` in ${selectedCategory}`}
             {contentType !== 'all' && ` (${contentType})`}
             {searchTerm && ` matching "${searchTerm}"`}
           </p>

@@ -5,6 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: process.env.VITE_BASE || '/',
   server: {
     host: "::",
     port: 8080,
@@ -13,12 +14,12 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['zax-million-favicon.png', 'robots.txt'],
+      includeAssets: ['zax-million-favicon.png', 'favicon.ico', 'robots.txt'],
       manifest: {
         name: 'Zax Million',
         short_name: 'Zax Million',
         description: 'Premium manga reading experience by Zax Million',
-        theme_color: '#d4a574',
+        theme_color: '#1e3a8a',
         background_color: '#1a1a1a',
         display: 'standalone',
         icons: [

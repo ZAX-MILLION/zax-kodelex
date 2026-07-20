@@ -12,8 +12,8 @@ export const DemoModeBanner = ({ visible = false }: DemoModeBannerProps) => {
       <div className="flex items-start gap-3 text-sm">
         <BookOpen className="h-4 w-4 text-primary mt-0.5 shrink-0" />
         <p className="text-muted-foreground">
-          Showing the built-in demo library (20 series, 20 chapters each). Connect Supabase and run
-          Admin → Demo Data Seeder to load live content.
+          Showing the built-in demo library (series covers + UI only — chapter pages are not included). Connect Supabase
+          later if you want a live database.
         </p>
       </div>
     </div>
