@@ -100,5 +100,8 @@ describe('reader isolation', () => {
     const selectContentUsesElevatedZ = (source.match(/SelectContent[^>]*className=\{READER_SETTINGS_SELECT_Z\}/g) || [])
       .length;
     expect(selectContentUsesElevatedZ).toBeGreaterThanOrEqual(7);
+    // Escape must see an open listbox in capture phase before Radix unmounts it.
+    expect(source).toContain("addEventListener('keydown', onKeyCapture, true)");
+    expect(source).toContain("querySelector('[role=\"listbox\"]')");
   });
 });

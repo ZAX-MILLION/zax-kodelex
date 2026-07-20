@@ -34,15 +34,27 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
 
   useEffect(() => {
     if (!isOpen) return;
+    // Capture phase sees an open listbox before Radix unmounts it on Escape.
+    let selectOpenOnEscape = false;
+    const onKeyCapture = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      selectOpenOnEscape = !!document.querySelector('[role="listbox"]');
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      // Let an open Radix Select close first; do not dismiss the whole panel.
-      if (document.querySelector('[role="listbox"][data-state="open"]')) return;
+      if (selectOpenOnEscape) {
+        selectOpenOnEscape = false;
+        return;
+      }
       onClose();
     };
+    window.addEventListener('keydown', onKeyCapture, true);
     window.addEventListener('keydown', onKey);
     panelRef.current?.focus();
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKeyCapture, true);
+      window.removeEventListener('keydown', onKey);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
