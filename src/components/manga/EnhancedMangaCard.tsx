@@ -190,8 +190,7 @@ export const EnhancedMangaCard = ({
                   created_at: new Date().toISOString()
                 }]).slice(0, 2);
                 return chaptersToShow.map((chapter, index) => <ChapterAccessHandler key={chapter.id} chapterId={chapter.id} chapterTitle={`Chapter ${chapter.chapter_number}`} isLocked={chapter.is_locked} onAccess={() => {
-                  const chapterSlug = `chapter-${chapter.chapter_number.toString().padStart(3, '0')}`;
-                  navigate(`/read/${series.id}/${chapterSlug}`);
+                  navigate(`/reader/${series.id}/${chapter.chapter_number}`);
                 }}>
                             <div className={`w-full px-2 py-1 md:py-1.5 rounded text-xs md:text-sm font-semibold transition-all hover:scale-105 cursor-pointer bg-gray-600/90 text-white hover:bg-gray-500/90 min-h-[44px] md:min-h-0 flex items-center ${index > 0 ? 'hidden md:flex' : ''}`}>
                               <div className="flex items-center justify-between w-full">

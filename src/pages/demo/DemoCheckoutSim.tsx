@@ -8,7 +8,7 @@ import { useDemoRole } from '@/contexts/DemoRoleContext';
 
 /** Simulated checkout — never calls PayPal or Edge Functions. */
 const DemoCheckoutSim = () => {
-  const { clearRole } = useDemoRole();
+  const { clearRole, grantDemoCoins, setActiveRole, coins } = useDemoRole();
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-lg space-y-6">
@@ -30,6 +30,9 @@ const DemoCheckoutSim = () => {
           <p className="text-sm text-amber-500/90" role="status">
             Demo only — no real charges. PayPal SDK is not loaded on this page.
           </p>
+          <p className="text-sm text-muted-foreground">
+            Current demo balance: <strong>{coins}</strong> coins
+          </p>
           <ul className="space-y-2 text-sm">
             {COIN_PACKAGES.map((pack) => (
               <li key={pack.id} className="flex justify-between border-b border-border/40 py-2">
@@ -40,13 +43,15 @@ const DemoCheckoutSim = () => {
           </ul>
           <Button
             className="w-full min-h-11"
-            onClick={() =>
+            onClick={() => {
+              setActiveRole('buyer');
+              grantDemoCoins(100);
               window.alert(
-                'Simulated success. No payment gateway was contacted. Reset Demo to clear session state.'
-              )
-            }
+                'Simulated success. +100 temporary demo coins added for this browser session. No payment gateway was contacted.'
+              );
+            }}
           >
-            Simulate successful payment
+            Simulate successful payment (+100 coins)
           </Button>
           <Button
             variant="outline"
