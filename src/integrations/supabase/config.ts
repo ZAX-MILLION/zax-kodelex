@@ -48,6 +48,9 @@ export function hasSupabaseCredentials(): boolean {
   const config = resolveSupabaseConfig();
   if (!config.url || !config.anonKey) return false;
   if (config.url.includes('placeholder.supabase.co')) return false;
+  // Dev fallback URL is for convenience only — do not treat it as live auth/API.
+  // Set VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY (or localStorage) for real login.
+  if (config.source === 'dev-fallback') return false;
   return true;
 }
 

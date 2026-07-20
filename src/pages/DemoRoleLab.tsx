@@ -1,5 +1,5 @@
 import type { ElementType } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Shield, User, Crown, Coins, Upload, Eye, ArrowLeft, FlaskConical } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import {
 } from '@/contexts/DemoRoleContext';
 import type { DemoRoleId } from '@/config/env';
 import { appConfig } from '@/config/env';
+import { getDemoRoleDestination } from '@/features/demo/demoAuthPolicy';
 
 const ROLE_ICONS: Record<DemoRoleId, ElementType> = {
   guest: Eye,
@@ -30,7 +31,7 @@ function RoleCapabilityList({ profile }: { profile: DemoRoleProfile }) {
     { label: 'Coin wallet display', ok: profile.coins > 0 },
     { label: 'Purchase UI (blocked)', ok: profile.canPurchase },
     { label: 'Upload panel preview', ok: profile.canUpload },
-    { label: 'Admin dashboard', ok: false },
+    { label: 'Admin simulation dashboard', ok: profile.role === 'admin' },
   ];
 
   return (
@@ -50,6 +51,7 @@ function RoleCapabilityList({ profile }: { profile: DemoRoleProfile }) {
 }
 
 const DemoRoleLab = () => {
+  const navigate = useNavigate();
   const { activeRole, profile, setActiveRole, clearRole, enabled } = useDemoRole();
 
   if (!enabled) {
@@ -63,6 +65,13 @@ const DemoRoleLab = () => {
       </div>
     );
   }
+
+  const activateRole = (role: DemoRoleId) => {
+    setActiveRole(role);
+    if (role !== 'guest') {
+      navigate(getDemoRoleDestination(role));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
@@ -117,7 +126,7 @@ const DemoRoleLab = () => {
                     variant={selected ? 'default' : 'outline'}
                     className="w-full min-h-11"
                     aria-pressed={selected}
-                    onClick={() => setActiveRole(option.id)}
+                    onClick={() => activateRole(option.id)}
                   >
                     {selected ? 'Active' : 'Simulate'}
                   </Button>

@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState, ReactNode, useCallback 
 import { User, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { appConfig } from '@/config/env';
+import { isRealAuthEnabled } from '@/features/demo/demoAuthPolicy';
 
 interface UserProfile {
   id: string;
@@ -158,7 +160,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, [clearProfile, fetchUserProfile]);
 
+  const authDisabledError = {
+    message: appConfig.isDemo
+      ? 'Demo mode uses Role Lab previews instead of real authentication.'
+      : 'Authentication is not configured on this host.',
+  };
+
   const signIn = async (email: string, password: string) => {
+    if (!isRealAuthEnabled() || !isSupabaseConfigured) {
+      return { error: authDisabledError, session: null };
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -186,6 +198,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signUp = async (email: string, password: string, username: string) => {
+    if (!isRealAuthEnabled() || !isSupabaseConfigured) {
+      return { error: authDisabledError, session: null };
+    }
+
     try {
       const redirectUrl = `${window.location.origin}/reset-password`;
 
@@ -229,6 +245,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const resetPassword = async (email: string) => {
+    if (!isRealAuthEnabled() || !isSupabaseConfigured) {
+      return { error: authDisabledError };
+    }
+
     try {
       const redirectUrl = `${window.location.origin}/reset-password`;
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -255,6 +275,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signOut = async () => {
+    if (!isRealAuthEnabled() || !isSupabaseConfigured) {
+      clearProfile();
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {

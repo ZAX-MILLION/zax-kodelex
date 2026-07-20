@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDemoRole } from '@/contexts/DemoRoleContext';
 import { Link, useLocation } from 'react-router-dom';
 import { appConfig } from '@/config/env';
+import { shouldUseDemoRolePreview } from '@/features/demo/demoAuthPolicy';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -281,7 +282,7 @@ const CreativeNavBar = () => {
                       </Button>
                     )}
                     <Button variant="ghost" size="sm" onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))} className="rounded-xl min-h-11 text-sm px-3">
-                      Sign In
+                      {shouldUseDemoRolePreview() ? 'Try Demo' : 'Sign In'}
                     </Button>
                     
                   </div>}
@@ -393,7 +394,7 @@ const CreativeNavBar = () => {
                 setIsMenuOpen(false);
               }} className="w-full bg-gradient-to-r from-primary to-manga-gold hover:from-primary/90 hover:to-manga-gold/90 rounded-xl text-base min-h-11">
                       <User className="h-4 w-4 mr-2" />
-                      Sign In / Get Started
+                      {shouldUseDemoRolePreview() ? 'Try Demo' : 'Sign In / Get Started'}
                     </Button>
                   </div>}
               </div>

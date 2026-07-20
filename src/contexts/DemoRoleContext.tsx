@@ -108,7 +108,7 @@ export const DEMO_ROLE_OPTIONS: Array<{
   {
     id: 'admin',
     label: 'Admin Preview',
-    description: 'Nav hints only — admin bundle not loaded on demo',
+    description: 'Simulated admin dashboard — production Admin bundle is never loaded',
   },
 ];
 

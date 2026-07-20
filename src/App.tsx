@@ -64,6 +64,9 @@ const DemoRoleLab = lazy(() => import('./pages/DemoRoleLab'));
 const DemoUploaderSim = lazy(() => import('./pages/demo/DemoUploaderSim'));
 const DemoAdminSim = lazy(() => import('./pages/demo/DemoAdminSim'));
 const DemoCheckoutSim = lazy(() => import('./pages/demo/DemoCheckoutSim'));
+const DemoMemberSim = lazy(() => import('./pages/demo/DemoMemberSim'));
+const DemoPaidMemberSim = lazy(() => import('./pages/demo/DemoPaidMemberSim'));
+const DemoBuyerSim = lazy(() => import('./pages/demo/DemoBuyerSim'));
 const DemoRoleAlias = lazy(() => import('./pages/demo/DemoRoleAlias'));
 
 function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
@@ -119,6 +122,9 @@ function AppContent() {
               <Route path="/buy" element={<PaymentsRouteGuard><AppShell><Buy /></AppShell></PaymentsRouteGuard>} />
               <Route path="/contests" element={<AppShell><Contests /></AppShell>} />
               <Route path="/demo" element={<AppShell><DemoRoleLab /></AppShell>} />
+              <Route path="/demo/member" element={<AppShell><DemoMemberSim /></AppShell>} />
+              <Route path="/demo/paid-member" element={<AppShell><DemoPaidMemberSim /></AppShell>} />
+              <Route path="/demo/buyer" element={<AppShell><DemoBuyerSim /></AppShell>} />
               <Route path="/demo/uploader" element={<AppShell><DemoUploaderSim /></AppShell>} />
               <Route path="/demo/admin" element={<AppShell><DemoAdminSim /></AppShell>} />
               <Route path="/demo/checkout" element={<AppShell><DemoCheckoutSim /></AppShell>} />
