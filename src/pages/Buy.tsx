@@ -9,6 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import SEOHelmet from '@/components/SEOHelmet';
+import { appConfig } from '@/config/env';
+import { Link } from 'react-router-dom';
 
 interface LicenseDetails {
   id: string;
@@ -118,6 +120,15 @@ const Buy = () => {
   };
 
   const processPayment = async (method: 'stripe' | 'paypal') => {
+    if (!appConfig.allowSimulatedBuy) {
+      toast({
+        title: 'Checkout unavailable',
+        description: 'Theme license sales are not live yet. Contact support or use Ko-fi.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const validationError = validateForm();
     if (validationError) {
       toast({
@@ -256,6 +267,32 @@ const Buy = () => {
       });
     }
   };
+
+  if (!appConfig.allowSimulatedBuy) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/50">
+        <SEOHelmet
+          title="Theme Licenses — Coming Soon"
+          description="Zax Million theme licenses will be available after payment integration is complete."
+        />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center max-w-xl">
+          <h1 className="text-3xl font-bold mb-4">Theme licenses coming soon</h1>
+          <p className="text-muted-foreground mb-6">
+            Simulated checkout is disabled in this environment. Staging builds may enable sandbox
+            testing; production requires verified PayPal before sales go live.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild>
+              <Link to="/support">Support & Ko-fi</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/">Back to Home</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (purchaseComplete && licenseDetails) {
     return (

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { appConfig } from '@/config/env';
 import { useToast } from '@/hooks/use-toast';
 
 export interface BlogPost {
@@ -21,6 +22,11 @@ export const useBlogPosts = (limit = 6) => {
   const fetchBlogPosts = async () => {
     try {
       setLoading(true);
+
+      if (!appConfig.features.blogDatabase) {
+        setPosts([]);
+        return;
+      }
       
       const { data, error } = await supabase
         .from('blog_posts')
@@ -45,11 +51,14 @@ export const useBlogPosts = (limit = 6) => {
       setPosts(formattedPosts);
     } catch (err) {
       console.error('Error fetching blog posts:', err);
-      toast({
-        title: "Error",
-        description: "Failed to load blog posts",
-        variant: "destructive"
-      });
+      if (appConfig.features.blogDatabase) {
+        toast({
+          title: "Error",
+          description: "Failed to load blog posts",
+          variant: "destructive"
+        });
+      }
+      setPosts([]);
     } finally {
       setLoading(false);
     }

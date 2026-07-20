@@ -29,8 +29,11 @@ jobs:
         run: npm ci
       - name: Build demo
         env:
+          VITE_APP_ENV: demo
           VITE_DEMO_MODE: 'true'
           VITE_SKIP_SETUP: 'true'
+          VITE_DISABLE_PAYMENTS: 'true'
+          VITE_DISABLE_ADMIN: 'true'
           VITE_BASE: '/zax-kodelex/'
         run: npm run build
       - name: SPA fallback for GitHub Pages
