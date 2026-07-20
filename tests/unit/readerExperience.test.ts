@@ -87,4 +87,18 @@ describe('reader isolation', () => {
     expect(source).toContain('ReaderComments');
     expect(source).toContain('ReaderSettings');
   });
+
+  it('layers Reader Settings select menus above the settings panel', () => {
+    const source = readFileSync(
+      resolve(__dirname, '../../src/components/reader/ReaderSettings.tsx'),
+      'utf8'
+    );
+    // Panel stack is z-[60]/z-[61]; SelectContent must portal above it.
+    expect(source).toContain('READER_SETTINGS_SELECT_Z');
+    expect(source).toMatch(/READER_SETTINGS_SELECT_Z\s*=\s*[\s\S]*z-\[80\]/);
+    expect(source).toMatch(/className=\{READER_SETTINGS_SELECT_Z\}/);
+    const selectContentUsesElevatedZ = (source.match(/SelectContent[^>]*className=\{READER_SETTINGS_SELECT_Z\}/g) || [])
+      .length;
+    expect(selectContentUsesElevatedZ).toBeGreaterThanOrEqual(7);
+  });
 });

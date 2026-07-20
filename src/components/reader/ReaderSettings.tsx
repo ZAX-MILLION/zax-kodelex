@@ -21,6 +21,13 @@ interface ReaderSettingsProps {
   onClose: () => void;
 }
 
+/**
+ * Select portals to document.body with default z-50.
+ * Reader Settings overlay uses z-[60]/z-[61], so dropdowns must sit above that stack.
+ */
+export const READER_SETTINGS_SELECT_Z =
+  'z-[80] max-h-[min(16rem,50vh)] overflow-y-auto';
+
 export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const { settings, patch, resetSettings } = useReaderSettings();
@@ -28,7 +35,10 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key !== 'Escape') return;
+      // Let an open Radix Select close first; do not dismiss the whole panel.
+      if (document.querySelector('[role="listbox"][data-state="open"]')) return;
+      onClose();
     };
     window.addEventListener('keydown', onKey);
     panelRef.current?.focus();
@@ -75,7 +85,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="reading-mode" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="webtoon">Webtoon / continuous vertical</SelectItem>
                 <SelectItem value="single">Single page</SelectItem>
                 <SelectItem value="double">Two page</SelectItem>
@@ -93,7 +103,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
                 <SelectTrigger id="reading-direction" className="min-h-11">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                   <SelectItem value="ltr">Left to right</SelectItem>
                   <SelectItem value="rtl">Right to left</SelectItem>
                 </SelectContent>
@@ -110,7 +120,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="reader-width" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="full">Full width</SelectItem>
                 <SelectItem value="comfortable">Comfortable (720px)</SelectItem>
                 <SelectItem value="boxed">Boxed (900px)</SelectItem>
@@ -142,7 +152,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="image-fit" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="width">Fit to width</SelectItem>
                 <SelectItem value="screen">Fit to screen</SelectItem>
                 <SelectItem value="contain">Contain</SelectItem>
@@ -186,7 +196,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="reader-bg" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="black">Pure black</SelectItem>
                 <SelectItem value="charcoal">Charcoal</SelectItem>
                 <SelectItem value="soft-dark">Soft dark</SelectItem>
@@ -204,7 +214,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="page-align" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="center">Center</SelectItem>
                 <SelectItem value="left">Left</SelectItem>
                 <SelectItem value="right">Right</SelectItem>
@@ -221,7 +231,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="toolbar-behavior" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="auto-hide">Auto-hide on scroll</SelectItem>
                 <SelectItem value="always">Always visible</SelectItem>
                 <SelectItem value="tap">Tap to toggle</SelectItem>
@@ -238,7 +248,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               <SelectTrigger id="progress-style" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="full">Page count + percentage + bar</SelectItem>
                 <SelectItem value="bar">Progress bar only</SelectItem>
                 <SelectItem value="minimal">Page count only</SelectItem>
