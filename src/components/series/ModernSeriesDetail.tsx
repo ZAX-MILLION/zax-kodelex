@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { SeriesComments } from './SeriesComments';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Star, Eye, BookOpen, Heart, Share2 } from 'lucide-react';
+import { Star, Eye, BookOpen, Heart, Share2, Play, Coins, Crown } from 'lucide-react';
 import LazyImage from '@/components/LazyImage';
 import ModernChapterGrid from './ModernChapterGrid';
 import { getOptimizedImageUrl, getFallbackCoverImage } from '@/utils/imageOptimization';
@@ -16,6 +17,7 @@ import {
   getDemoSeriesById,
   isDemoSeriesId,
 } from '@/utils/demoLibraryData';
+import type { DemoAccessType } from '@/features/demo/data/demoChapterCatalog';
 interface MangaSeries {
   id: string;
   title: string;
@@ -44,6 +46,7 @@ interface Chapter {
   is_locked: boolean;
   unlock_cost: number;
   thumbnail_url: string;
+  access_type?: DemoAccessType;
 }
 const ModernSeriesDetail = () => {
   const {
@@ -104,6 +107,7 @@ const ModernSeriesDetail = () => {
               is_locked: chapter.is_locked,
               unlock_cost: chapter.unlock_cost,
               thumbnail_url: demoSeries.cover_image_url,
+              access_type: chapter.access_type,
             }))
           );
           return;
@@ -171,6 +175,7 @@ const ModernSeriesDetail = () => {
             is_locked: chapter.is_locked,
             unlock_cost: chapter.unlock_cost,
             thumbnail_url: demoSeries.cover_image_url,
+            access_type: chapter.access_type,
           }))
         );
         return;
@@ -285,13 +290,68 @@ const ModernSeriesDetail = () => {
               </div>
               
               {/* Action Buttons under cover */}
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <div className="mt-6 flex flex-col gap-3">
+                {chapters.length > 0 && (
+                  <Button asChild size="lg" className="w-full gap-3 h-12 text-base font-semibold rounded-xl min-h-11">
+                    <Link
+                      to={`/reader/${series.id}/${
+                        (() => {
+                          try {
+                            const raw = sessionStorage.getItem(`zax-demo-continue:${series.id}`);
+                            const n = raw ? parseInt(raw, 10) : NaN;
+                            if (Number.isFinite(n) && chapters.some((c) => c.chapter_number === n)) {
+                              return n;
+                            }
+                          } catch {
+                            /* ignore */
+                          }
+                          return chapters[0].chapter_number;
+                        })()
+                      }`}
+                      onClick={() => {
+                        try {
+                          sessionStorage.setItem(
+                            `zax-demo-continue:${series.id}`,
+                            String(chapters[0].chapter_number)
+                          );
+                        } catch {
+                          /* ignore */
+                        }
+                      }}
+                    >
+                      <Play className="h-5 w-5" />
+                      {(() => {
+                        try {
+                          const raw = sessionStorage.getItem(`zax-demo-continue:${series.id}`);
+                          return raw ? 'Continue Reading' : 'Start Reading';
+                        } catch {
+                          return 'Start Reading';
+                        }
+                      })()}
+                    </Link>
+                  </Button>
+                )}
                 <Button onClick={toggleBookmark} size="lg" disabled={!user} className={`w-full gap-3 h-12 text-base font-semibold rounded-xl shadow-lg transition-all duration-300 ${isBookmarked ? 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 hover:shadow-xl hover:shadow-red-500/25' : 'bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 hover:shadow-xl hover:shadow-primary/25'}`}>
                   <Heart className={`h-5 w-5 ${isBookmarked ? 'fill-current' : ''}`} />
                   {isBookmarked ? 'Remove from Library' : 'Add to Library'}
                 </Button>
-                
-                
+                <div className="flex flex-wrap gap-2">
+                  {chapters.some((c) => c.access_type === 'free' || !c.is_locked) && (
+                    <Badge variant="secondary">Free chapter</Badge>
+                  )}
+                  {chapters.some((c) => c.access_type === 'coins' || (c.is_locked && c.unlock_cost > 0)) && (
+                    <Badge variant="outline" className="gap-1">
+                      <Coins className="h-3 w-3" />
+                      Coin chapter
+                    </Badge>
+                  )}
+                  {chapters.some((c) => c.access_type === 'premium') && (
+                    <Badge variant="outline" className="gap-1">
+                      <Crown className="h-3 w-3" />
+                      Premium chapter
+                    </Badge>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -408,7 +468,7 @@ const ModernSeriesDetail = () => {
           </TabsList>
 
           <TabsContent value="chapters" className="mt-0">
-            <ModernChapterGrid chapters={chapters} />
+            <ModernChapterGrid chapters={chapters} seriesId={series.id} />
           </TabsContent>
 
           <TabsContent value="comments" className="mt-0">

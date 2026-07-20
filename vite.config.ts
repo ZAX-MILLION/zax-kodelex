@@ -51,6 +51,7 @@ export default defineConfig(() => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg}'],
+          globIgnores: ['**/demo/chapters/**', '**/demo/chapters/**/*'],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
           runtimeCaching: [
             {

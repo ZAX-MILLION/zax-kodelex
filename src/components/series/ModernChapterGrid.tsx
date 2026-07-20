@@ -37,9 +37,10 @@ interface Chapter {
 
 interface ModernChapterGridProps {
   chapters: Chapter[];
+  seriesId?: string;
 }
 
-const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [] }) => {
+const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], seriesId }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [gridColumns, setGridColumns] = useState<1 | 2 | 3>(3);
@@ -48,7 +49,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [] }) 
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [showUnlockPopup, setShowUnlockPopup] = useState(false);
 
-  // Check user access to chapters
+  // Check user access to chapters (skipped for demo chapter ids — Role Lab handles that)
   useEffect(() => {
     if (user && chapters.length > 0) {
       checkUserAccess();
@@ -57,7 +58,10 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [] }) 
 
   const checkUserAccess = async () => {
     if (!user) return;
-    
+    if (chapters.some((chapter) => chapter.id.includes('-ch-'))) {
+      return;
+    }
+
     try {
       const { data } = await supabase
         .from('chapter_access')
@@ -92,8 +96,15 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [] }) 
   };
 
   const handleChapterClick = (chapter: Chapter) => {
+    // Demo chapters always open the reader route; Role Lab gate handles locks.
+    if (chapter.id.includes('-ch-') || seriesId?.startsWith('00000000-0000-4000-a000-')) {
+      const targetSeries = seriesId || chapter.id.split('-ch-')[0];
+      navigate(`/reader/${targetSeries}/${chapter.chapter_number}`);
+      return;
+    }
+
     const status = getChapterStatus(chapter);
-    
+
     if (status === 'locked') {
       setSelectedChapter(chapter);
       setShowUnlockPopup(true);

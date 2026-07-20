@@ -1,6 +1,14 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { DemoRoleId } from '@/config/env';
 import { appConfig } from '@/config/env';
+import type { DemoChapter } from '@/utils/demoLibraryData';
+import {
+  applyDemoCoinUnlock,
+  evaluateDemoChapterAccess,
+  type PureDemoAccessResult,
+} from '@/features/demo/demoChapterAccess';
+
+export type DemoAccessResult = PureDemoAccessResult;
 
 export interface DemoRoleProfile {
   id: string;
@@ -15,6 +23,8 @@ export interface DemoRoleProfile {
 }
 
 const DEMO_ROLE_STORAGE_KEY = 'zax-demo-role';
+const DEMO_UNLOCKS_STORAGE_KEY = 'zax-demo-unlocks';
+const DEMO_COIN_BONUS_STORAGE_KEY = 'zax-demo-coin-bonus';
 
 const ROLE_PROFILES: Record<DemoRoleId, DemoRoleProfile> = {
   guest: {
@@ -90,10 +100,10 @@ export const DEMO_ROLE_OPTIONS: Array<{
   label: string;
   description: string;
 }> = [
-  { id: 'guest', label: 'Guest', description: 'Browse the demo library only' },
-  { id: 'member', label: 'Member', description: 'Signed-in reader with profile UI' },
-  { id: 'paid', label: 'Paid / Premium', description: 'Premium badge and early-access UI' },
-  { id: 'buyer', label: 'Buyer', description: 'Coin wallet UI (no real checkout)' },
+  { id: 'guest', label: 'Guest', description: 'Browse free demo chapters only' },
+  { id: 'member', label: 'Member', description: 'Can spend demo coins to unlock one paid chapter' },
+  { id: 'paid', label: 'Paid / Premium', description: 'Premium demo chapters unlocked' },
+  { id: 'buyer', label: 'Buyer', description: 'Simulated checkout grants temporary demo coins' },
   { id: 'uploader', label: 'Uploader', description: 'Upload panel preview (no writes)' },
   {
     id: 'admin',
@@ -106,9 +116,16 @@ interface DemoRoleContextValue {
   enabled: boolean;
   activeRole: DemoRoleId;
   profile: DemoRoleProfile | null;
+  coins: number;
+  unlockedChapterIds: string[];
   setActiveRole: (role: DemoRoleId) => void;
   clearRole: () => void;
+  resetDemo: () => void;
   isSimulatingAuth: boolean;
+  isChapterUnlocked: (chapterId: string) => boolean;
+  canAccessChapter: (chapter: Pick<DemoChapter, 'id' | 'access_type' | 'unlock_cost'>) => DemoAccessResult;
+  unlockChapterWithCoins: (chapterId: string, cost: number) => { ok: boolean; message: string };
+  grantDemoCoins: (amount: number) => void;
 }
 
 const DemoRoleContext = createContext<DemoRoleContextValue | undefined>(undefined);
@@ -122,11 +139,44 @@ function readStoredRole(): DemoRoleId {
   return 'guest';
 }
 
+function readUnlocks(): string[] {
+  if (typeof sessionStorage === 'undefined') return [];
+  try {
+    const raw = sessionStorage.getItem(DEMO_UNLOCKS_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function readCoinBonus(): number {
+  if (typeof sessionStorage === 'undefined') return 0;
+  const raw = sessionStorage.getItem(DEMO_COIN_BONUS_STORAGE_KEY);
+  const value = raw ? Number(raw) : 0;
+  return Number.isFinite(value) ? value : 0;
+}
+
 export function DemoRoleProvider({ children }: { children: React.ReactNode }) {
   const enabled = appConfig.features.roleLab;
   const [activeRole, setRoleState] = useState<DemoRoleId>(() =>
     enabled ? readStoredRole() : 'guest'
   );
+  const [unlockedChapterIds, setUnlockedChapterIds] = useState<string[]>(() =>
+    enabled ? readUnlocks() : []
+  );
+  const [coinBonus, setCoinBonus] = useState<number>(() => (enabled ? readCoinBonus() : 0));
+
+  const persistUnlocks = useCallback((ids: string[]) => {
+    setUnlockedChapterIds(ids);
+    sessionStorage.setItem(DEMO_UNLOCKS_STORAGE_KEY, JSON.stringify(ids));
+  }, []);
+
+  const persistCoinBonus = useCallback((amount: number) => {
+    setCoinBonus(amount);
+    sessionStorage.setItem(DEMO_COIN_BONUS_STORAGE_KEY, String(amount));
+  }, []);
 
   const setActiveRole = useCallback(
     (role: DemoRoleId) => {
@@ -137,23 +187,112 @@ export function DemoRoleProvider({ children }: { children: React.ReactNode }) {
     [enabled]
   );
 
-  const clearRole = useCallback(() => {
+  const resetDemo = useCallback(() => {
     setRoleState('guest');
+    setUnlockedChapterIds([]);
+    setCoinBonus(0);
     sessionStorage.removeItem(DEMO_ROLE_STORAGE_KEY);
+    sessionStorage.removeItem(DEMO_UNLOCKS_STORAGE_KEY);
+    sessionStorage.removeItem(DEMO_COIN_BONUS_STORAGE_KEY);
   }, []);
+
+  const clearRole = useCallback(() => {
+    resetDemo();
+  }, [resetDemo]);
+
+  const baseCoins = ROLE_PROFILES[activeRole].coins;
+  const coins = baseCoins + coinBonus;
+
+  const isChapterUnlocked = useCallback(
+    (chapterId: string) => unlockedChapterIds.includes(chapterId),
+    [unlockedChapterIds]
+  );
+
+  const canAccessChapter = useCallback(
+    (chapter: Pick<DemoChapter, 'id' | 'access_type' | 'unlock_cost'>): DemoAccessResult => {
+      const profile = ROLE_PROFILES[activeRole];
+      return evaluateDemoChapterAccess(chapter, {
+        role: activeRole,
+        coins: profile.coins + coinBonus,
+        isPremium: profile.isPremium,
+        unlockedChapterIds,
+      });
+    },
+    [activeRole, unlockedChapterIds, coinBonus]
+  );
+
+  const unlockChapterWithCoins = useCallback(
+    (chapterId: string, cost: number) => {
+      if (!enabled) {
+        return { ok: false, message: 'Demo Role Lab is not enabled.' };
+      }
+      if (activeRole === 'guest') {
+        return { ok: false, message: 'Switch to Member or Buyer in Role Lab to use demo coins.' };
+      }
+      const result = applyDemoCoinUnlock(
+        { coins, unlockedChapterIds },
+        chapterId,
+        cost
+      );
+      if (!result.ok) {
+        return { ok: false, message: result.message };
+      }
+      persistCoinBonus(coinBonus - (coins - result.coins));
+      persistUnlocks(result.unlockedChapterIds);
+      return { ok: true, message: result.message };
+    },
+    [
+      enabled,
+      activeRole,
+      unlockedChapterIds,
+      coins,
+      coinBonus,
+      persistCoinBonus,
+      persistUnlocks,
+    ]
+  );
+
+  const grantDemoCoins = useCallback(
+    (amount: number) => {
+      if (!enabled) return;
+      persistCoinBonus(coinBonus + amount);
+    },
+    [enabled, coinBonus, persistCoinBonus]
+  );
 
   const value = useMemo<DemoRoleContextValue>(() => {
     const profile =
-      enabled && activeRole !== 'guest' ? ROLE_PROFILES[activeRole] : null;
+      enabled && activeRole !== 'guest'
+        ? { ...ROLE_PROFILES[activeRole], coins }
+        : null;
     return {
       enabled,
       activeRole,
       profile,
+      coins,
+      unlockedChapterIds,
       setActiveRole,
       clearRole,
+      resetDemo,
       isSimulatingAuth: enabled && activeRole !== 'guest',
+      isChapterUnlocked,
+      canAccessChapter,
+      unlockChapterWithCoins,
+      grantDemoCoins,
     };
-  }, [enabled, activeRole, setActiveRole, clearRole]);
+  }, [
+    enabled,
+    activeRole,
+    coins,
+    unlockedChapterIds,
+    setActiveRole,
+    clearRole,
+    resetDemo,
+    isChapterUnlocked,
+    canAccessChapter,
+    unlockChapterWithCoins,
+    grantDemoCoins,
+  ]);
 
   return (
     <DemoRoleContext.Provider value={value}>{children}</DemoRoleContext.Provider>

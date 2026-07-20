@@ -139,6 +139,36 @@ export function BlogArticle({ slug }: BlogArticleProps) {
             <p key={index}>{paragraph}</p>
           ))}
         </div>
+
+        {appConfig.isDemo && (
+          <aside className="max-w-2xl mx-auto mt-10 rounded-2xl border border-border/50 bg-card/40 p-5 sm:p-6 space-y-4">
+            <h2 className="text-lg font-semibold">Explore the live demo</h2>
+            <p className="text-sm text-muted-foreground">
+              Jump into a featured series, open a free sample chapter, or try Role Lab personas.
+            </p>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2">
+              <Button asChild className="min-h-11">
+                <Link to="/series/00000000-0000-4000-a000-000000000001">
+                  Featured series
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="min-h-11">
+                <Link to="/reader/00000000-0000-4000-a000-000000000001/1">
+                  Read sample chapter
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="min-h-11">
+                <Link to="/demo">Role Lab</Link>
+              </Button>
+              <Button asChild variant="ghost" className="min-h-11">
+                <Link to="/premium">Membership preview</Link>
+              </Button>
+              <Button asChild variant="ghost" className="min-h-11">
+                <Link to="/demo/uploader">Uploader simulation</Link>
+              </Button>
+            </div>
+          </aside>
+        )}
       </div>
 
       {related.length > 0 && (
