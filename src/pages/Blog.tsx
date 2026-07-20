@@ -1,81 +1,83 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import SEOHelmet from '@/components/SEOHelmet';
-import AnimatedBackground from '@/components/AnimatedBackground';
-import { useBlogPosts } from '@/hooks/useBlogPosts';
+import { Link, useParams } from 'react-router-dom';
+import { BookOpen, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { EnhancedSEOHelmet } from '@/components/EnhancedSEOHelmet';
 import { BlogPostCard } from '@/components/homepage/BlogPostCard';
-import { Card, CardContent } from '@/components/ui/card';
-import { BookOpen } from 'lucide-react';
+import { BlogArticle } from '@/components/blog/BlogArticle';
+import { useBlogPosts } from '@/hooks/useBlogPosts';
+import { appConfig } from '@/config/env';
+import { LoadingState } from '@/components/LoadingSpinner';
 
 const Blog = () => {
   const { slug } = useParams();
   const { posts, loading } = useBlogPosts(20);
 
-  // If accessing a specific blog post
   if (slug) {
-    return (
-      <div className="min-h-screen bg-background">
-        <SEOHelmet 
-          title={`Blog Post - Zax Million`}
-          description="Read our latest blog post"
-        />
-        <AnimatedBackground />
-        <div className="container mx-auto px-4 py-8">
-          <Card>
-            <CardContent className="p-8 text-center">
-              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-bold mb-4">Blog Post Coming Soon</h2>
-              <p className="text-muted-foreground">
-                Individual blog post pages will be implemented in a future update.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
+    return <BlogArticle slug={slug} />;
   }
 
-  // Blog listing page
+  const [featured, ...rest] = posts;
+
   return (
     <div className="min-h-screen bg-background">
-      <SEOHelmet 
-        title="Blog - Zax Million"
-        description="Latest news, updates, and insights from Zax Million"
+      <EnhancedSEOHelmet
+        title="Blog — Zax Million"
+        description="Platform news, membership guides, and product updates from Zax Million."
+        noindex={appConfig.shouldNoIndex}
       />
-      <AnimatedBackground />
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Blog</h1>
-          <p className="text-muted-foreground">Latest news, updates, and insights</p>
-        </div>
 
+      <div className="relative overflow-hidden border-b border-border/40">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-35"
+          style={{
+            background:
+              'radial-gradient(ellipse 70% 55% at 15% 0%, hsl(25 95% 53% / 0.16), transparent 55%), radial-gradient(ellipse 50% 40% at 90% 10%, hsl(210 100% 60% / 0.1), transparent 50%)',
+          }}
+          aria-hidden
+        />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 relative">
+          <p className="text-xs uppercase tracking-[0.2em] text-primary/90 mb-3">Journal</p>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Zax Million Blog</h1>
+          <p className="mt-3 max-w-2xl text-muted-foreground leading-relaxed">
+            Product updates, membership clarity, and platform notes — written for readers and
+            operators evaluating the experience.
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10">
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-muted rounded-lg h-48 mb-4" />
-                <div className="space-y-3">
-                  <div className="h-4 bg-muted rounded w-3/4" />
-                  <div className="h-3 bg-muted rounded w-full" />
-                  <div className="h-3 bg-muted rounded w-2/3" />
-                </div>
-              </div>
-            ))}
+          <div className="min-h-[40vh] flex items-center justify-center">
+            <LoadingState message="Loading articles…" />
           </div>
-        ) : posts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post) => (
-              <BlogPostCard key={post.id} post={post} />
-            ))}
+        ) : posts.length === 0 ? (
+          <div className="text-center py-16 space-y-3">
+            <BookOpen className="h-12 w-12 text-muted-foreground mx-auto" />
+            <h2 className="text-xl font-semibold">No articles yet</h2>
+            <p className="text-muted-foreground">Check back soon for platform updates.</p>
+            <Button asChild variant="outline" className="min-h-11">
+              <Link to="/">
+                Back home
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Link>
+            </Button>
           </div>
         ) : (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-bold mb-2">No Blog Posts Yet</h2>
-              <p className="text-muted-foreground">Check back later for updates!</p>
-            </CardContent>
-          </Card>
+          <>
+            {featured && <BlogPostCard post={featured} featured />}
+            {rest.length > 0 && (
+              <section aria-labelledby="more-articles-heading" className="space-y-6">
+                <h2 id="more-articles-heading" className="text-xl sm:text-2xl font-bold">
+                  More articles
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+                  {rest.map((post) => (
+                    <BlogPostCard key={post.id} post={post} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
         )}
       </div>
     </div>
