@@ -28,6 +28,7 @@ import type { DemoAccessType } from '@/features/demo/data/demoChapterCatalog';
 import {
   getContinueChapterNumber,
   isChapterRead,
+  markAllChaptersRead,
 } from '@/features/series/seriesReadingProgress';
 
 export interface SeriesChapterItem {
@@ -200,6 +201,24 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
             <ArrowUpDown className="h-4 w-4" />
             {sortNewestFirst ? 'Newest first' : 'Oldest first'}
           </Button>
+          {seriesId && chapters.length > 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="min-h-10 gap-2"
+              onClick={() => {
+                markAllChaptersRead(
+                  seriesId,
+                  chapters.map((c) => c.chapter_number)
+                );
+                setReadTick((n) => n + 1);
+              }}
+            >
+              <CheckCircle className="h-4 w-4" />
+              Mark all read
+            </Button>
+          )}
         </div>
       </div>
 

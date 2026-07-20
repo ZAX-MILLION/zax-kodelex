@@ -63,6 +63,12 @@ export function markChapterRead(seriesId: string, chapterNumber: number) {
   writeChapterSet(seriesId, set);
 }
 
+export function markAllChaptersRead(seriesId: string, chapterNumbers: number[]) {
+  const set = readChapterSet(seriesId);
+  chapterNumbers.forEach((n) => set.add(n));
+  writeChapterSet(seriesId, set);
+}
+
 export function isChapterRead(seriesId: string, chapterNumber: number): boolean {
   return readChapterSet(seriesId).has(chapterNumber);
 }

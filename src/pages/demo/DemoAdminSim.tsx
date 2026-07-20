@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/label';
 import { EnhancedSEOHelmet } from '@/components/EnhancedSEOHelmet';
 import { DemoSimChrome } from '@/components/demo/DemoSimChrome';
 import { SeriesDetailsBackgroundControls } from '@/components/series/SeriesDetailsBackgroundControls';
+import { SeriesDetailsLayoutControls } from '@/components/series/SeriesDetailsLayoutControls';
 import { useDemoRole } from '@/contexts/DemoRoleContext';
 import { DEMO_SIMULATED_ACTION_MESSAGE } from '@/features/demo/demoAuthPolicy';
 import { getFeaturedDemoSeries } from '@/utils/demoLibraryData';
@@ -364,12 +365,34 @@ const DemoAdminSim = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            <SeriesDetailsLayoutControls
+              compact
+              onChanged={() => announce('Layout settings updated in demo state.')}
+            />
             <SeriesDetailsBackgroundControls
               compact
               onChanged={() => announce('Background settings updated in demo state.')}
             />
             <div className="space-y-4 border-t border-border/40 pt-4">
-              <p className="text-sm font-medium">Per-series overrides (featured demo catalogue)</p>
+              <p className="text-sm font-medium">Per-series layout overrides (featured demo catalogue)</p>
+              {featuredSeries.map((series) => (
+                <div
+                  key={`layout-${series.id}`}
+                  className="rounded-xl border border-border/50 bg-muted/10 p-3 sm:p-4"
+                >
+                  <SeriesDetailsLayoutControls
+                    compact
+                    seriesId={series.id}
+                    seriesTitle={series.title}
+                    onChanged={() =>
+                      announce(`Layout updated for ${series.title} in demo state.`)
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="space-y-4 border-t border-border/40 pt-4">
+              <p className="text-sm font-medium">Per-series background overrides (featured demo catalogue)</p>
               {featuredSeries.map((series) => (
                 <div
                   key={series.id}

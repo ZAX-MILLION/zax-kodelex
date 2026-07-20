@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SeriesDetailsBackgroundControls } from "@/components/series/SeriesDetailsBackgroundControls";
+import { SeriesDetailsLayoutControls } from "@/components/series/SeriesDetailsLayoutControls";
 
 interface SiteSettings {
   site_title: string;
@@ -556,6 +557,15 @@ export const SiteSettings = () => {
                   metadata or demo admin tools.
                 </p>
                 <SeriesDetailsBackgroundControls compact />
+              </div>
+
+              <div className="rounded-xl border border-border/40 bg-muted/10 p-4 sm:p-5">
+                <h4 className="mb-1 text-sm font-semibold">Manga details page layout</h4>
+                <p className="mb-4 text-xs text-muted-foreground">
+                  Choose the default series details layout. Per-series overrides can be set in demo admin
+                  tools.
+                </p>
+                <SeriesDetailsLayoutControls compact />
               </div>
 
               <div className="space-y-2">
