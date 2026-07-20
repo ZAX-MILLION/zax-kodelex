@@ -1,76 +1,118 @@
-import { useEffect, useState } from 'react';
-import {
-  getOptimizedSeriesDetailsBgUrl,
-  resolveSeriesDetailsBackground,
-  type SeriesDetailsBgSource,
-} from '@/features/series/seriesDetailsBackground';
-import { cn } from '@/lib/utils';
-
-interface SeriesDetailsBackgroundProps {
-  seriesId: string;
-  seriesCustomUrl?: string | null;
-  globalDefaultUrl?: string | null;
-  className?: string;
-  children: React.ReactNode;
-}
-
-/**
- * Fixed, softened page backdrop for manga/series details.
- * Content scrolls above a dimmed, blurred image layer for readability.
- */
-export function SeriesDetailsBackground({
-  seriesId,
-  seriesCustomUrl,
-  globalDefaultUrl,
-  className,
-  children,
-}: SeriesDetailsBackgroundProps) {
-  const resolved = resolveSeriesDetailsBackground({
-    seriesId,
-    seriesCustomUrl,
-    globalDefaultUrl,
-  });
-  const [src, setSrc] = useState(() => getOptimizedSeriesDetailsBgUrl(resolved.url));
-  const [source, setSource] = useState<SeriesDetailsBgSource>(resolved.source);
-
-  useEffect(() => {
-    const next = resolveSeriesDetailsBackground({
-      seriesId,
-      seriesCustomUrl,
-      globalDefaultUrl,
-    });
-    setSrc(getOptimizedSeriesDetailsBgUrl(next.url));
-    setSource(next.source);
-  }, [seriesId, seriesCustomUrl, globalDefaultUrl]);
-
-  return (
-    <div className={cn('relative min-h-screen overflow-x-hidden', className)}>
-      <div
-        className="pointer-events-none fixed inset-0 -z-10"
-        aria-hidden
-        data-series-details-bg={source}
-      >
-        <img
-          src={src}
-          alt=""
-          width={1600}
-          height={900}
-          decoding="async"
-          loading="eager"
-          fetchPriority="low"
-          className="h-full w-full object-cover scale-105 blur-[2px] sm:blur-[3px]"
-          onError={(e) => {
-            const el = e.currentTarget;
-            if (!el.src.includes('series-details-bg-default')) {
-              el.src = '/assets/series-details-bg-default.svg';
-              setSource('fallback');
-            }
-          }}
-        />
-        <div className="absolute inset-0 bg-background/75 sm:bg-background/70" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/55 to-background/90" />
-      </div>
-      <div className="relative z-0">{children}</div>
-    </div>
-  );
-}
+import { useEffect, useMemo, useState } from 'react';
+import {
+  getOptimizedSeriesDetailsBgUrl,
+  getSeriesDetailsBgPositionStyle,
+  resolveSeriesDetailsBackground,
+  SERIES_DETAILS_BG_FALLBACK,
+  type SeriesDetailsBgSource,
+} from '@/features/series/seriesDetailsBackground';
+import { cn } from '@/lib/utils';
+
+interface SeriesDetailsBackgroundProps {
+  seriesId: string;
+  seriesCustomUrl?: string | null;
+  globalDefaultUrl?: string | null;
+  coverImageUrl?: string | null;
+  className?: string;
+  children: React.ReactNode;
+}
+
+/**
+ * Fixed or scrolling page backdrop for manga/series details.
+ * Content scrolls above a dimmed, blurred image layer for readability.
+ */
+export function SeriesDetailsBackground({
+  seriesId,
+  seriesCustomUrl,
+  globalDefaultUrl,
+  coverImageUrl,
+  className,
+  children,
+}: SeriesDetailsBackgroundProps) {
+  const resolved = useMemo(
+    () =>
+      resolveSeriesDetailsBackground({
+        seriesId,
+        seriesCustomUrl,
+        globalDefaultUrl,
+        coverImageUrl,
+      }),
+    [seriesId, seriesCustomUrl, globalDefaultUrl, coverImageUrl]
+  );
+
+  const [src, setSrc] = useState(() => getOptimizedSeriesDetailsBgUrl(resolved.url));
+  const [source, setSource] = useState<SeriesDetailsBgSource>(resolved.source);
+  const { theme } = resolved;
+
+  useEffect(() => {
+    const next = resolveSeriesDetailsBackground({
+      seriesId,
+      seriesCustomUrl,
+      globalDefaultUrl,
+      coverImageUrl,
+    });
+    setSrc(getOptimizedSeriesDetailsBgUrl(next.url));
+    setSource(next.source);
+  }, [seriesId, seriesCustomUrl, globalDefaultUrl, coverImageUrl]);
+
+  const overlayAlpha = theme.overlayDarkness / 100;
+  const accentStyle = theme.accentColor
+    ? ({ '--series-bg-accent': theme.accentColor } as React.CSSProperties)
+    : undefined;
+
+  return (
+    <div
+      className={cn('relative min-h-screen overflow-x-hidden', className)}
+      style={accentStyle}
+    >
+      <div
+        className={cn(
+          'pointer-events-none inset-0 -z-10',
+          theme.attachment === 'fixed' ? 'fixed' : 'absolute'
+        )}
+        aria-hidden
+        data-series-details-bg={source}
+      >
+        <img
+          src={src}
+          alt=""
+          width={1600}
+          height={900}
+          decoding="async"
+          loading="eager"
+          fetchPriority="low"
+          className="h-full w-full object-cover scale-105"
+          style={{
+            objectPosition: getSeriesDetailsBgPositionStyle(theme.position),
+            filter: theme.blur > 0 ? `blur(${theme.blur}px)` : undefined,
+          }}
+          onError={(e) => {
+            const el = e.currentTarget;
+            if (source === 'cover' && coverImageUrl) {
+              setSrc(SERIES_DETAILS_BG_FALLBACK);
+              setSource('fallback');
+              return;
+            }
+            if (!el.src.includes('series-details-bg-default')) {
+              el.src = SERIES_DETAILS_BG_FALLBACK;
+              setSource('fallback');
+            }
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-background"
+          style={{ opacity: overlayAlpha }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background/92" />
+        {theme.accentColor && (
+          <div
+            className="absolute inset-0 mix-blend-soft-light opacity-25"
+            style={{ backgroundColor: theme.accentColor }}
+          />
+        )}
+      </div>
+      <div className="relative z-0">{children}</div>
+    </div>
+  );
+}
+

@@ -1,29 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import LazyImage from '../LazyImage';
 import ChapterUnlockPopup from '../ChapterUnlockPopup';
 import {
-  Grid3X3,
-  List,
   Clock,
   CheckCircle,
   Lock,
   Unlock,
-  EyeOff,
-  Eye,
-  Square,
-  Grid2X2,
-  Columns3
+  MessageCircle,
+  ArrowUpDown,
+  BookMarked,
+  Circle,
 } from 'lucide-react';
+import type { DemoAccessType } from '@/features/demo/data/demoChapterCatalog';
+import {
+  getContinueChapterNumber,
+  isChapterRead,
+} from '@/features/series/seriesReadingProgress';
 
-interface Chapter {
+export interface SeriesChapterItem {
   id: string;
   title: string;
   chapter_number: number;
@@ -33,29 +40,43 @@ interface Chapter {
   is_locked: boolean;
   unlock_cost: number;
   thumbnail_url: string;
-  access_type?: 'free' | 'coins' | 'premium';
+  access_type?: DemoAccessType;
+  comment_count?: number;
 }
 
 interface ModernChapterGridProps {
-  chapters: Chapter[];
+  chapters: SeriesChapterItem[];
   seriesId?: string;
 }
+
+type AccessFilter = 'all' | DemoAccessType;
+type ReadFilter = 'all' | 'read' | 'unread';
 
 const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], seriesId }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [gridColumns, setGridColumns] = useState<1 | 2 | 3>(3);
-  const [showLocked, setShowLocked] = useState(true);
+  const [sortNewestFirst, setSortNewestFirst] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [accessFilter, setAccessFilter] = useState<AccessFilter>('all');
+  const [readFilter, setReadFilter] = useState<ReadFilter>('all');
   const [userAccess, setUserAccess] = useState<Record<string, boolean>>({});
-  const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
+  const [selectedChapter, setSelectedChapter] = useState<SeriesChapterItem | null>(null);
   const [showUnlockPopup, setShowUnlockPopup] = useState(false);
+  const [readTick, setReadTick] = useState(0);
 
-  // Check user access to chapters (skipped for demo chapter ids — Role Lab handles that)
+  const continueChapter = seriesId ? getContinueChapterNumber(seriesId) : null;
+
   useEffect(() => {
     if (user && chapters.length > 0) {
       checkUserAccess();
     }
   }, [user, chapters]);
+
+  useEffect(() => {
+    const onStorage = () => setReadTick((n) => n + 1);
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   const checkUserAccess = async () => {
     if (!user) return;
@@ -68,10 +89,10 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
         .from('chapter_access')
         .select('chapter_id')
         .eq('user_id', user.id)
-        .in('chapter_id', chapters.map(c => c.id));
-      
+        .in('chapter_id', chapters.map((c) => c.id));
+
       const accessMap: Record<string, boolean> = {};
-      data?.forEach(access => {
+      data?.forEach((access) => {
         accessMap[access.chapter_id] = true;
       });
       setUserAccess(accessMap);
@@ -80,15 +101,37 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
     }
   };
 
-  const sortedChapters = [...chapters].sort(
-    (a, b) => b.chapter_number - a.chapter_number
-  );
+  const filteredChapters = useMemo(() => {
+    let list = [...chapters];
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      list = list.filter(
+        (c) =>
+          c.title.toLowerCase().includes(q) ||
+          String(c.chapter_number).includes(q)
+      );
+    }
+    if (accessFilter !== 'all') {
+      list = list.filter((c) => {
+        const type = c.access_type || (c.is_locked ? (c.unlock_cost > 0 ? 'coins' : 'premium') : 'free');
+        return type === accessFilter;
+      });
+    }
+    if (readFilter !== 'all' && seriesId) {
+      list = list.filter((c) => {
+        const read = isChapterRead(seriesId, c.chapter_number);
+        return readFilter === 'read' ? read : !read;
+      });
+    }
+    list.sort((a, b) =>
+      sortNewestFirst
+        ? b.chapter_number - a.chapter_number
+        : a.chapter_number - b.chapter_number
+    );
+    return list;
+  }, [chapters, searchQuery, accessFilter, readFilter, sortNewestFirst, seriesId, readTick]);
 
-  const filteredChapters = showLocked 
-    ? sortedChapters 
-    : sortedChapters.filter(chapter => !chapter.is_locked || userAccess[chapter.id]);
-
-  const getChapterStatus = (chapter: Chapter) => {
+  const getChapterStatus = (chapter: SeriesChapterItem) => {
     if (userAccess[chapter.id]) return 'unlocked';
     if (chapter.access_type === 'premium') return 'locked-premium';
     if (chapter.access_type === 'coins') return 'locked';
@@ -97,8 +140,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
     return 'locked-premium';
   };
 
-  const handleChapterClick = (chapter: Chapter) => {
-    // Demo chapters always open the reader route; Role Lab gate handles locks.
+  const handleChapterClick = (chapter: SeriesChapterItem) => {
     if (chapter.id.includes('-ch-') || seriesId?.startsWith('00000000-0000-4000-a000-')) {
       const targetSeries = seriesId || chapter.id.split('-ch-')[0];
       navigate(`/reader/${targetSeries}/${chapter.chapter_number}`);
@@ -106,7 +148,6 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
     }
 
     const status = getChapterStatus(chapter);
-
     if (status === 'locked' || status === 'locked-premium') {
       setSelectedChapter(chapter);
       setShowUnlockPopup(true);
@@ -116,152 +157,147 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
   };
 
   return (
-    <div className="w-full space-y-6">
-      {/* Header with View Toggle and Filters */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <h2 className="text-2xl font-bold">Chapters</h2>
-        
-        <div className="flex items-center gap-4">
-          {/* Show/Hide Locked Toggle */}
-          <div className="flex items-center gap-2">
-            <Switch
-              id="show-locked"
-              checked={showLocked}
-              onCheckedChange={setShowLocked}
-            />
-            <Label htmlFor="show-locked" className="text-sm font-medium">
-              {showLocked ? (
-                <span className="flex items-center gap-1">
-                  <Eye className="h-3 w-3" />
-                  Show locked
-                </span>
-              ) : (
-                <span className="flex items-center gap-1">
-                  <EyeOff className="h-3 w-3" />
-                  Hide locked
-                </span>
-              )}
-            </Label>
-          </div>
-          
-          {/* Column Toggle */}
-          <div className="flex items-center gap-2 bg-background/50 backdrop-blur-sm border border-border/20 rounded-lg p-1">
-            <Button
-              variant={gridColumns === 1 ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setGridColumns(1)}
-              className="h-8 w-8 p-0"
-              title="1 per row"
-            >
-              <Square className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={gridColumns === 2 ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setGridColumns(2)}
-              className="h-8 w-8 p-0"
-              title="2 per row"
-            >
-              <Grid2X2 className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={gridColumns === 3 ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setGridColumns(3)}
-              className="h-8 w-8 p-0"
-              title="3 per row"
-            >
-              <Columns3 className="h-4 w-4" />
-            </Button>
-          </div>
+    <div className="w-full space-y-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <h2 className="text-xl font-bold sm:text-2xl">Chapters</h2>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <Input
+            type="search"
+            placeholder="Search chapters…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="min-h-10 w-full sm:w-44"
+            aria-label="Search chapters"
+          />
+          <Select value={accessFilter} onValueChange={(v) => setAccessFilter(v as AccessFilter)}>
+            <SelectTrigger className="min-h-10 w-full sm:w-36">
+              <SelectValue placeholder="Access" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All access</SelectItem>
+              <SelectItem value="free">Free</SelectItem>
+              <SelectItem value="coins">Coin</SelectItem>
+              <SelectItem value="premium">Premium</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={readFilter} onValueChange={(v) => setReadFilter(v as ReadFilter)}>
+            <SelectTrigger className="min-h-10 w-full sm:w-36">
+              <SelectValue placeholder="Read status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="read">Read</SelectItem>
+              <SelectItem value="unread">Unread</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="min-h-10 gap-2"
+            onClick={() => setSortNewestFirst((v) => !v)}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+            {sortNewestFirst ? 'Newest first' : 'Oldest first'}
+          </Button>
         </div>
       </div>
 
-      {/* Chapter Grid */}
-      <div className={`grid gap-4 ${
-        gridColumns === 1 ? 'grid-cols-1' :
-        gridColumns === 2 ? 'grid-cols-1 md:grid-cols-2' :
-        'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-      }`}>
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-1">
         {filteredChapters.map((chapter) => {
-          const daysAgo = Math.floor((Date.now() - new Date(chapter.release_date).getTime()) / (1000 * 60 * 60 * 24));
+          const daysAgo = Math.floor(
+            (Date.now() - new Date(chapter.release_date).getTime()) / (1000 * 60 * 60 * 24)
+          );
           const isNew = daysAgo <= 3;
           const status = getChapterStatus(chapter);
           const isLockedVisual = status === 'locked' || status === 'locked-premium';
+          const isRead = seriesId ? isChapterRead(seriesId, chapter.chapter_number) : false;
+          const isContinue = continueChapter === chapter.chapter_number;
+          const commentCount = chapter.comment_count ?? 0;
 
           return (
-            <Card 
-              key={chapter.id} 
-              className={`group hover:bg-accent/80 transition-all duration-200 cursor-pointer border border-border/10 bg-card/20 backdrop-blur-sm hover:border-accent/40 ${
-                gridColumns === 1 ? 'p-6' : gridColumns === 2 ? 'p-5' : 'p-4'
-              } ${isLockedVisual ? 'opacity-70' : ''}`}
+            <Card
+              key={chapter.id}
+              className={`group cursor-pointer border border-border/10 bg-card/30 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-card/50 ${
+                isContinue ? 'ring-2 ring-primary/50' : ''
+              } ${isLockedVisual ? 'opacity-80' : ''}`}
               onClick={() => handleChapterClick(chapter)}
             >
-              <div className="flex items-center gap-4">
-                {/* Chapter Number Badge */}
-                <div className="flex-shrink-0 relative">
-                  <div className={`${
-                    gridColumns === 1 ? 'w-16 h-16' : gridColumns === 2 ? 'w-14 h-14' : 'w-12 h-12'
-                  } rounded-lg flex items-center justify-center font-bold ${
-                    gridColumns === 1 ? 'text-lg' : gridColumns === 2 ? 'text-base' : 'text-sm'
-                  } shadow-lg border-2 ${
-                    isLockedVisual ? 'bg-destructive text-destructive-foreground border-destructive/30' :
-                    status === 'unlocked' ? 'bg-blue-500 text-white border-blue-500/30' :
-                    'bg-green-600 text-white border-green-600/30'
-                  }`}>
+              <div className="flex items-center gap-3 p-4 sm:gap-4">
+                <div className="relative shrink-0">
+                  <div
+                    className={`flex h-12 w-12 items-center justify-center rounded-lg text-sm font-bold shadow-md sm:h-14 sm:w-14 sm:text-base ${
+                      isLockedVisual
+                        ? 'border-2 border-destructive/30 bg-destructive text-destructive-foreground'
+                        : status === 'unlocked'
+                          ? 'border-2 border-blue-500/30 bg-blue-500 text-white'
+                          : 'border-2 border-green-600/30 bg-green-600 text-white'
+                    }`}
+                  >
                     {chapter.chapter_number}
                   </div>
-                  
-                  {/* New indicator dot */}
                   {isNew && !isLockedVisual && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-background animate-pulse"></div>
+                    <span className="absolute -right-1 -top-1 h-2.5 w-2.5 animate-pulse rounded-full bg-green-500 ring-2 ring-background" />
                   )}
                 </div>
 
-                {/* Chapter Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1 min-w-0">
-                      <h3 className={`font-bold group-hover:text-primary transition-colors line-clamp-1 ${
-                        gridColumns === 1 ? 'text-xl mb-2' : gridColumns === 2 ? 'text-lg mb-1' : 'text-base mb-1'
-                      }`}>
-                        Chapter {chapter.chapter_number}
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="flex flex-wrap items-center gap-2 font-bold group-hover:text-primary">
+                        <span className="line-clamp-1">Chapter {chapter.chapter_number}</span>
+                        {isContinue && (
+                          <Badge variant="default" className="gap-1 text-[10px]">
+                            <BookMarked className="h-3 w-3" />
+                            Continue
+                          </Badge>
+                        )}
+                        {isRead && (
+                          <Badge variant="secondary" className="gap-1 text-[10px]">
+                            <CheckCircle className="h-3 w-3" />
+                            Read
+                          </Badge>
+                        )}
+                        {!isRead && !isContinue && (
+                          <Circle className="h-3 w-3 text-muted-foreground" aria-label="Unread" />
+                        )}
                       </h3>
-                      <p className={`text-muted-foreground line-clamp-2 ${
-                        gridColumns === 1 ? 'text-base' : 'text-sm'
-                      }`}>
-                        {chapter.title}
-                      </p>
+                      <p className="line-clamp-1 text-sm text-muted-foreground">{chapter.title}</p>
                     </div>
-                    
-                    {/* Status and Time on right */}
-                    <div className="flex flex-col items-end gap-2 ml-4">
-                      {/* Status Badge */}
+
+                    <div className="flex shrink-0 flex-col items-end gap-1">
                       {status === 'locked' ? (
-                        <Badge variant="destructive" className={`gap-1 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
+                        <Badge variant="destructive" className="gap-1 text-xs">
                           <Lock className="h-3 w-3" />
                           {chapter.unlock_cost} coins
                         </Badge>
                       ) : status === 'locked-premium' ? (
-                        <Badge variant="destructive" className={`gap-1 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
+                        <Badge variant="destructive" className="gap-1 text-xs">
                           <Lock className="h-3 w-3" />
                           Premium
                         </Badge>
                       ) : status === 'unlocked' ? (
-                        <Badge variant="secondary" className={`gap-1 bg-blue-500/20 text-blue-600 border-blue-500/30 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
+                        <Badge variant="secondary" className="gap-1 border-blue-500/30 bg-blue-500/20 text-xs text-blue-600">
                           <Unlock className="h-3 w-3" />
                           Unlocked
                         </Badge>
                       ) : (
-                        <Badge variant="default" className={`gap-1 bg-green-600 hover:bg-green-700 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
+                        <Badge variant="default" className="gap-1 bg-green-600 text-xs hover:bg-green-700">
                           <CheckCircle className="h-3 w-3" />
                           Free
                         </Badge>
                       )}
-                      
-                      <div className={`text-muted-foreground flex items-center gap-1 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
-                        <Clock className="h-3 w-3" />
-                        {daysAgo === 0 ? '1h' : `${daysAgo}d`} ago
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {daysAgo === 0 ? 'Today' : `${daysAgo}d ago`}
+                        </span>
+                        {commentCount > 0 && (
+                          <span className="flex items-center gap-1">
+                            <MessageCircle className="h-3 w-3" />
+                            {commentCount}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -272,8 +308,10 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
         })}
       </div>
 
+      {filteredChapters.length === 0 && (
+        <p className="py-8 text-center text-sm text-muted-foreground">No chapters match your filters.</p>
+      )}
 
-      {/* Chapter Unlock Popup */}
       {selectedChapter && (
         <ChapterUnlockPopup
           isOpen={showUnlockPopup}

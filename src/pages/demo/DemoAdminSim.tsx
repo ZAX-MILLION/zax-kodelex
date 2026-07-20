@@ -379,6 +379,7 @@ const DemoAdminSim = () => {
                     compact
                     seriesId={series.id}
                     seriesTitle={series.title}
+                    coverImageUrl={series.cover_image_url}
                     onChanged={() =>
                       announce(`Background updated for ${series.title} in demo state.`)
                     }

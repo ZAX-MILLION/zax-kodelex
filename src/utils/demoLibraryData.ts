@@ -42,6 +42,8 @@ export interface DemoSeries {
   updated_at: string;
   locked_chapter_count: number;
   featured: boolean;
+  alt_title?: string | null;
+  followers_count?: number;
   /** Optional catalogue background for the series details page. */
   details_background_url?: string | null;
 }
@@ -66,6 +68,7 @@ export interface DemoChapter {
   created_at: string;
   previous_chapter_id: string | null;
   next_chapter_id: string | null;
+  comment_count?: number;
 }
 
 const MANGA_TITLES = [
@@ -251,6 +254,7 @@ function buildDemoLibrary() {
       id,
       slug,
       title: def.title,
+      ...(index % 4 === 1 ? { alt_title: `${def.title} (Official)` } : {}),
       description: def.description,
       author: def.author,
       artist: def.artist,
@@ -272,6 +276,7 @@ function buildDemoLibrary() {
       view_count: viewBase + index * 4200,
       rating_average: Number((3.8 + (index % 10) * 0.1).toFixed(1)),
       rating_count: 500 + index * 320,
+      followers_count: 1200 + index * 890,
       age_rating: def.age_rating,
       language: def.language,
       publication_date: pubDate.toISOString().split('T')[0],
@@ -319,6 +324,7 @@ function buildDemoLibrary() {
         created_at: releaseDate.toISOString(),
         previous_chapter_id: null,
         next_chapter_id: null,
+        comment_count: featured ? 4 + ch + (index % 3) : ch > 1 ? 1 : 0,
       });
     }
 
