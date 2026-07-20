@@ -225,8 +225,13 @@ export const useAnalyticsTracking = () => {
     const handleBeforeUnload = () => {
       const sessionDuration = Math.round((Date.now() - pageStartTimeRef.current) / 1000);
       
-      // Use sendBeacon for reliable tracking on page unload
-      if (navigator.sendBeacon && user) {
+      // Use sendBeacon for reliable tracking on page unload (never in demo / offline)
+      if (
+        navigator.sendBeacon &&
+        user &&
+        isSupabaseConfigured &&
+        !appConfig.isDemo
+      ) {
         const event = {
           activity_type: 'session_end',
           page_url: location.pathname,

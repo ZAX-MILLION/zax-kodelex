@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { appConfig } from '@/config/env';
+import { isSupabaseConfigured, supabase } from '@/integrations/supabase/client';
 
 interface ColorSettings {
   primary_color?: string;
@@ -81,6 +82,11 @@ const applyColorScheme = (colors: ColorSettings) => {
 
 export const useColorScheme = () => {
   useEffect(() => {
+    // Public demo / offline: never query or subscribe.
+    if (appConfig.isDemo || !isSupabaseConfigured) {
+      return;
+    }
+
     const loadColorScheme = async () => {
       try {
         // Check if child theme system is handling colors

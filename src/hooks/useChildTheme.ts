@@ -291,8 +291,12 @@ export const useChildTheme = () => {
     updated_at: new Date().toISOString()
   });
 
-  // Listen for real-time theme changes
+  // Listen for real-time theme changes (never in demo / offline)
   useEffect(() => {
+    if (isDemoModeEnabled() || !isSupabaseConfigured) {
+      return;
+    }
+
     const subscription = supabase
       .channel('child_themes_changes')
       .on(
