@@ -1,7 +1,8 @@
 import {
   buildFeaturedChapterPages,
-  buildSharedSamplePages,
   getDemoAccessType,
+  getDemoLockedChapterCount,
+  getDemoSeriesChapterCount,
   getDemoUnlockCost,
   getFeaturedMetaByIndex,
   isFeaturedDemoSeriesIndex,
@@ -16,7 +17,8 @@ export function sortDemoChaptersNewestFirst<T extends { chapter_number: number }
   return [...chapters].sort((a, b) => b.chapter_number - a.chapter_number);
 }
 
-export const CHAPTERS_PER_SERIES = 20;
+/** Upper bound for demo catalogue chapter counts (featured max = 10). */
+export const CHAPTERS_PER_SERIES = 10;
 
 export interface DemoSeries {
   id: string;
@@ -110,6 +112,11 @@ const CHAPTER_TITLE_POOL = [
   'Hidden Paths',
   'The Rival Appears',
   'Trial by Fire',
+  'Crossroads',
+  'Into the Depths',
+  'Unlikely Allies',
+  'The Reckoning',
+  'New Horizons',
 ];
 
 let demoModeActive = false;
@@ -225,14 +232,15 @@ const SERIES_DEFINITIONS = [
   ...NOVEL_TITLES.map((title, i) => buildSeriesDefinition(title, 'novel', 'novel', i + 17)),
 ];
 
-function buildReadablePages(seriesIndex: number, seriesSlug: string, chapterNumber: number): string[] {
-  if (isFeaturedDemoSeriesIndex(seriesIndex)) {
-    return buildFeaturedChapterPages(seriesSlug, chapterNumber);
+function buildReadablePages(
+  seriesSlug: string,
+  chapterNumber: number,
+  contentType: 'manga' | 'novel'
+): string[] {
+  if (contentType === 'novel') {
+    return [];
   }
-  if (chapterNumber === 1) {
-    return buildSharedSamplePages();
-  }
-  return [];
+  return buildFeaturedChapterPages(seriesSlug, chapterNumber);
 }
 
 function buildDemoLibrary() {
@@ -244,7 +252,10 @@ function buildDemoLibrary() {
     const featured = isFeaturedDemoSeriesIndex(index);
     const featuredMeta = getFeaturedMetaByIndex(index);
     const slug = resolveDemoSeriesSlug(def.title, index);
-    const readableCount = featured ? featuredMeta?.readableChapterCount || 3 : 1;
+    const chapterCount =
+      featuredMeta?.readableChapterCount ?? getDemoSeriesChapterCount(index, featured);
+    const lockedChapterCount =
+      featuredMeta?.lockedChapterCount ?? getDemoLockedChapterCount(index);
     const daysAgo = 180 + index * 14;
     const pubDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
     const createdAt = new Date(Date.now() - (daysAgo + 7) * 24 * 60 * 60 * 1000);
@@ -289,17 +300,14 @@ function buildDemoLibrary() {
     const seriesChapterIds: string[] = [];
     let lockedCount = 0;
 
-    for (let ch = 1; ch <= readableCount; ch++) {
-      const access = getDemoAccessType(ch, readableCount);
+    for (let ch = 1; ch <= chapterCount; ch++) {
+      const access = getDemoAccessType(ch, chapterCount, lockedChapterCount);
       const unlockCost = getDemoUnlockCost(access);
       if (access !== 'free') lockedCount += 1;
-      const pages =
-        def.content_type === 'novel' && !featured
-          ? []
-          : buildReadablePages(index, slug, ch);
+      const pages = buildReadablePages(slug, ch, def.content_type);
       const chapterId = makeChapterId(id, ch);
       seriesChapterIds.push(chapterId);
-      const releaseDate = new Date(Date.now() - (readableCount - ch + index) * 2 * 24 * 60 * 60 * 1000);
+      const releaseDate = new Date(Date.now() - (chapterCount - ch + index) * 2 * 24 * 60 * 60 * 1000);
 
       chapters.push({
         id: chapterId,
@@ -319,12 +327,12 @@ function buildDemoLibrary() {
         content_type: def.content_type === 'novel' && pages.length === 0 ? 'text' : 'image',
         text_content:
           def.content_type === 'novel' && pages.length === 0
-            ? `# ${CHAPTER_TITLE_POOL[ch - 1] || `Chapter ${ch}`}\n\nA short demo excerpt from *${def.title}*. Open a featured series for full sample page artwork.`
+            ? `# ${CHAPTER_TITLE_POOL[ch - 1] || `Chapter ${ch}`}\n\nA short demo excerpt from *${def.title}*, chapter ${ch} of ${chapterCount}.`
             : undefined,
         created_at: releaseDate.toISOString(),
         previous_chapter_id: null,
         next_chapter_id: null,
-        comment_count: featured ? 4 + ch + (index % 3) : ch > 1 ? 1 : 0,
+        comment_count: featured ? 4 + ch + (index % 3) : Math.max(1, (ch + index) % 6),
       });
     }
 
@@ -414,7 +422,7 @@ export function getRelatedDemoSeries(seriesId: string, limit = 3): DemoSeries[] 
 
 export function getDemoChapterFeed(limit = 10) {
   return [...DEMO_LIBRARY.chapters]
-    .filter((chapter) => chapter.page_count > 0)
+    .filter((chapter) => chapter.page_count > 0 || chapter.content_type === 'text')
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, limit)
     .map((chapter) => {

@@ -10,6 +10,7 @@ export interface DemoReadableSeriesMeta {
   title: string;
   featured: boolean;
   readableChapterCount: number;
+  lockedChapterCount: 1 | 2;
 }
 
 /** First five catalogue titles = homepage featured set. */
@@ -19,35 +20,40 @@ export const FEATURED_DEMO_SERIES: DemoReadableSeriesMeta[] = [
     slug: 'crimson-blade-chronicles',
     title: 'Crimson Blade Chronicles',
     featured: true,
-    readableChapterCount: 3,
+    readableChapterCount: 10,
+    lockedChapterCount: 2,
   },
   {
     seriesIndex: 1,
     slug: 'dragon-throne-wars',
     title: 'Dragon Throne Wars',
     featured: true,
-    readableChapterCount: 3,
+    readableChapterCount: 9,
+    lockedChapterCount: 2,
   },
   {
     seriesIndex: 2,
     slug: 'mystic-academy',
     title: 'Mystic Academy',
     featured: true,
-    readableChapterCount: 3,
+    readableChapterCount: 8,
+    lockedChapterCount: 1,
   },
   {
     seriesIndex: 3,
     slug: 'shadow-ninja-academy',
     title: 'Shadow Ninja Academy',
     featured: true,
-    readableChapterCount: 3,
+    readableChapterCount: 10,
+    lockedChapterCount: 2,
   },
   {
     seriesIndex: 4,
     slug: 'mecha-guardian-force',
     title: 'Mecha Guardian Force',
     featured: true,
-    readableChapterCount: 3,
+    readableChapterCount: 9,
+    lockedChapterCount: 1,
   },
 ];
 
@@ -57,6 +63,9 @@ const FEATURED_BY_INDEX = new Map(
 const FEATURED_BY_SLUG = new Map(
   FEATURED_DEMO_SERIES.map((item) => [item.slug, item])
 );
+
+/** Max chapters in any demo series (for seed helpers). */
+export const DEMO_MAX_CHAPTERS_PER_SERIES = 10;
 
 export function slugifySeriesTitle(title: string): string {
   return title
@@ -78,20 +87,47 @@ export function isFeaturedDemoSeriesIndex(index: number): boolean {
 }
 
 /**
+ * Deterministic chapter count per catalogue index.
+ * Featured series: 8–10 chapters. All others: 5–8 chapters.
+ */
+export function getDemoSeriesChapterCount(seriesIndex: number, featured = false): number {
+  if (featured) {
+    const featuredCounts = [10, 9, 8, 10, 9];
+    return featuredCounts[seriesIndex] ?? 8;
+  }
+  return 5 + (seriesIndex % 4);
+}
+
+/**
+ * How many newest chapters are locked (1 = premium only, 2 = coin + premium).
+ */
+export function getDemoLockedChapterCount(seriesIndex: number): 1 | 2 {
+  if (seriesIndex <= 4 && (seriesIndex === 2 || seriesIndex === 4)) return 1;
+  if (seriesIndex > 4 && seriesIndex % 3 === 2) return 1;
+  return 2;
+}
+
+/**
  * Chronological demo access tiers (by chapter_number within a series).
  * - Older chapters are free.
  * - Newest chapter is premium-locked.
- * - When totalChapters >= 3, second-newest is coin-locked.
+ * - When lockedChapterCount is 2 and totalChapters >= 3, second-newest is coin-locked.
  * Never produces a newer free chapter after an older locked chapter.
- * Series with fewer than 2 chapters stay free (nothing to gate behind).
  */
 export function getDemoAccessType(
   chapterNumber: number,
-  totalChapters = 3
+  totalChapters = 3,
+  lockedChapterCount: 1 | 2 = 2
 ): DemoAccessType {
   if (totalChapters < 2 || chapterNumber < 1) return 'free';
   if (chapterNumber >= totalChapters) return 'premium';
-  if (totalChapters >= 3 && chapterNumber === totalChapters - 1) return 'coins';
+  if (
+    lockedChapterCount >= 2 &&
+    totalChapters >= 3 &&
+    chapterNumber === totalChapters - 1
+  ) {
+    return 'coins';
+  }
   return 'free';
 }
 

@@ -10,45 +10,40 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const outRoot = path.join(root, 'public', 'demo', 'chapters');
 
-const FEATURED = [
-  {
-    slug: 'crimson-blade-chronicles',
-    title: 'Crimson Blade Chronicles',
-    accent: '#e11d48',
-    secondary: '#7f1d1d',
-  },
-  {
-    slug: 'dragon-throne-wars',
-    title: 'Dragon Throne Wars',
-    accent: '#f59e0b',
-    secondary: '#92400e',
-  },
-  {
-    slug: 'mystic-academy',
-    title: 'Mystic Academy',
-    accent: '#8b5cf6',
-    secondary: '#4c1d95',
-  },
-  {
-    slug: 'shadow-ninja-academy',
-    title: 'Shadow Ninja Academy',
-    accent: '#64748b',
-    secondary: '#0f172a',
-  },
-  {
-    slug: 'mecha-guardian-force',
-    title: 'Mecha Guardian Force',
-    accent: '#0ea5e9',
-    secondary: '#0c4a6e',
-  },
-];
+function slugify(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
-const SHARED = {
-  slug: '_shared-sample',
-  title: 'Demo Sample Chapter',
-  accent: '#f97316',
-  secondary: '#9a3412',
-};
+function getChapterCount(index, featured) {
+  if (featured) {
+    const featuredCounts = [10, 9, 8, 10, 9];
+    return featuredCounts[index] ?? 8;
+  }
+  return 5 + (index % 4);
+}
+
+const IMAGE_SERIES = [
+  { index: 0, title: 'Crimson Blade Chronicles', featured: true, accent: '#e11d48', secondary: '#7f1d1d' },
+  { index: 1, title: 'Dragon Throne Wars', featured: true, accent: '#f59e0b', secondary: '#92400e' },
+  { index: 2, title: 'Mystic Academy', featured: true, accent: '#8b5cf6', secondary: '#4c1d95' },
+  { index: 3, title: 'Shadow Ninja Academy', featured: true, accent: '#64748b', secondary: '#0f172a' },
+  { index: 4, title: 'Mecha Guardian Force', featured: true, accent: '#0ea5e9', secondary: '#0c4a6e' },
+  { index: 5, title: 'Demon Hunter Legacy', featured: false, accent: '#dc2626', secondary: '#450a0a' },
+  { index: 6, title: 'Dragon Slayer Chronicles', featured: false, accent: '#2563eb', secondary: '#1e3a8a' },
+  { index: 7, title: 'Forest Guardian Spirits', featured: false, accent: '#16a34a', secondary: '#14532d' },
+  { index: 8, title: "Solo Ascension: Ranker's Path", featured: false, accent: '#7c3aed', secondary: '#4c1d95' },
+  { index: 9, title: 'Tower of Infinite Floors', featured: false, accent: '#0891b2', secondary: '#164e63' },
+  { index: 10, title: 'Villainess Rewritten', featured: false, accent: '#db2777', secondary: '#831843' },
+  { index: 11, title: 'Murim Chronicles: Iron Fist', featured: false, accent: '#ca8a04', secondary: '#713f12' },
+  { index: 12, title: "I Became the Duke's Secret Advisor", featured: false, accent: '#9333ea', secondary: '#581c87' },
+  { index: 13, title: 'Immortal Cultivation: Nine Heavens', featured: false, accent: '#059669', secondary: '#064e3b' },
+  { index: 14, title: 'Spirit Blade Sovereign', featured: false, accent: '#0284c7', secondary: '#0c4a6e' },
+  { index: 15, title: "Urban Cultivator's Return", featured: false, accent: '#ea580c', secondary: '#7c2d12' },
+  { index: 16, title: 'Heavenly Dao Reincarnation', featured: false, accent: '#4f46e5', secondary: '#312e81' },
+];
 
 const W = 800;
 const H = 1200;
@@ -185,9 +180,21 @@ function endPage(series, chapterNum) {
   });
 }
 
+const CHAPTER_TITLES = [
+  'The Awakening',
+  'Rising Stakes',
+  'Hidden Paths',
+  'The Rival Appears',
+  'Trial by Fire',
+  'Crossroads',
+  'Into the Depths',
+  'Unlikely Allies',
+  'The Reckoning',
+  'New Horizons',
+];
+
 function chapterTitle(ch) {
-  const titles = ['The Awakening', 'Rising Stakes', 'Hidden Paths'];
-  return titles[ch - 1] || `Chapter ${ch}`;
+  return CHAPTER_TITLES[ch - 1] || `Chapter ${ch}`;
 }
 
 function buildChapterPages(series, chapterNum, pageCount) {
@@ -197,10 +204,7 @@ function buildChapterPages(series, chapterNum, pageCount) {
     const kind = i % 4;
     if (kind === 0) {
       pages.push(
-        dialoguePage(series, i, [
-          'We hold the line here.',
-          'Then we move at dawn.',
-        ])
+        dialoguePage(series, i, ['We hold the line here.', 'Then we move at dawn.'])
       );
     } else if (kind === 1) {
       pages.push(actionPage(series, i));
@@ -228,14 +232,24 @@ function writeChapter(series, chapterNum, pageCount) {
 function main() {
   fs.mkdirSync(outRoot, { recursive: true });
   let total = 0;
-  for (const series of FEATURED) {
-    for (let ch = 1; ch <= 3; ch++) {
-      const count = 8 + ((ch + series.slug.length) % 5); // 8–12
+  for (const entry of IMAGE_SERIES) {
+    const slug =
+      entry.index <= 4
+        ? [
+            'crimson-blade-chronicles',
+            'dragon-throne-wars',
+            'mystic-academy',
+            'shadow-ninja-academy',
+            'mecha-guardian-force',
+          ][entry.index]
+        : slugify(entry.title);
+    const series = { ...entry, slug };
+    const chapterCount = getChapterCount(entry.index, entry.featured);
+    for (let ch = 1; ch <= chapterCount; ch++) {
+      const count = 8 + ((ch + slug.length) % 5);
       total += writeChapter(series, ch, count);
     }
   }
-  // Shared sample for non-featured series (one readable chapter)
-  total += writeChapter(SHARED, 1, 8);
   console.log(`Generated ${total} demo chapter pages under public/demo/chapters/`);
 }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200" role="img" aria-label="Forest Guardian Spirits dialogue page 8">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="55%" stop-color="#121826"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2236"/>
+      <stop offset="100%" stop-color="#0f1524"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect x="28" y="28" width="744" height="1144" rx="18" fill="none" stroke="#16a34a" stroke-opacity="0.35" stroke-width="2"/>
+  
+  <rect x="70" y="140" width="660" height="900" rx="12" fill="url(#panel)" stroke="#334155" stroke-width="2"/>
+  <text x="100" y="185" fill="#16a34a" font-family="system-ui, sans-serif" font-size="16" letter-spacing="2">DIALOGUE</text>
+  
+  <rect x="90" y="220" width="620" height="120" rx="60" fill="#f8fafc"/>
+  <text x="400" y="290" text-anchor="middle" fill="#0f172a" font-family="system-ui, sans-serif" font-size="22">We hold the line here.</text>
+  <rect x="90" y="380" width="620" height="120" rx="60" fill="#f8fafc"/>
+  <text x="400" y="450" text-anchor="middle" fill="#0f172a" font-family="system-ui, sans-serif" font-size="22">Then we move at dawn.</text>
+
+</svg>
