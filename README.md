@@ -2,6 +2,12 @@
 
 Premium manga reading platform built with React, Vite, Tailwind CSS, and Supabase.
 
+![Zax Million homepage](docs/screenshots/app-homepage.png)
+
+<p align="center"><em>Dark-mode manga library — featured series, latest comics, and trending</em></p>
+
+![Zax Million promo](docs/screenshots/hero-promo.png)
+
 ## Features
 
 - **Modern reader** — vertical webtoon and page-by-page modes
@@ -14,8 +20,8 @@ Premium manga reading platform built with React, Vite, Tailwind CSS, and Supabas
 ## Quick start (5 minutes)
 
 ```bash
-git clone <your-repo-url> zax-million
-cd zax-million
+git clone https://github.com/ZAX-MILLION/zax-kodelex.git
+cd zax-kodelex
 npm install
 cp .env.example .env
 # Edit .env with your Supabase URL and anon key
@@ -23,6 +29,8 @@ npm run dev
 ```
 
 Open **http://localhost:8080**. On first launch without env vars, the setup wizard guides you through Supabase configuration and admin account creation.
+
+Tip: set `VITE_DEMO_MODE=true` in `.env` to explore the built-in demo library without a database.
 
 ## Environment variables
 
@@ -82,4 +90,4 @@ public/           Static assets, sitemap, robots.txt
 
 ## License
 
-Private — Zax Million © 2026
+© 2026 Zax Million. All rights reserved.
