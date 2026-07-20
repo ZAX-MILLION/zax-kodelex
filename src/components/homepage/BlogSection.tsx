@@ -71,7 +71,7 @@ export const BlogSection = () => {
   }
 
   return (
-    <section className="w-full container mx-auto px-4">
+    <section className="w-full container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-2">

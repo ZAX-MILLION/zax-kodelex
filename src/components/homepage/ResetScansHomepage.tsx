@@ -72,7 +72,7 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
           <div className="h-[500px] bg-muted rounded-lg" />
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
             <div className="space-y-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <div key={i} className="aspect-[3/4] bg-muted rounded-lg" />
                 ))}
@@ -91,8 +91,8 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
   const showDemoBanner = !loading && latestSeries.length > 0 && latestSeries.every((s) => isDemoSeriesId(s.id));
 
   return (
-    <div className={`space-y-8 ${className}`}>
-      <div className="container mx-auto px-4 pt-4">
+    <div className={`space-y-6 lg:space-y-8 ${className}`}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <DemoModeBanner visible={showDemoBanner} />
       </div>
       {/* Hero Slider - Full Width */}
@@ -102,21 +102,21 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
         showFilters={true}
       />
 
-      <Separator className="bg-border/50" />
+      <Separator className="bg-border/50 hidden sm:block" />
 
       {/* Main Content with Sidebar - Properly Boxed */}
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
           {/* Main Content */}
           <div className="space-y-8">
             {/* Latest Comics Section - moved under Feed */}
             <section>
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">Latest Comics</h2>
-                  <p className="text-muted-foreground">Fresh chapters just dropped</p>
+                  <h2 className="text-xl sm:text-2xl font-bold text-foreground">Latest Comics</h2>
+                  <p className="text-sm text-muted-foreground">Fresh chapters just dropped</p>
                 </div>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="w-full sm:w-auto">
                   <Link to="/browse?sort=latest">
                     View All
                     <ChevronRight className="h-4 w-4 ml-1" />
@@ -125,7 +125,7 @@ export const ResetScansHomepage = ({ className = '' }: ResetScansHomepageProps) 
               </div>
               
               {/* Grid: 4 per row on desktop, responsive down to 2 */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
                 {currentPageSeries.map(series => (
                   <EnhancedMangaCard 
                     key={series.id} 
