@@ -11,11 +11,17 @@ import { appConfig } from '@/config/env';
 export type ReadingMode = 'webtoon' | 'single' | 'double';
 export type ReadingDirection = 'ltr' | 'rtl';
 export type ImageFit = 'width' | 'screen' | 'original' | 'contain';
-export type ReaderWidth = 'full' | 'comfortable' | 'boxed' | 'custom';
+export type ReaderWidth = 'original' | 'comfortable' | 'wide' | 'full' | 'custom';
 export type PageAlign = 'center' | 'left' | 'right';
 export type ReaderBackground = 'black' | 'charcoal' | 'soft-dark' | 'sepia';
+/** Top bar chrome — replaces legacy toolbarBehavior (bottom bar removed). */
+export type TopBarBehavior = 'always' | 'auto-hide' | 'tap';
+export type SideRailBehavior = 'always' | 'auto-hide' | 'collapsed-mobile';
+export type ProgressStyle = 'badge' | 'percent' | 'bar' | 'hidden';
+export type AutoScrollSpeed = 'slow' | 'normal' | 'fast';
+
+/** @deprecated kept for sanitizing older stored settings */
 export type ToolbarBehavior = 'auto-hide' | 'always' | 'tap';
-export type ProgressStyle = 'full' | 'bar' | 'minimal' | 'hidden';
 
 export interface ReaderSettingsState {
   readingMode: ReadingMode;
@@ -27,25 +33,30 @@ export interface ReaderSettingsState {
   imageGap: number;
   background: ReaderBackground;
   pageAlign: PageAlign;
-  toolbarBehavior: ToolbarBehavior;
+  topBarBehavior: TopBarBehavior;
+  sideRailBehavior: SideRailBehavior;
   progressStyle: ProgressStyle;
+  autoScrollSpeed: AutoScrollSpeed;
 }
 
 export const READER_SETTINGS_DEFAULTS: ReaderSettingsState = {
   readingMode: 'webtoon',
   direction: 'ltr',
-  widthMode: 'boxed',
-  customMaxWidth: 900,
+  widthMode: 'wide',
+  customMaxWidth: 1050,
   imageFit: 'width',
   imageScale: 100,
   imageGap: 0,
   background: 'charcoal',
   pageAlign: 'center',
-  toolbarBehavior: 'auto-hide',
-  progressStyle: 'full',
+  topBarBehavior: 'always',
+  sideRailBehavior: 'collapsed-mobile',
+  progressStyle: 'badge',
+  autoScrollSpeed: 'normal',
 };
 
-const STORAGE_KEY = 'zax-reader-settings-v1';
+const STORAGE_KEY = 'zax-reader-settings-v2';
+const LEGACY_STORAGE_KEY = 'zax-reader-settings-v1';
 
 const BACKGROUND_CSS: Record<ReaderBackground, string> = {
   black: '#000000',
@@ -54,22 +65,58 @@ const BACKGROUND_CSS: Record<ReaderBackground, string> = {
   sepia: '#2a241c',
 };
 
+const WIDTH_PRESETS: Record<Exclude<ReaderWidth, 'full' | 'custom'>, number> = {
+  original: 720,
+  comfortable: 860,
+  wide: 1050,
+};
+
+export const AUTO_SCROLL_PX_PER_FRAME: Record<AutoScrollSpeed, number> = {
+  slow: 0.55,
+  normal: 1.15,
+  fast: 2.2,
+};
+
 function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
 }
 
+function migrateWidthMode(raw: unknown): ReaderWidth {
+  if (raw === 'boxed') return 'wide';
+  if (['original', 'comfortable', 'wide', 'full', 'custom'].includes(raw as string)) {
+    return raw as ReaderWidth;
+  }
+  return READER_SETTINGS_DEFAULTS.widthMode;
+}
+
+function migrateProgressStyle(raw: unknown): ProgressStyle {
+  if (raw === 'full' || raw === 'minimal') return 'badge';
+  if (['badge', 'percent', 'bar', 'hidden'].includes(raw as string)) {
+    return raw as ProgressStyle;
+  }
+  return READER_SETTINGS_DEFAULTS.progressStyle;
+}
+
+function migrateTopBar(raw: Partial<ReaderSettingsState> & { toolbarBehavior?: string }): TopBarBehavior {
+  if (['always', 'auto-hide', 'tap'].includes(raw.topBarBehavior as string)) {
+    return raw.topBarBehavior as TopBarBehavior;
+  }
+  if (['always', 'auto-hide', 'tap'].includes(raw.toolbarBehavior as string)) {
+    return raw.toolbarBehavior as TopBarBehavior;
+  }
+  return READER_SETTINGS_DEFAULTS.topBarBehavior;
+}
+
 function sanitize(raw: unknown): ReaderSettingsState {
   if (!raw || typeof raw !== 'object') return { ...READER_SETTINGS_DEFAULTS };
-  const o = raw as Partial<ReaderSettingsState>;
+  const o = raw as Partial<ReaderSettingsState> & { toolbarBehavior?: string };
   const readingMode = ['webtoon', 'single', 'double'].includes(o.readingMode as string)
     ? (o.readingMode as ReadingMode)
     : READER_SETTINGS_DEFAULTS.readingMode;
   const direction = ['ltr', 'rtl'].includes(o.direction as string)
     ? (o.direction as ReadingDirection)
     : READER_SETTINGS_DEFAULTS.direction;
-  const widthMode = ['full', 'comfortable', 'boxed', 'custom'].includes(o.widthMode as string)
-    ? (o.widthMode as ReaderWidth)
-    : READER_SETTINGS_DEFAULTS.widthMode;
+  const widthMode = migrateWidthMode(o.widthMode);
   const imageFit = ['width', 'screen', 'original', 'contain'].includes(o.imageFit as string)
     ? (o.imageFit as ImageFit)
     : READER_SETTINGS_DEFAULTS.imageFit;
@@ -79,31 +126,35 @@ function sanitize(raw: unknown): ReaderSettingsState {
   const pageAlign = ['center', 'left', 'right'].includes(o.pageAlign as string)
     ? (o.pageAlign as PageAlign)
     : READER_SETTINGS_DEFAULTS.pageAlign;
-  const toolbarBehavior = ['auto-hide', 'always', 'tap'].includes(o.toolbarBehavior as string)
-    ? (o.toolbarBehavior as ToolbarBehavior)
-    : READER_SETTINGS_DEFAULTS.toolbarBehavior;
-  const progressStyle = ['full', 'bar', 'minimal', 'hidden'].includes(o.progressStyle as string)
-    ? (o.progressStyle as ProgressStyle)
-    : READER_SETTINGS_DEFAULTS.progressStyle;
+  const sideRailBehavior = ['always', 'auto-hide', 'collapsed-mobile'].includes(
+    o.sideRailBehavior as string
+  )
+    ? (o.sideRailBehavior as SideRailBehavior)
+    : READER_SETTINGS_DEFAULTS.sideRailBehavior;
+  const autoScrollSpeed = ['slow', 'normal', 'fast'].includes(o.autoScrollSpeed as string)
+    ? (o.autoScrollSpeed as AutoScrollSpeed)
+    : READER_SETTINGS_DEFAULTS.autoScrollSpeed;
 
   return {
     readingMode,
     direction: readingMode === 'webtoon' ? 'ltr' : direction,
     widthMode,
-    customMaxWidth: clamp(Number(o.customMaxWidth) || 900, 480, 1400),
+    customMaxWidth: clamp(Number(o.customMaxWidth) || 1050, 480, 1400),
     imageFit,
     imageScale: clamp(Number(o.imageScale) || 100, 50, 200),
     imageGap: clamp(Number(o.imageGap) || 0, 0, 48),
     background,
     pageAlign,
-    toolbarBehavior,
-    progressStyle,
+    topBarBehavior: migrateTopBar(o),
+    sideRailBehavior,
+    progressStyle: migrateProgressStyle(o.progressStyle),
+    autoScrollSpeed,
   };
 }
 
 function loadSettings(): ReaderSettingsState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!raw) return { ...READER_SETTINGS_DEFAULTS };
     return sanitize(JSON.parse(raw));
   } catch {
@@ -144,14 +195,10 @@ export function ReaderSettingsProvider({ children }: { children: React.ReactNode
   }, []);
 
   const value = useMemo<ReaderSettingsContextValue>(() => {
-    const contentMaxWidth =
-      settings.widthMode === 'full'
-        ? '100%'
-        : settings.widthMode === 'comfortable'
-          ? 720
-          : settings.widthMode === 'custom'
-            ? settings.customMaxWidth
-            : 900;
+    let contentMaxWidth: string | number | undefined;
+    if (settings.widthMode === 'full') contentMaxWidth = '100%';
+    else if (settings.widthMode === 'custom') contentMaxWidth = settings.customMaxWidth;
+    else contentMaxWidth = WIDTH_PRESETS[settings.widthMode];
 
     const justifyClass =
       settings.pageAlign === 'left'

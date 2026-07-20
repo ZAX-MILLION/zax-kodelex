@@ -15,6 +15,7 @@ import {
   DEMO_BANNER_COPY,
 } from '../../src/features/demo/demoAuthPolicy';
 import { appConfig } from '../../src/config/env';
+import { isSupabaseConfigured, isLiveSupabaseClient } from '../../src/integrations/supabase/client';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -30,6 +31,15 @@ describe('reader settings', () => {
     expect(next.widthMode).toBe('comfortable');
   });
 
+  it('defaults to wide webtoon-oriented width and migrates boxed', () => {
+    expect(READER_SETTINGS_DEFAULTS.widthMode).toBe('wide');
+    expect(READER_SETTINGS_DEFAULTS.imageGap).toBe(0);
+    const migrated = applyReaderSettingsPatch(READER_SETTINGS_DEFAULTS, {
+      widthMode: 'boxed' as never,
+    });
+    expect(migrated.widthMode).toBe('wide');
+  });
+
   it('resets to defaults when sanitized empty', () => {
     const next = applyReaderSettingsPatch(READER_SETTINGS_DEFAULTS, {
       imageScale: 999,
@@ -40,7 +50,7 @@ describe('reader settings', () => {
   });
 
   it('uses a dedicated namespaced storage key', () => {
-    expect(getReaderSettingsStorageKey()).toBe('zax-reader-settings-v1');
+    expect(getReaderSettingsStorageKey()).toBe('zax-reader-settings-v2');
   });
 });
 
@@ -77,8 +87,27 @@ describe('auth environment matrix', () => {
   });
 });
 
+describe('demo backend isolation', () => {
+  it('does not treat the offline stub as a live Supabase client in unit env', () => {
+    expect(isSupabaseConfigured).toBe(false);
+    expect(isLiveSupabaseClient()).toBe(false);
+  });
+
+  it('never constructs a placeholder createClient URL in the client module', () => {
+    const source = readFileSync(
+      resolve(__dirname, '../../src/integrations/supabase/client.ts'),
+      'utf8'
+    );
+    expect(source).toContain('createOfflineDemoClient');
+    expect(source).toContain('Must NEVER call createClient');
+    // Offline path must not open placeholder.supabase.co
+    const offlineFn = source.slice(source.indexOf('function createOfflineDemoClient'));
+    expect(offlineFn).not.toMatch(/createClient\s*\(\s*['"]https:\/\/placeholder/);
+  });
+});
+
 describe('reader isolation', () => {
-  it('does not import production Admin from WebtoonReader', () => {
+  it('uses a single top bar and side rail without a bottom toolbar', () => {
     const source = readFileSync(
       resolve(__dirname, '../../src/components/reader/WebtoonReader.tsx'),
       'utf8'
@@ -86,6 +115,13 @@ describe('reader isolation', () => {
     expect(source).not.toMatch(/pages\/Admin/);
     expect(source).toContain('ReaderComments');
     expect(source).toContain('ReaderSettings');
+    expect(source).toContain('data-reader-top-bar');
+    expect(source).toContain('ReaderSideRail');
+    expect(source).toContain('ReaderCommentsDrawer');
+    expect(source).toContain('ReaderChapterList');
+    expect(source).not.toMatch(/aria-label="Reader controls"[\s\S]*fixed bottom-0/);
+    expect(source).not.toContain('pb-24');
+    expect(source).not.toMatch(/fixed bottom-0 left-0 right-0 z-50/);
   });
 
   it('layers Reader Settings select menus above the settings panel', () => {
@@ -93,22 +129,22 @@ describe('reader isolation', () => {
       resolve(__dirname, '../../src/components/reader/ReaderSettings.tsx'),
       'utf8'
     );
-    // Panel stack is z-[60]/z-[61]; SelectContent must portal above it.
     expect(source).toContain('READER_SETTINGS_SELECT_Z');
     expect(source).toMatch(/READER_SETTINGS_SELECT_Z\s*=\s*[\s\S]*z-\[80\]/);
     expect(source).toMatch(/className=\{READER_SETTINGS_SELECT_Z\}/);
-    const selectContentUsesElevatedZ = (source.match(/SelectContent[^>]*className=\{READER_SETTINGS_SELECT_Z\}/g) || [])
-      .length;
+    const selectContentUsesElevatedZ = (
+      source.match(/SelectContent[^>]*className=\{READER_SETTINGS_SELECT_Z\}/g) || []
+    ).length;
     expect(selectContentUsesElevatedZ).toBeGreaterThanOrEqual(7);
-    // Escape must see an open listbox in capture phase before Radix unmounts it.
     expect(source).toContain("addEventListener('keydown', onKeyCapture, true)");
     expect(source).toContain("querySelector('[role=\"listbox\"]')");
+    expect(source).toContain('Top Bar Behavior');
+    expect(source).not.toContain('Toolbar Behavior');
 
     const readerSource = readFileSync(
       resolve(__dirname, '../../src/components/reader/WebtoonReader.tsx'),
       'utf8'
     );
-    // Parent reader shell must not close settings while a select listbox is open.
     expect(readerSource).toContain("addEventListener('keydown', onKeyCapture, true)");
     expect(readerSource).toContain('selectOpenOnEscape');
   });

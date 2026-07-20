@@ -154,12 +154,20 @@ const Reader = () => {
         onNextChapter={() => {
           if (next) navigate(`/reader/${series.id}/${next.chapter_number}`);
         }}
+        onSelectChapter={(n) => navigate(`/reader/${series.id}/${n}`)}
         hasPreviousChapter={Boolean(prev)}
         hasNextChapter={Boolean(next)}
         chapterTitle={chapter.title}
         chapterNumber={chapter.chapter_number}
         seriesTitle={series.title}
         seriesId={series.id}
+        seriesCoverUrl={series.cover_image_url}
+        chapters={siblings.map((c) => ({
+          id: c.id,
+          chapter_number: c.chapter_number,
+          title: c.title,
+          access: c.access_type === 'free' ? 'free' : c.access_type === 'premium' ? 'premium' : 'coins',
+        }))}
         relatedSeries={related.map((item) => ({
           id: item.id,
           title: item.title,

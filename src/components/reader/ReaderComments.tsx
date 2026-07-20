@@ -11,6 +11,10 @@ import { isRealAuthEnabled } from '@/features/demo/demoAuthPolicy';
 interface ReaderCommentsProps {
   chapterKey: string;
   chapterId?: string;
+  /** inline = end-of-chapter block; drawer = compact panel body */
+  variant?: 'inline' | 'drawer';
+  onRequestClose?: () => void;
+  onJumpToInline?: () => void;
 }
 
 function formatWhen(iso: string) {
@@ -25,7 +29,12 @@ function formatWhen(iso: string) {
   }
 }
 
-export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
+export function ReaderComments({
+  chapterKey,
+  variant = 'inline',
+  onRequestClose,
+  onJumpToInline,
+}: ReaderCommentsProps) {
   const headingId = useId();
   const {
     enabled,
@@ -44,6 +53,7 @@ export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
 
   const canPostDemo = enabled && (appConfig.isDemo || appConfig.features.roleLab);
   const needsRealLogin = !canPostDemo && isRealAuthEnabled();
+  const isDrawer = variant === 'drawer';
 
   const submit = () => {
     const result = addComment(draft, replyTo);
@@ -56,11 +66,15 @@ export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
 
   return (
     <section
-      id="reader-comments"
+      id={isDrawer ? undefined : 'reader-comments'}
       aria-labelledby={headingId}
-      className="mx-auto w-full max-w-2xl px-4 py-10 border-t border-border/40"
+      className={
+        isDrawer
+          ? 'flex min-h-0 flex-1 flex-col'
+          : 'mx-auto w-full max-w-2xl px-4 py-10 border-t border-border/40'
+      }
     >
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 shrink-0">
         <h2 id={headingId} className="text-xl font-semibold flex items-center gap-2">
           <MessageCircle className="h-5 w-5" aria-hidden />
           {count} {count === 1 ? 'Comment' : 'Comments'}
@@ -87,13 +101,27 @@ export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
         </div>
       </div>
 
+      {isDrawer && onJumpToInline && (
+        <Button
+          variant="link"
+          className="mb-3 h-auto min-h-11 justify-start px-0 text-sm"
+          onClick={() => {
+            onJumpToInline();
+            onRequestClose?.();
+          }}
+        >
+          View comments below chapter
+        </Button>
+      )}
+
+      <div className={isDrawer ? 'min-h-0 flex-1 overflow-y-auto pr-1' : undefined}>
       {canPostDemo ? (
-        <div className="space-y-2 mb-6 rounded-xl border border-border/50 bg-card/40 p-3">
-          <Label htmlFor="reader-comment-input">
+        <div className="space-y-2 mb-6 rounded-xl border border-border/50 bg-card/40 p-3 sticky bottom-0 bg-background/95 backdrop-blur-sm z-[1]">
+          <Label htmlFor={isDrawer ? 'reader-comment-drawer-input' : 'reader-comment-input'}>
             {replyTo ? 'Write a reply (temporary demo comment)' : 'Add a comment (temporary in demo)'}
           </Label>
           <Textarea
-            id="reader-comment-input"
+            id={isDrawer ? 'reader-comment-drawer-input' : 'reader-comment-input'}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             maxLength={500}
@@ -116,7 +144,7 @@ export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
             </div>
           </div>
           {status && (
-            <p className="text-sm text-muted-foreground" role="status">
+            <p className="text-sm text-muted-foreground" role="status" aria-live="polite">
               {status}
             </p>
           )}
@@ -136,7 +164,7 @@ export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
           No comments yet. Be the first to start the discussion.
         </p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="space-y-4 pb-4">
           {roots.map((comment) => (
             <li key={comment.id} className="rounded-xl border border-border/40 p-4 space-y-2">
               <div className="flex flex-wrap items-center gap-2">
@@ -205,6 +233,7 @@ export function ReaderComments({ chapterKey }: ReaderCommentsProps) {
           ))}
         </ul>
       )}
+      </div>
     </section>
   );
 }

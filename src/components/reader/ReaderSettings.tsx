@@ -11,9 +11,11 @@ import {
   type ReaderWidth,
   type ReaderBackground,
   type PageAlign,
-  type ToolbarBehavior,
+  type TopBarBehavior,
+  type SideRailBehavior,
   type ProgressStyle,
   type ReadingDirection,
+  type AutoScrollSpeed,
 } from '@/contexts/ReaderSettingsContext';
 
 interface ReaderSettingsProps {
@@ -34,7 +36,6 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    // Capture phase sees an open listbox before Radix unmounts it on Escape.
     let selectOpenOnEscape = false;
     const onKeyCapture = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
@@ -61,7 +62,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-end sm:items-start sm:justify-end"
+      className="fixed inset-0 z-[60] flex items-end sm:items-start sm:justify-end print:hidden"
       role="dialog"
       aria-modal="true"
       aria-label="Reader Settings"
@@ -75,7 +76,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="relative z-[61] w-full sm:w-96 sm:max-w-[calc(100vw-2rem)] sm:mt-20 sm:mr-4 max-h-[min(90vh,720px)] overflow-y-auto rounded-t-2xl sm:rounded-xl border border-border bg-background/98 backdrop-blur-md shadow-2xl p-4 pb-[max(1rem,env(safe-area-inset-bottom))] outline-none"
+        className="relative z-[61] w-full sm:w-96 sm:max-w-[calc(100vw-2rem)] sm:mt-16 sm:mr-4 max-h-[min(90vh,720px)] overflow-y-auto rounded-t-2xl sm:rounded-xl border border-border bg-background/98 backdrop-blur-md shadow-2xl p-4 pb-[max(1rem,env(safe-area-inset-bottom))] outline-none"
       >
         <div className="flex items-center justify-between mb-4 sticky top-0 bg-background/95 py-1 z-10">
           <h3 className="font-semibold flex items-center gap-2 text-base">
@@ -133,9 +134,10 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
-                <SelectItem value="full">Full width</SelectItem>
-                <SelectItem value="comfortable">Comfortable (720px)</SelectItem>
-                <SelectItem value="boxed">Boxed (900px)</SelectItem>
+                <SelectItem value="original">Original (720px)</SelectItem>
+                <SelectItem value="comfortable">Comfortable (860px)</SelectItem>
+                <SelectItem value="wide">Wide (1050px)</SelectItem>
+                <SelectItem value="full">Full available width</SelectItem>
                 <SelectItem value="custom">Custom maximum</SelectItem>
               </SelectContent>
             </Select>
@@ -151,6 +153,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
                 min={480}
                 max={1400}
                 step={20}
+                aria-valuetext={`${settings.customMaxWidth} pixels`}
               />
             </div>
           )}
@@ -166,7 +169,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
                 <SelectItem value="width">Fit to width</SelectItem>
-                <SelectItem value="screen">Fit to screen</SelectItem>
+                <SelectItem value="screen">Fit to viewport</SelectItem>
                 <SelectItem value="contain">Contain</SelectItem>
                 <SelectItem value="original">Original size</SelectItem>
               </SelectContent>
@@ -182,6 +185,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
               min={50}
               max={200}
               step={5}
+              aria-valuetext={`${settings.imageScale} percent`}
             />
           </div>
 
@@ -195,6 +199,7 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
                 min={0}
                 max={48}
                 step={2}
+                aria-valuetext={`${settings.imageGap} pixels`}
               />
             </div>
           )}
@@ -235,24 +240,41 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="toolbar-behavior">Toolbar Behavior</Label>
+            <Label htmlFor="top-bar-behavior">Top Bar Behavior</Label>
             <Select
-              value={settings.toolbarBehavior}
-              onValueChange={(value: ToolbarBehavior) => patch({ toolbarBehavior: value })}
+              value={settings.topBarBehavior}
+              onValueChange={(value: TopBarBehavior) => patch({ topBarBehavior: value })}
             >
-              <SelectTrigger id="toolbar-behavior" className="min-h-11">
+              <SelectTrigger id="top-bar-behavior" className="min-h-11">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
-                <SelectItem value="auto-hide">Auto-hide on scroll</SelectItem>
                 <SelectItem value="always">Always visible</SelectItem>
+                <SelectItem value="auto-hide">Compact auto-hide</SelectItem>
                 <SelectItem value="tap">Tap to toggle</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="progress-style">Progress</Label>
+            <Label htmlFor="side-rail-behavior">Side Controls</Label>
+            <Select
+              value={settings.sideRailBehavior}
+              onValueChange={(value: SideRailBehavior) => patch({ sideRailBehavior: value })}
+            >
+              <SelectTrigger id="side-rail-behavior" className="min-h-11">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
+                <SelectItem value="always">Always visible</SelectItem>
+                <SelectItem value="auto-hide">Auto-hide while scrolling</SelectItem>
+                <SelectItem value="collapsed-mobile">Collapsed by default on mobile</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="progress-style">Progress Display</Label>
             <Select
               value={settings.progressStyle}
               onValueChange={(value: ProgressStyle) => patch({ progressStyle: value })}
@@ -261,10 +283,27 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
-                <SelectItem value="full">Page count + percentage + bar</SelectItem>
-                <SelectItem value="bar">Progress bar only</SelectItem>
-                <SelectItem value="minimal">Page count only</SelectItem>
+                <SelectItem value="badge">Page badge</SelectItem>
+                <SelectItem value="percent">Percentage</SelectItem>
+                <SelectItem value="bar">Thin progress line</SelectItem>
                 <SelectItem value="hidden">Hidden</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="auto-scroll-speed">Auto-scroll Speed</Label>
+            <Select
+              value={settings.autoScrollSpeed}
+              onValueChange={(value: AutoScrollSpeed) => patch({ autoScrollSpeed: value })}
+            >
+              <SelectTrigger id="auto-scroll-speed" className="min-h-11">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent position="popper" sideOffset={4} className={READER_SETTINGS_SELECT_Z}>
+                <SelectItem value="slow">Slow</SelectItem>
+                <SelectItem value="normal">Normal</SelectItem>
+                <SelectItem value="fast">Fast</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -282,5 +321,3 @@ export const ReaderSettings = ({ isOpen, onClose }: ReaderSettingsProps) => {
     </div>
   );
 };
-
-export default ReaderSettings;
