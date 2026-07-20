@@ -88,7 +88,7 @@ public/           Static assets, sitemap, robots.txt
 ## Support
 
 - Ko-fi: https://ko-fi.com/zaxmi
-- Email: contact@zaxmillion.com
+- Email: ZAXMIllion@proton.me
 
 ## License
 

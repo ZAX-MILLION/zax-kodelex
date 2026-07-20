@@ -101,7 +101,7 @@ const defaultFooterSettings: FooterSettings = {
   socialLinks: [
     { id: '1', platform: 'GitHub', url: 'https://github.com/zaxmillion', icon: 'Github' },
     { id: '2', platform: 'Twitter', url: 'https://twitter.com/zaxmillion', icon: 'Twitter' },
-    { id: '3', platform: 'Email', url: 'mailto:contact@zaxmillion.com', icon: 'Mail' },
+    { id: '3', platform: 'Email', url: 'mailto:ZAXMIllion@proton.me', icon: 'Mail' },
   ],
   copyrightText: 'All rights reserved.',
   version: 'v1.0.0',

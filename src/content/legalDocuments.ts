@@ -1,6 +1,6 @@
 /** Legal document bodies shown in-app and mirrored under docs/legal/. */
 export const LEGAL_LAST_UPDATED = 'July 20, 2026';
-export const LEGAL_CONTACT_EMAIL = 'contact@zaxmillion.com';
+export const LEGAL_CONTACT_EMAIL = 'ZAXMIllion@proton.me';
 export const LEGAL_OPERATOR = 'Zax Million';
 
 export const legalDocuments = {

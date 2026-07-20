@@ -38,7 +38,7 @@ We use reasonable technical and organizational measures. No method of transmissi
 
 ## Your choices & rights
 
-Depending on your region (for example GDPR/CCPA-style laws), you may have rights to access, correct, delete, export, or restrict processing of personal data, and to object to certain processing. Contact **contact@zaxmillion.com**.
+Depending on your region (for example GDPR/CCPA-style laws), you may have rights to access, correct, delete, export, or restrict processing of personal data, and to object to certain processing. Contact **ZAXMIllion@proton.me**.
 
 You may also manage cookie preferences where our cookie tools are available.
 
@@ -56,4 +56,4 @@ We may update this Policy by posting a new version with a revised date.
 
 ## Contact
 
-**Email:** contact@zaxmillion.com
+**Email:** ZAXMIllion@proton.me

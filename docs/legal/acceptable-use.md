@@ -33,4 +33,4 @@ If you self-host or redistribute the software, **you** are the operator of that 
 
 ## Contact
 
-Report abuse: **contact@zaxmillion.com**
+Report abuse: **ZAXMIllion@proton.me**

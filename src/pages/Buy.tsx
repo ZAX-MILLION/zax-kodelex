@@ -321,7 +321,7 @@ const Buy = () => {
             <div className="mt-8 text-sm text-muted-foreground">
               <p>Keep your license key safe - you'll need it for support and updates.</p>
               <p className="mt-2">
-                Need help? Contact us at <a href="mailto:support@example.com" className="text-primary hover:underline">support@example.com</a>
+                Need help? Contact us at <a href="mailto:ZAXMIllion@proton.me" className="text-primary hover:underline">ZAXMIllion@proton.me</a>
               </p>
             </div>
           </div>

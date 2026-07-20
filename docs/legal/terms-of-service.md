@@ -8,7 +8,7 @@ By accessing or using the Service — including cloning, hosting, or running the
 
 ## 1. Who we are
 
-The Service is operated by Zax Million. Contact: **contact@zaxmillion.com**.
+The Service is operated by Zax Million. Contact: **ZAXMIllion@proton.me**.
 
 ## 2. The Service is a tool
 
@@ -93,6 +93,6 @@ We may update these Terms by posting a revised version. Continued use after chan
 
 ## 14. Contact
 
-**Email:** contact@zaxmillion.com
+**Email:** ZAXMIllion@proton.me
 
 Related policies: [Privacy](privacy.md) · [Cookies](cookies.md) · [DMCA](dmca.md) · [Acceptable Use](acceptable-use.md) · [Disclaimer](disclaimer.md)

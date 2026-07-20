@@ -279,13 +279,13 @@ export const LegalPagesManager: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [legalPages, setLegalPages] = useState<LegalPage[]>([]);
   const [legalSettings, setLegalSettings] = useState<LegalSettings>({
-    company_name: 'Your Company Name',
-    company_address: '123 Main St, City, State 12345',
-    contact_email: 'contact@yoursite.com',
+    company_name: 'Zax Million',
+    company_address: 'Online Service',
+    contact_email: 'ZAXMIllion@proton.me',
     copyright_year: new Date().getFullYear(),
-    dmca_agent_name: 'DMCA Agent',
-    dmca_agent_email: 'dmca@yoursite.com',
-    dmca_agent_address: '123 Main St, City, State 12345',
+    dmca_agent_name: 'Zax Million Copyright Agent',
+    dmca_agent_email: 'ZAXMIllion@proton.me',
+    dmca_agent_address: 'Online Service',
     auto_copyright: true
   });
   const [activeTab, setActiveTab] = useState('pages');

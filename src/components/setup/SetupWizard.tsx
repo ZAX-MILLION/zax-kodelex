@@ -27,7 +27,7 @@ export const SetupWizard = () => {
     themeMode: 'multi-series',
     basicSettings: {
       siteName: 'Zax Million',
-      contactEmail: 'contact@zaxmillion.com',
+      contactEmail: 'ZAXMIllion@proton.me',
       siteDescription: 'Premium manga reading platform by Zax Million',
     },
   });

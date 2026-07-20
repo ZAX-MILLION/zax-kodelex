@@ -25,7 +25,7 @@ If you believe material on a Zax Million-operated site infringes your copyright,
 
 **DMCA / Copyright Agent**  
 Zax Million  
-Email: **contact@zaxmillion.com**
+Email: **ZAXMIllion@proton.me**
 
 We may share your notice with the user who posted the material and with service providers as needed to process the request.
 
@@ -35,7 +35,7 @@ If your content was removed and you believe it was a mistake or misidentificatio
 
 ## Self-hosted copies
 
-If you run your own installation of this software, **you** must designate your own contact for copyright complaints and handle takedowns for your deployment. Do not send notices about third-party self-hosted sites to contact@zaxmillion.com unless that site is actually operated by us.
+If you run your own installation of this software, **you** must designate your own contact for copyright complaints and handle takedowns for your deployment. Do not send notices about third-party self-hosted sites to ZAXMIllion@proton.me unless that site is actually operated by us.
 
 ## False notices
 

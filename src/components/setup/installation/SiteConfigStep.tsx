@@ -96,7 +96,7 @@ export const SiteConfigStep = ({
               type="email"
               value={formData.contactEmail}
               onChange={(e) => updateFormData('contactEmail', e.target.value)}
-              placeholder="contact@yourdomain.com"
+              placeholder="ZAXMIllion@proton.me"
             />
           </div>
         </CardContent>

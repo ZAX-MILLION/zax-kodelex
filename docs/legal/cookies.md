@@ -21,4 +21,4 @@ You can control cookies through our preference tools (when shown) and through yo
 
 ## More information
 
-See our [Privacy Policy](privacy.md). Questions: **contact@zaxmillion.com**.
+See our [Privacy Policy](privacy.md). Questions: **ZAXMIllion@proton.me**.

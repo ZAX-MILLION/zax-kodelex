@@ -372,7 +372,7 @@ const Help = () => {
               <CardContent className="space-y-2">
                 <ul className="space-y-1 text-sm">
                   <li>• Use the contact form on our website</li>
-                  <li>• Email: support@zaxmillionimanga.com</li>
+                  <li>• Email: ZAXMIllion@proton.me</li>
                   <li>• Include your license key in requests</li>
                   <li>• Describe the issue in detail</li>
                 </ul>

@@ -31,4 +31,4 @@ THE SOFTWARE AND SERVICE ARE PROVIDED WITHOUT WARRANTY. USE AT YOUR OWN RISK. Se
 
 ## Contact
 
-**Email:** contact@zaxmillion.com
+**Email:** ZAXMIllion@proton.me

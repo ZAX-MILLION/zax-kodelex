@@ -13,7 +13,7 @@ These files protect you and set rules for users. They are **templates**, not a l
 
 ## What you should still do
 
-1. Put your real contact email in legal pages if it changes (currently `contact@zaxmillion.com`).
+1. Put your real contact email in legal pages if it changes (currently `ZAXMIllion@proton.me`).
 2. If you earn money or store user data in the EU/UK/California, have a lawyer review Privacy + Terms.
 3. Only host manga/comics you own or have permission to use.
 4. Answer DMCA / copyright emails promptly and remove infringing uploads.

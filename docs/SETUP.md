@@ -162,5 +162,5 @@ Smoke test:
 
 ## Contact
 
-- Email: contact@zaxmillion.com
+- Email: ZAXMIllion@proton.me
 - Ko-fi: https://ko-fi.com/zaxmi

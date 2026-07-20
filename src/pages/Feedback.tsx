@@ -216,8 +216,8 @@ const FeedbackPage = () => {
                   <div>
                     <div className="font-medium">Email Support</div>
                     <div className="text-sm text-muted-foreground">
-                      <a href="mailto:support@zaxmillion.com" className="text-primary hover:underline">
-                        support@zaxmillion.com
+                      <a href="mailto:ZAXMIllion@proton.me" className="text-primary hover:underline">
+                        ZAXMIllion@proton.me
                       </a>
                     </div>
                   </div>
