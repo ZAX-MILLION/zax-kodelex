@@ -7,6 +7,7 @@ import {
   evaluateDemoChapterAccess,
   type PureDemoAccessResult,
 } from '@/features/demo/demoChapterAccess';
+import { clearDemoCommentSession } from '@/features/demo/useDemoChapterComments';
 
 export type DemoAccessResult = PureDemoAccessResult;
 
@@ -194,6 +195,7 @@ export function DemoRoleProvider({ children }: { children: React.ReactNode }) {
     sessionStorage.removeItem(DEMO_ROLE_STORAGE_KEY);
     sessionStorage.removeItem(DEMO_UNLOCKS_STORAGE_KEY);
     sessionStorage.removeItem(DEMO_COIN_BONUS_STORAGE_KEY);
+    clearDemoCommentSession();
   }, []);
 
   const clearRole = useCallback(() => {

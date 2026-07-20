@@ -168,6 +168,11 @@ const Reader = () => {
         endOfChapter
         isMobile={isMobile}
         chapterPositionLabel={`${currentIndex + 1} / ${siblings.length}`}
+        demoSeriesIndex={Math.max(
+          0,
+          Number.parseInt(series.id.slice(-12), 10) - 1 || 0
+        )}
+        chapterId={chapter.id}
       />
     );
   }

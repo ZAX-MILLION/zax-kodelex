@@ -44,7 +44,8 @@ describe('demo auth policy', () => {
   });
 
   it('uses the updated interactive demo banner copy', () => {
-    expect(DEMO_BANNER_COPY).toContain('readable sample chapters');
+    expect(DEMO_BANNER_COPY).toContain('readable chapters');
+    expect(DEMO_BANNER_COPY).toContain('administration simulations');
     expect(DEMO_BANNER_COPY).not.toContain('chapter pages are not included');
   });
 });
@@ -70,8 +71,14 @@ describe('demo admin simulation isolation', () => {
     );
     expect(source).toContain('shouldUseDemoRolePreview');
     expect(source).toContain('DemoRolePreviewModal');
-    expect(source).toContain('Quick Test Login (dev only)');
-    // Quick test is gated behind isRealAuthEnabled — never shown when demo preview is active
     expect(source).toMatch(/showQuickTest = import\.meta\.env\.DEV && isRealAuthEnabled\(\)/);
+  });
+
+  it('scopes Try Demo modal to public demo only', () => {
+    const policy = readFileSync(
+      resolve(__dirname, '../../src/features/demo/demoAuthPolicy.ts'),
+      'utf8'
+    );
+    expect(policy).toMatch(/shouldUseDemoRolePreview\(\)[\s\S]*return appConfig\.isDemo/);
   });
 });

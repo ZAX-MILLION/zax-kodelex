@@ -11,6 +11,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTestAccounts } from '@/hooks/useTestAccounts';
 import { isRealAuthEnabled, shouldUseDemoRolePreview } from '@/features/demo/demoAuthPolicy';
 import DemoRolePreviewModal from '@/components/DemoRolePreviewModal';
+import { Link } from 'react-router-dom';
+import { appConfig } from '@/config/env';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -42,10 +44,15 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
             <DialogTitle>Sign in unavailable</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            Authentication requires a configured Supabase project. This host is not connected to
-            live auth.
+            Authentication needs a configured Supabase project in your environment file. This host
+            is not connected to live auth, so login requests are not sent.
           </p>
-          <Button className="min-h-11" onClick={onClose}>
+          {appConfig.features.roleLab && (
+            <Button asChild className="min-h-11 w-full" onClick={onClose}>
+              <Link to="/demo">Open Role Lab (no password)</Link>
+            </Button>
+          )}
+          <Button variant="outline" className="min-h-11" onClick={onClose}>
             Close
           </Button>
         </DialogContent>

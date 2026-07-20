@@ -52,9 +52,12 @@ const CreativeNavBar = () => {
   const seriesMatch = /^\/series\/([a-z0-9-]+)/i.exec(location.pathname);
   const currentSeriesId = seriesMatch ? seriesMatch[1] : null;
   const { wallet } = useCoinWallet();
-  const { profile: demoProfile, isSimulatingAuth } = useDemoRole();
+  const { profile: demoProfile, isSimulatingAuth, resetDemo } = useDemoRole();
   const paymentsEnabled = appConfig.features.coinStore;
   const adminNavEnabled = appConfig.features.adminPanel;
+  const demoPreview = shouldUseDemoRolePreview();
+  // Avoid duplicating Role Lab in the main nav when demo CTA already covers it
+  const showRoleLabNav = appConfig.features.roleLab && !demoPreview && !isSimulatingAuth;
 
   // Close the mobile menu whenever the route changes
   useEffect(() => {
@@ -85,7 +88,7 @@ const CreativeNavBar = () => {
     label: t('header.contact', 'Contact Us'),
     path: '/contact',
     color: 'manga-red'
-  }, ...(appConfig.features.roleLab ? [{
+  }, ...(showRoleLabNav ? [{
     icon: FlaskConical,
     label: 'Role Lab',
     path: '/demo',
@@ -271,20 +274,52 @@ const CreativeNavBar = () => {
                       </div>
                     </DropdownMenuContent>
                   </DropdownMenu> : <div className="flex items-center space-x-1 xs:space-x-2">
-                    {isSimulatingAuth && demoProfile && (
-                      <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
-                        Demo: {demoProfile.displayName}
-                      </Badge>
-                    )}
-                    {appConfig.features.roleLab && (
-                      <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-                        <Link to="/demo">Role Lab</Link>
+                    {isSimulatingAuth && demoProfile ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="sm" className="rounded-xl min-h-11 text-sm px-3">
+                            Demo: {demoProfile.displayName}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52">
+                          <DropdownMenuItem asChild>
+                            <Link to="/demo">Switch demo role</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              resetDemo();
+                            }}
+                          >
+                            Reset Demo / Exit
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : demoPreview ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+                        className="rounded-xl min-h-11 text-sm px-3"
+                      >
+                        Try Demo
                       </Button>
+                    ) : (
+                      <>
+                        {showRoleLabNav && (
+                          <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
+                            <Link to="/demo">Role Lab</Link>
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))}
+                          className="rounded-xl min-h-11 text-sm px-3"
+                        >
+                          Sign In
+                        </Button>
+                      </>
                     )}
-                    <Button variant="ghost" size="sm" onClick={() => window.dispatchEvent(new CustomEvent('open-auth-modal'))} className="rounded-xl min-h-11 text-sm px-3">
-                      {shouldUseDemoRolePreview() ? 'Try Demo' : 'Sign In'}
-                    </Button>
-                    
                   </div>}
               </>}
 
@@ -384,18 +419,39 @@ const CreativeNavBar = () => {
                       Sign Out
                     </Button>
                   </div> : <div className="pt-3 border-t border-border/30 space-y-2">
-                    {appConfig.features.roleLab && (
-                      <Button variant="outline" asChild className="w-full min-h-11">
-                        <Link to="/demo" onClick={() => setIsMenuOpen(false)}>Role Lab</Link>
-                      </Button>
+                    {isSimulatingAuth && demoProfile ? (
+                      <>
+                        <p className="text-sm text-muted-foreground px-1">Demo: {demoProfile.displayName}</p>
+                        <Button variant="outline" asChild className="w-full min-h-11">
+                          <Link to="/demo" onClick={() => setIsMenuOpen(false)}>Switch demo role</Link>
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          className="w-full min-h-11"
+                          onClick={() => {
+                            resetDemo();
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Reset Demo / Exit
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        {showRoleLabNav && (
+                          <Button variant="outline" asChild className="w-full min-h-11">
+                            <Link to="/demo" onClick={() => setIsMenuOpen(false)}>Role Lab</Link>
+                          </Button>
+                        )}
+                        <Button onClick={() => {
+                          window.dispatchEvent(new CustomEvent('open-auth-modal'));
+                          setIsMenuOpen(false);
+                        }} className="w-full bg-gradient-to-r from-primary to-manga-gold hover:from-primary/90 hover:to-manga-gold/90 rounded-xl text-base min-h-11">
+                          <User className="h-4 w-4 mr-2" />
+                          {demoPreview ? 'Try Demo' : 'Sign In / Get Started'}
+                        </Button>
+                      </>
                     )}
-                    <Button onClick={() => {
-                window.dispatchEvent(new CustomEvent('open-auth-modal'));
-                setIsMenuOpen(false);
-              }} className="w-full bg-gradient-to-r from-primary to-manga-gold hover:from-primary/90 hover:to-manga-gold/90 rounded-xl text-base min-h-11">
-                      <User className="h-4 w-4 mr-2" />
-                      {shouldUseDemoRolePreview() ? 'Try Demo' : 'Sign In / Get Started'}
-                    </Button>
                   </div>}
               </div>
             </div>

@@ -84,9 +84,18 @@ const DemoMemberWorkspace = ({ role, title, seoTitle }: DemoMemberWorkspaceProps
           <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">
               {isPremium
-                ? 'Premium demo chapters are unlocked for this persona.'
+                ? 'Premium demo chapters are unlocked. Ads stay off in this preview, and premium theme accents appear on this badge.'
                 : 'Spend demo coins on a coin-locked sample chapter from any featured series.'}
             </p>
+            {isPremium && (
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm">
+                Ad-free reading preview · Premium theme accent active for this session
+              </div>
+            )}
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>Reading history (temporary): last opened featured series</li>
+              <li>Favorites (temporary): pin series from Continue reading</li>
+            </ul>
             <Button
               variant="secondary"
               className="w-full min-h-11"

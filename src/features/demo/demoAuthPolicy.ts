@@ -2,7 +2,7 @@ import type { DemoRoleId } from '@/config/env';
 import { appConfig } from '@/config/env';
 import { resolveSupabaseConfig } from '@/integrations/supabase/config';
 
-/** Real email/password auth only when Supabase is explicitly configured (not demo / not dev-fallback). */
+/** Real email/password auth when Supabase is explicitly configured (not public demo). */
 export function isRealAuthEnabled(): boolean {
   if (appConfig.isDemo) return false;
   const config = resolveSupabaseConfig();
@@ -13,18 +13,24 @@ export function isRealAuthEnabled(): boolean {
 }
 
 /**
- * Public demo (or Role Lab without live auth) uses role previews instead of Supabase Auth.
- * Central switch — AuthModal, nav, and AuthContext all read this.
+ * Public demo builds use Role Lab previews instead of Supabase Auth.
+ * Local staging/production with configured Supabase keep the real Sign In form.
+ * Local without credentials: AuthModal shows a safe config message (not Try Demo replacement unless isDemo).
  */
 export function shouldUseDemoRolePreview(): boolean {
-  return appConfig.isDemo || (appConfig.features.roleLab && !isRealAuthEnabled());
+  return appConfig.isDemo;
+}
+
+/** Nav / modal helper: offer Role Lab entry when demo OR staging feature flag. */
+export function canOfferRoleLab(): boolean {
+  return appConfig.features.roleLab;
 }
 
 export const DEMO_SIMULATED_ACTION_MESSAGE =
   'This action is simulated in the public demo. No production data was changed.';
 
 export const DEMO_BANNER_COPY =
-  'Interactive public demo — explore readable sample chapters, temporary role previews, and simulated purchases. No real money is charged and no production data is changed.';
+  'Interactive public demo — explore readable chapters, temporary role previews, uploader tools, administration simulations, and test purchases. No real money is charged and no production data is changed.';
 
 export const DEMO_ROLE_PREVIEW_ACTIONS: ReadonlyArray<{
   role: DemoRoleId;

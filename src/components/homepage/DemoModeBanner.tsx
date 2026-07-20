@@ -18,7 +18,7 @@ export const DemoModeBanner = ({ visible = false }: DemoModeBannerProps) => {
           <BookOpen className="h-4 w-4 text-primary mt-0.5 shrink-0" />
           <p className="text-muted-foreground">{DEMO_BANNER_COPY}</p>
         </div>
-        {appConfig.features.roleLab && (
+        {appConfig.features.roleLab && !appConfig.isDemo && (
           <Button variant="outline" size="sm" asChild className="shrink-0 w-full sm:w-auto min-h-11">
             <Link to="/demo">
               <FlaskConical className="h-4 w-4 mr-2" />
