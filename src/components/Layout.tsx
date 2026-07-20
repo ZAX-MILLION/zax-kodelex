@@ -42,8 +42,16 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col overflow-x-hidden">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded-md focus:min-h-11 focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        Skip to main content
+      </a>
       <CreativeNavBar />
-      <main className="flex-1 w-full max-w-full">{children}</main>
+      <main id="main-content" className="flex-1 w-full max-w-full" tabIndex={-1}>
+        {children}
+      </main>
       <BackToTop />
       <Footer />
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />

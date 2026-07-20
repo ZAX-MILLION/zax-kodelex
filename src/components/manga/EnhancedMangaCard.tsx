@@ -139,14 +139,14 @@ export const EnhancedMangaCard = ({
             </div>}
           
           {/* Content Type Badge */}
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 hidden md:block">
             <Badge className={`text-xs font-bold uppercase tracking-wider px-2 py-1 shadow-lg ${series.genres?.includes('Novel') ? 'bg-purple-500/90 text-white' : series.genres?.includes('Manhua') ? 'bg-red-500/90 text-white' : series.genres?.includes('Manhwa') ? 'bg-blue-500/90 text-white' : 'bg-orange-500/90 text-white'}`}>
               {series.genres?.includes('Novel') ? 'NOVEL' : series.genres?.includes('Manhua') ? 'MANHUA' : series.genres?.includes('Manhwa') ? 'MANHWA' : 'MANGA'}
             </Badge>
           </div>
           
           {/* Rating badge */}
-          {series.rating_average && <div className="absolute top-2 left-2 bg-black/80 text-white px-2 py-1 rounded text-xs flex items-center gap-1">
+          {series.rating_average && <div className="absolute top-2 left-2 hidden md:flex bg-black/80 text-white px-2 py-1 rounded text-xs items-center gap-1">
               <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
               <span>{series.rating_average.toFixed(1)}</span>
             </div>}
@@ -155,7 +155,7 @@ export const EnhancedMangaCard = ({
           <div className="absolute bottom-2 left-2">
             <div className="flex items-center gap-1">
               <div className={`w-2 h-2 rounded-full ${series.status === 'ongoing' ? 'bg-green-500' : series.status === 'completed' ? 'bg-blue-500' : series.status === 'hiatus' ? 'bg-orange-500' : 'bg-red-500'}`} />
-              <span className="text-xs font-medium text-white bg-black/60 px-1 py-0.5 rounded">
+              <span className="hidden lg:inline text-xs font-medium text-white bg-black/60 px-1 py-0.5 rounded">
                 {series.status === 'ongoing' ? 'Ongoing' : series.status === 'completed' ? 'Complete' : series.status === 'hiatus' ? 'Hiatus' : 'Dropped'}
               </span>
             </div>
@@ -163,9 +163,9 @@ export const EnhancedMangaCard = ({
         </div>
 
         {/* Content below image */}
-        <CardContent className={`${config.padding} space-y-2 min-h-[100px] flex flex-col`}>
+        <CardContent className={`p-2 md:p-3 space-y-1 md:space-y-2 min-h-[72px] md:min-h-[100px] flex flex-col`}>
           {/* Title */}
-          <h3 className={`font-bold ${config.titleSize} line-clamp-2 group-hover:text-primary transition-colors duration-300`}>
+          <h3 className={`font-bold text-sm md:text-base line-clamp-2 min-h-[2.5rem] group-hover:text-primary transition-colors duration-300`}>
             {series.title}
           </h3>
           
@@ -178,9 +178,7 @@ export const EnhancedMangaCard = ({
                     <div className="h-6 bg-muted rounded" />
                   </div> : <div className="space-y-1">
                      {(() => {
-                console.log(`EnhancedMangaCard - Series ${series.id} (${series.title}): chapters found=${chapters.length}`);
-                // If no real chapters, show fake locked ones to entice users
-                const chaptersToShow = chapters.length > 0 ? chapters : [{
+                const chaptersToShow = (chapters.length > 0 ? chapters : [{
                   id: `${series.id}-fake-3`,
                   chapter_number: 3,
                   is_locked: true,
@@ -190,17 +188,17 @@ export const EnhancedMangaCard = ({
                   chapter_number: 2,
                   is_locked: true,
                   created_at: new Date().toISOString()
-                }];
+                }]).slice(0, 2);
                 return chaptersToShow.map((chapter, index) => <ChapterAccessHandler key={chapter.id} chapterId={chapter.id} chapterTitle={`Chapter ${chapter.chapter_number}`} isLocked={chapter.is_locked} onAccess={() => {
                   const chapterSlug = `chapter-${chapter.chapter_number.toString().padStart(3, '0')}`;
                   navigate(`/read/${series.id}/${chapterSlug}`);
                 }}>
-                            <div className={`w-full px-2 py-1 rounded ${config.textSize} font-semibold transition-all hover:scale-105 cursor-pointer bg-gray-600/90 text-white hover:bg-gray-500/90`}>
-                              <div className="flex items-center justify-between">
+                            <div className={`w-full px-2 py-1 md:py-1.5 rounded text-xs md:text-sm font-semibold transition-all hover:scale-105 cursor-pointer bg-gray-600/90 text-white hover:bg-gray-500/90 min-h-[44px] md:min-h-0 flex items-center ${index > 0 ? 'hidden md:flex' : ''}`}>
+                              <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-1">
                                   <span>CH. {chapter.chapter_number}</span>
                                 </div>
-                                <div className="flex items-center gap-1 text-xs opacity-80">
+                                <div className="hidden md:flex items-center gap-1 text-xs opacity-80">
                                   {chapter.is_locked && <Lock className="h-3 w-3 text-yellow-400" />}
                                   {(() => {
                           const daysDiff = Math.floor((Date.now() - new Date(chapter.created_at).getTime()) / (1000 * 60 * 60 * 24));

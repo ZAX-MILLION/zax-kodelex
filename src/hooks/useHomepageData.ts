@@ -56,6 +56,10 @@ export const useHomepageWidgets = () => {
 
   const fetchWidgets = async () => {
     try {
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        setWidgets([]);
+        return;
+      }
       const { data, error } = await supabase
         .from('homepage_widgets')
         .select('*')
@@ -93,6 +97,19 @@ export const useHomepageSettings = () => {
 
   const fetchSettings = async () => {
     try {
+      if (isDemoModeEnabled() || !isSupabaseConfigured) {
+        setSettings({
+          id: 'demo',
+          hero_slides_count: 5,
+          latest_comics_count: 8,
+          trending_count: 8,
+          auto_slide_interval: 6000,
+          show_content_type_filter: false,
+          feed_chapters_count: 8,
+          blog_posts_count: 4,
+        });
+        return;
+      }
       const { data, error } = await supabase
         .from('homepage_settings')
         .select('*')

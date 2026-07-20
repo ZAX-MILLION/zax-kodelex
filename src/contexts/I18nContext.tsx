@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { appConfig } from '@/config/env';
 
 interface Language {
   id: string;
@@ -56,6 +57,11 @@ export const I18nProvider = ({ children }: I18nProviderProps) => {
 
   // Load languages from database
   const loadLanguages = async () => {
+    if (appConfig.isDemo || !isSupabaseConfigured) {
+      setLanguages([defaultLanguage]);
+      setCurrentLanguage(defaultLanguage);
+      return;
+    }
     try {
       const { data, error } = await supabase
         .from('languages')
@@ -107,6 +113,10 @@ export const I18nProvider = ({ children }: I18nProviderProps) => {
 
   // Load translations for current language
   const loadTranslations = async (languageCode: string) => {
+    if (appConfig.isDemo || !isSupabaseConfigured) {
+      setTranslations({});
+      return;
+    }
     try {
       const { data, error } = await supabase
         .from('translations')

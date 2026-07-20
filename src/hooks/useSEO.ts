@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { appConfig, shouldNoIndexRoute } from '@/config/env';
 
 export interface SEOMetadata {
   title?: string;
@@ -52,10 +53,10 @@ export const useSEO = () => {
   const [seoSettings, setSEOSettings] = useState<SEOSettings>({
     siteTitle: 'Zax Million',
     siteDescription: 'Professional manga reading platform with premium features',
-    siteUrl: window.location.origin,
+    siteUrl: appConfig.siteUrl || (typeof window !== 'undefined' ? window.location.origin : ''),
     defaultImage: '/manga-cover.jpg',
-    allowIndexing: true,
-    robotsDirectives: ['index', 'follow']
+    allowIndexing: !appConfig.shouldNoIndex,
+    robotsDirectives: appConfig.shouldNoIndex ? ['noindex', 'nofollow'] : ['index', 'follow']
   });
   
   const [currentMetadata, setCurrentMetadata] = useState<SEOMetadata>({});
@@ -112,7 +113,7 @@ export const useSEO = () => {
       type: 'website',
       siteName: seoSettings.siteTitle,
       canonical: `${seoSettings.siteUrl}${currentPath}`,
-      robots: seoSettings.allowIndexing ? 'index,follow' : 'noindex,nofollow',
+      robots: shouldNoIndexRoute(currentPath) ? 'noindex,nofollow' : (seoSettings.allowIndexing ? 'index,follow' : 'noindex,nofollow'),
       twitterCard: 'summary_large_image',
       ...customMeta
     };

@@ -1,218 +1,128 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
+import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import {
+  getPayPalAccessToken,
+  requirePayPalCredentials,
+  resolvePayPalBaseUrl,
+  verifyPayPalWebhookSignature,
+} from '../_shared/paypal.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-paypal-transmission-id, x-paypal-cert-id, x-paypal-auth-algo, x-paypal-transmission-sig, x-paypal-transmission-time',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type, paypal-transmission-id, paypal-transmission-time, paypal-cert-url, paypal-auth-algo, paypal-transmission-sig',
 };
 
-// Initialize Supabase client
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-interface PayPalWebhookEvent {
-  id: string;
-  event_type: string;
-  resource_type: string;
-  summary: string;
-  resource: {
-    id: string;
-    status?: string;
-    billing_info?: {
-      next_billing_time?: string;
-      last_payment?: {
-        amount: {
-          currency_code: string;
-          value: string;
-        };
-        time: string;
-      };
-    };
-    plan_id?: string;
-    subscriber?: {
-      email_address: string;
-      payer_id: string;
-    };
-    custom_id?: string; // This will contain our user_id
-  };
-}
-
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { 
-      status: 405, 
-      headers: corsHeaders 
-    });
+    return new Response('Method not allowed', { status: 405, headers: corsHeaders });
   }
 
   try {
-    const webhookEvent: PayPalWebhookEvent = await req.json();
-    console.log('PayPal webhook received:', JSON.stringify(webhookEvent, null, 2));
+    const rawBody = await req.text();
+    const webhookEvent = JSON.parse(rawBody);
+    const eventId = webhookEvent.id;
+    const eventType = webhookEvent.event_type;
 
-    // Log the transaction
-    await supabase.from('payment_transactions').insert({
-      paypal_transaction_id: webhookEvent.id,
-      transaction_type: webhookEvent.event_type,
-      status: webhookEvent.resource.status || 'received',
-      paypal_data: webhookEvent,
-    });
-
-    // Handle different webhook events
-    switch (webhookEvent.event_type) {
-      case 'BILLING.SUBSCRIPTION.CREATED':
-        await handleSubscriptionCreated(webhookEvent);
-        break;
-      
-      case 'BILLING.SUBSCRIPTION.ACTIVATED':
-        await handleSubscriptionActivated(webhookEvent);
-        break;
-      
-      case 'PAYMENT.SALE.COMPLETED':
-        await handlePaymentCompleted(webhookEvent);
-        break;
-      
-      case 'BILLING.SUBSCRIPTION.CANCELLED':
-      case 'BILLING.SUBSCRIPTION.SUSPENDED':
-        await handleSubscriptionCancelled(webhookEvent);
-        break;
-      
-      case 'BILLING.SUBSCRIPTION.EXPIRED':
-        await handleSubscriptionExpired(webhookEvent);
-        break;
-      
-      default:
-        console.log(`Unhandled webhook event: ${webhookEvent.event_type}`);
+    const webhookId = Deno.env.get('PAYPAL_WEBHOOK_ID')?.trim();
+    if (!webhookId) {
+      return new Response(JSON.stringify({ error: 'Webhook not configured' }), {
+        status: 503,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    const { clientId, clientSecret } = requirePayPalCredentials();
+    const { baseUrl } = resolvePayPalBaseUrl();
+    const accessToken = await getPayPalAccessToken(baseUrl, clientId, clientSecret);
+    const verified = await verifyPayPalWebhookSignature({
+      baseUrl,
+      accessToken,
+      webhookId,
+      headers: req.headers,
+      rawBody,
     });
 
-  } catch (error) {
-    console.error('Error processing PayPal webhook:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+    if (!verified) {
+      return new Response(JSON.stringify({ error: 'Invalid signature' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      { auth: { persistSession: false } }
     );
-  }
-};
 
-async function handleSubscriptionCreated(event: PayPalWebhookEvent) {
-  const { resource } = event;
-  const userId = resource.custom_id;
+    const { data: existing } = await supabase
+      .from('payment_webhook_events')
+      .select('id')
+      .eq('event_id', eventId)
+      .maybeSingle();
 
-  if (!userId) {
-    console.error('No user ID found in subscription created event');
-    return;
-  }
+    if (existing) {
+      return new Response(JSON.stringify({ status: 'duplicate_ignored' }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
-  // Create subscription record
-  const { error } = await supabase
-    .from('user_subscriptions')
-    .insert({
-      user_id: userId,
-      plan: 'premium',
-      status: 'pending',
-      paypal_subscription_id: resource.id,
-      paypal_plan_id: resource.plan_id,
-      amount: 5.00,
-      currency: 'USD',
-      metadata: { paypal_event: event }
+    await supabase.from('payment_webhook_events').insert({
+      event_id: eventId,
+      event_type: eventType,
+      provider: 'paypal',
+      payload: webhookEvent,
     });
 
-  if (error) {
-    console.error('Error creating subscription:', error);
-  } else {
-    console.log(`Subscription created for user ${userId}`);
-  }
-}
+    const customId = webhookEvent.resource?.custom_id || '';
+    const userId = String(customId).split('|')[0];
+    const subscriptionId = webhookEvent.resource?.id;
 
-async function handleSubscriptionActivated(event: PayPalWebhookEvent) {
-  const { resource } = event;
+    switch (eventType) {
+      case 'BILLING.SUBSCRIPTION.ACTIVATED':
+      case 'PAYMENT.SALE.COMPLETED': {
+        if (userId) {
+          await supabase.from('user_subscriptions').upsert({
+            user_id: userId,
+            plan: 'premium',
+            status: 'active',
+            paypal_subscription_id: subscriptionId,
+            updated_at: new Date().toISOString(),
+          });
+        }
+        break;
+      }
+      case 'BILLING.SUBSCRIPTION.CANCELLED':
+      case 'BILLING.SUBSCRIPTION.SUSPENDED':
+      case 'BILLING.SUBSCRIPTION.EXPIRED': {
+        if (userId) {
+          await supabase
+            .from('user_subscriptions')
+            .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+            .eq('user_id', userId)
+            .eq('paypal_subscription_id', subscriptionId);
+        }
+        break;
+      }
+      default:
+        break;
+    }
 
-  // Update subscription status to active
-  const { error } = await supabase
-    .from('user_subscriptions')
-    .update({ 
-      status: 'active',
-      start_date: new Date().toISOString(),
-      end_date: null // Recurring subscription, no end date
-    })
-    .eq('paypal_subscription_id', resource.id);
-
-  if (error) {
-    console.error('Error activating subscription:', error);
-  } else {
-    console.log(`Subscription activated: ${resource.id}`);
-  }
-}
-
-async function handlePaymentCompleted(event: PayPalWebhookEvent) {
-  const { resource } = event;
-
-  // Log the successful payment
-  const { error } = await supabase
-    .from('payment_transactions')
-    .insert({
-      paypal_transaction_id: resource.id,
-      transaction_type: 'payment_completed',
-      amount: parseFloat(resource.billing_info?.last_payment?.amount?.value || '0'),
-      currency: resource.billing_info?.last_payment?.amount?.currency_code || 'USD',
-      status: 'completed',
-      paypal_data: event,
+    return new Response(JSON.stringify({ status: 'ok', eventType }), {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-
-  if (error) {
-    console.error('Error logging payment:', error);
-  } else {
-    console.log(`Payment completed: ${resource.id}`);
+  } catch (error) {
+    console.error('paypal-webhook:', error);
+    return new Response(JSON.stringify({ error: 'Webhook processing failed' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
-}
-
-async function handleSubscriptionCancelled(event: PayPalWebhookEvent) {
-  const { resource } = event;
-
-  // Update subscription status to cancelled
-  const { error } = await supabase
-    .from('user_subscriptions')
-    .update({ 
-      status: 'canceled',
-      auto_renew: false,
-      end_date: new Date().toISOString()
-    })
-    .eq('paypal_subscription_id', resource.id);
-
-  if (error) {
-    console.error('Error cancelling subscription:', error);
-  } else {
-    console.log(`Subscription cancelled: ${resource.id}`);
-  }
-}
-
-async function handleSubscriptionExpired(event: PayPalWebhookEvent) {
-  const { resource } = event;
-
-  // Update subscription status to expired
-  const { error } = await supabase
-    .from('user_subscriptions')
-    .update({ 
-      status: 'expired',
-      end_date: new Date().toISOString()
-    })
-    .eq('paypal_subscription_id', resource.id);
-
-  if (error) {
-    console.error('Error marking subscription as expired:', error);
-  } else {
-    console.log(`Subscription expired: ${resource.id}`);
-  }
-}
-
-serve(handler);
+});

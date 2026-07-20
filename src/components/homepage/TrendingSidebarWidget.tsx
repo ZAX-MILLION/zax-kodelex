@@ -142,7 +142,7 @@ const TrendingSidebarWidget = ({
                 
                 {/* Rating and Views */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
+                  <div className="hidden md:flex items-center gap-1">
                     {renderStars(rating)}
                     <span className="text-xs text-muted-foreground ml-1">
                       {rating.toFixed(1)}
