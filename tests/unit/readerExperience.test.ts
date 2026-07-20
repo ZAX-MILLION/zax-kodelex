@@ -122,6 +122,23 @@ describe('reader isolation', () => {
     expect(source).not.toMatch(/aria-label="Reader controls"[\s\S]*fixed bottom-0/);
     expect(source).not.toContain('pb-24');
     expect(source).not.toMatch(/fixed bottom-0 left-0 right-0 z-50/);
+    // Mobile reading column keeps a safe-area-aware right gutter clear of the rail
+    expect(source).toContain('safe-area-inset-right');
+    expect(source).toMatch(/pr-\[calc\(2\.75rem/);
+  });
+
+  it('keeps the mobile side rail as a launcher that expands into a dismissible panel', () => {
+    const rail = readFileSync(
+      resolve(__dirname, '../../src/components/reader/ReaderSideRail.tsx'),
+      'utf8'
+    );
+    expect(rail).toContain('data-reader-side-rail-mobile-launcher');
+    expect(rail).toContain('data-reader-side-rail-mobile-panel');
+    expect(rail).toContain('data-reader-side-rail-backdrop');
+    expect(rail).toContain('min-h-11 min-w-11');
+    expect(rail).toContain('safe-area-inset-right');
+    expect(rail).toContain('Open reader controls');
+    expect(rail).toContain('Dismiss reader controls');
   });
 
   it('layers Reader Settings select menus above the settings panel', () => {

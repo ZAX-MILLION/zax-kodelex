@@ -477,7 +477,13 @@ function WebtoonReaderInner({
         onClick={onReadingSurfaceClick}
       >
         <div
-          className={cn('pt-12 sm:pt-14 pb-8', justifyClass)}
+          className={cn(
+            'pt-12 sm:pt-14 pb-8',
+            justifyClass,
+            // Reserve a right gutter so the fixed side rail / mobile launcher never covers images
+            'pr-[calc(2.75rem+max(0.5rem,env(safe-area-inset-right))+0.35rem)]',
+            'sm:pr-[calc(3rem+max(0.75rem,env(safe-area-inset-right))+0.35rem)]'
+          )}
           style={{
             maxWidth: contentMaxWidth,
             width: settings.widthMode === 'full' ? '100%' : undefined,
