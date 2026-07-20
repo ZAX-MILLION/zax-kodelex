@@ -241,13 +241,13 @@ We'd love to hear from you! Get in touch with us using any of the methods below.
 ## Support
 
 For technical support and account issues:
-**Email:** support@yoursite.com  
+**Email:** ZAXMIllion@proton.me  
 **Hours:** Monday - Friday, 9 AM - 6 PM EST
 
 ## Business Inquiries
 
 For partnerships and business opportunities:
-**Email:** business@yoursite.com
+**Email:** ZAXMIllion@proton.me
 
 ## DMCA & Legal
 
