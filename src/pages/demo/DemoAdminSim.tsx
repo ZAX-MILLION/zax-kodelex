@@ -19,8 +19,10 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { EnhancedSEOHelmet } from '@/components/EnhancedSEOHelmet';
 import { DemoSimChrome } from '@/components/demo/DemoSimChrome';
+import { SeriesDetailsBackgroundControls } from '@/components/series/SeriesDetailsBackgroundControls';
 import { useDemoRole } from '@/contexts/DemoRoleContext';
 import { DEMO_SIMULATED_ACTION_MESSAGE } from '@/features/demo/demoAuthPolicy';
+import { getFeaturedDemoSeries } from '@/utils/demoLibraryData';
 
 type DemoAdminState = {
   pendingUploads: Array<{ id: string; title: string; author: string; status: 'pending' | 'approved' | 'rejected' }>;
@@ -82,6 +84,7 @@ const DemoAdminSim = () => {
     { label: 'Pending uploads', value: String(state.pendingUploads.filter((u) => u.status === 'pending').length), icon: Upload },
     { label: 'Open reports', value: String(state.comments.filter((c) => !c.hidden).length), icon: MessageSquare },
   ];
+  const featuredSeries = getFeaturedDemoSeries().slice(0, 3);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl space-y-6">
@@ -346,6 +349,43 @@ const DemoAdminSim = () => {
                 announce('Setting toggled in demo state.');
               }}
             />
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Palette className="h-4 w-4" />
+              Manga details backgrounds
+            </CardTitle>
+            <CardDescription>
+              Session-only preview controls. Global default applies to all series unless a series override
+              or catalogue URL is set.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <SeriesDetailsBackgroundControls
+              compact
+              onChanged={() => announce('Background settings updated in demo state.')}
+            />
+            <div className="space-y-4 border-t border-border/40 pt-4">
+              <p className="text-sm font-medium">Per-series overrides (featured demo catalogue)</p>
+              {featuredSeries.map((series) => (
+                <div
+                  key={series.id}
+                  className="rounded-xl border border-border/50 bg-muted/10 p-3 sm:p-4"
+                >
+                  <SeriesDetailsBackgroundControls
+                    compact
+                    seriesId={series.id}
+                    seriesTitle={series.title}
+                    onChanged={() =>
+                      announce(`Background updated for ${series.title} in demo state.`)
+                    }
+                  />
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>

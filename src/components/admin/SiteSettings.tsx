@@ -20,6 +20,7 @@ import {
   Eye
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SeriesDetailsBackgroundControls } from "@/components/series/SeriesDetailsBackgroundControls";
 
 interface SiteSettings {
   site_title: string;
@@ -546,6 +547,15 @@ export const SiteSettings = () => {
                     <SelectItem value="80vh">Full Height (80vh)</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="rounded-xl border border-border/40 bg-muted/10 p-4 sm:p-5">
+                <h4 className="mb-1 text-sm font-semibold">Manga details page background</h4>
+                <p className="mb-4 text-xs text-muted-foreground">
+                  Global default behind series detail pages. Per-series overrides can be set in catalogue
+                  metadata or demo admin tools.
+                </p>
+                <SeriesDetailsBackgroundControls compact />
               </div>
 
               <div className="space-y-2">

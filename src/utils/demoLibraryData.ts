@@ -42,6 +42,8 @@ export interface DemoSeries {
   updated_at: string;
   locked_chapter_count: number;
   featured: boolean;
+  /** Optional catalogue background for the series details page. */
+  details_background_url?: string | null;
 }
 
 export interface DemoChapter {
@@ -254,6 +256,9 @@ function buildDemoLibrary() {
       artist: def.artist,
       status: def.status,
       genres: def.genres,
+      ...(index === 0
+        ? { details_background_url: 'https://picsum.photos/seed/crimson-blade-details/1600/900' }
+        : {}),
       tags: [
         ...def.tags,
         ...(def.format === 'manhwa' ? ['Full Color'] : []),
