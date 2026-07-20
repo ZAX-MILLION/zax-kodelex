@@ -73,8 +73,6 @@ function mapDemoSeriesCatalogue(): SeriesData[] {
       rating_average: item.rating_average,
       rating_count: item.rating_count,
       latest_chapters: chapters
-        .slice()
-        .reverse()
         .slice(0, 2)
         .map((chapter) => ({
           id: chapter.id,

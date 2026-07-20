@@ -33,6 +33,7 @@ interface Chapter {
   is_locked: boolean;
   unlock_cost: number;
   thumbnail_url: string;
+  access_type?: 'free' | 'coins' | 'premium';
 }
 
 interface ModernChapterGridProps {
@@ -79,20 +80,21 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
     }
   };
 
-  const sortedChapters = [...chapters].sort((a, b) => {
-    return a.chapter_number - b.chapter_number 
-      ? b.chapter_number - a.chapter_number 
-      : a.chapter_number - b.chapter_number;
-  });
+  const sortedChapters = [...chapters].sort(
+    (a, b) => b.chapter_number - a.chapter_number
+  );
 
   const filteredChapters = showLocked 
     ? sortedChapters 
     : sortedChapters.filter(chapter => !chapter.is_locked || userAccess[chapter.id]);
 
   const getChapterStatus = (chapter: Chapter) => {
-    if (!chapter.is_locked || chapter.unlock_cost === 0) return 'free';
     if (userAccess[chapter.id]) return 'unlocked';
-    return 'locked';
+    if (chapter.access_type === 'premium') return 'locked-premium';
+    if (chapter.access_type === 'coins') return 'locked';
+    if (chapter.access_type === 'free' || !chapter.is_locked) return 'free';
+    if (chapter.unlock_cost > 0) return 'locked';
+    return 'locked-premium';
   };
 
   const handleChapterClick = (chapter: Chapter) => {
@@ -105,7 +107,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
 
     const status = getChapterStatus(chapter);
 
-    if (status === 'locked') {
+    if (status === 'locked' || status === 'locked-premium') {
       setSelectedChapter(chapter);
       setShowUnlockPopup(true);
     } else {
@@ -185,13 +187,14 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
           const daysAgo = Math.floor((Date.now() - new Date(chapter.release_date).getTime()) / (1000 * 60 * 60 * 24));
           const isNew = daysAgo <= 3;
           const status = getChapterStatus(chapter);
+          const isLockedVisual = status === 'locked' || status === 'locked-premium';
 
           return (
             <Card 
               key={chapter.id} 
               className={`group hover:bg-accent/80 transition-all duration-200 cursor-pointer border border-border/10 bg-card/20 backdrop-blur-sm hover:border-accent/40 ${
                 gridColumns === 1 ? 'p-6' : gridColumns === 2 ? 'p-5' : 'p-4'
-              } ${status === 'locked' ? 'opacity-70' : ''}`}
+              } ${isLockedVisual ? 'opacity-70' : ''}`}
               onClick={() => handleChapterClick(chapter)}
             >
               <div className="flex items-center gap-4">
@@ -202,7 +205,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
                   } rounded-lg flex items-center justify-center font-bold ${
                     gridColumns === 1 ? 'text-lg' : gridColumns === 2 ? 'text-base' : 'text-sm'
                   } shadow-lg border-2 ${
-                    status === 'locked' ? 'bg-destructive text-destructive-foreground border-destructive/30' :
+                    isLockedVisual ? 'bg-destructive text-destructive-foreground border-destructive/30' :
                     status === 'unlocked' ? 'bg-blue-500 text-white border-blue-500/30' :
                     'bg-green-600 text-white border-green-600/30'
                   }`}>
@@ -210,7 +213,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
                   </div>
                   
                   {/* New indicator dot */}
-                  {isNew && status !== 'locked' && (
+                  {isNew && !isLockedVisual && (
                     <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500 border-2 border-background animate-pulse"></div>
                   )}
                 </div>
@@ -238,6 +241,11 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
                         <Badge variant="destructive" className={`gap-1 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
                           <Lock className="h-3 w-3" />
                           {chapter.unlock_cost} coins
+                        </Badge>
+                      ) : status === 'locked-premium' ? (
+                        <Badge variant="destructive" className={`gap-1 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>
+                          <Lock className="h-3 w-3" />
+                          Premium
                         </Badge>
                       ) : status === 'unlocked' ? (
                         <Badge variant="secondary" className={`gap-1 bg-blue-500/20 text-blue-600 border-blue-500/30 ${gridColumns === 1 ? 'text-sm' : 'text-xs'}`}>

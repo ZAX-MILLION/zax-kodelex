@@ -54,8 +54,9 @@ export function ReaderChapterList({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return chapters;
-    return chapters.filter(
+    const base = [...chapters].sort((a, b) => b.chapter_number - a.chapter_number);
+    if (!q) return base;
+    return base.filter(
       (c) =>
         String(c.chapter_number).includes(q) ||
         c.title.toLowerCase().includes(q)

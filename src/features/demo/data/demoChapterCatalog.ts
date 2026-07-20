@@ -77,11 +77,38 @@ export function isFeaturedDemoSeriesIndex(index: number): boolean {
   return FEATURED_BY_INDEX.has(index);
 }
 
-/** Chapter 1 free, 2 coin-locked, 3 premium-locked for featured series. */
-export function getDemoAccessType(chapterNumber: number): DemoAccessType {
-  if (chapterNumber <= 1) return 'free';
-  if (chapterNumber === 2) return 'coins';
-  return 'premium';
+/**
+ * Chronological demo access tiers (by chapter_number within a series).
+ * - Older chapters are free.
+ * - Newest chapter is premium-locked.
+ * - When totalChapters >= 3, second-newest is coin-locked.
+ * Never produces a newer free chapter after an older locked chapter.
+ * Series with fewer than 2 chapters stay free (nothing to gate behind).
+ */
+export function getDemoAccessType(
+  chapterNumber: number,
+  totalChapters = 3
+): DemoAccessType {
+  if (totalChapters < 2 || chapterNumber < 1) return 'free';
+  if (chapterNumber >= totalChapters) return 'premium';
+  if (totalChapters >= 3 && chapterNumber === totalChapters - 1) return 'coins';
+  return 'free';
+}
+
+/** True when a locked chapter is followed by a newer free chapter (invalid). */
+export function hasChronologicalAccessViolation(
+  chapters: Array<{ chapter_number: number; access_type: DemoAccessType }>
+): boolean {
+  const ordered = [...chapters].sort((a, b) => a.chapter_number - b.chapter_number);
+  let seenLocked = false;
+  for (const chapter of ordered) {
+    if (chapter.access_type !== 'free') {
+      seenLocked = true;
+      continue;
+    }
+    if (seenLocked) return true;
+  }
+  return false;
 }
 
 export function getDemoUnlockCost(access: DemoAccessType): number {

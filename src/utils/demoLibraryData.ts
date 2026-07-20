@@ -9,6 +9,13 @@ import {
   type DemoAccessType,
 } from '@/features/demo/data/demoChapterCatalog';
 
+/** Newest → Oldest for chapter list UIs. */
+export function sortDemoChaptersNewestFirst<T extends { chapter_number: number }>(
+  chapters: T[]
+): T[] {
+  return [...chapters].sort((a, b) => b.chapter_number - a.chapter_number);
+}
+
 export const CHAPTERS_PER_SERIES = 20;
 
 export interface DemoSeries {
@@ -265,15 +272,17 @@ function buildDemoLibrary() {
       publication_date: pubDate.toISOString().split('T')[0],
       created_at: createdAt.toISOString(),
       updated_at: new Date(Date.now() - index * 3 * 24 * 60 * 60 * 1000).toISOString(),
-      locked_chapter_count: featured ? 2 : 0,
+      locked_chapter_count: 0,
       featured,
     });
 
     const seriesChapterIds: string[] = [];
+    let lockedCount = 0;
 
     for (let ch = 1; ch <= readableCount; ch++) {
-      const access = featured ? getDemoAccessType(ch) : 'free';
-      const unlockCost = featured ? getDemoUnlockCost(access) : 0;
+      const access = getDemoAccessType(ch, readableCount);
+      const unlockCost = getDemoUnlockCost(access);
+      if (access !== 'free') lockedCount += 1;
       const pages =
         def.content_type === 'novel' && !featured
           ? []
@@ -316,6 +325,11 @@ function buildDemoLibrary() {
       chapter.next_chapter_id =
         i < seriesChapterIds.length - 1 ? seriesChapterIds[i + 1] : null;
     }
+
+    const seriesRecord = series[series.length - 1];
+    if (seriesRecord) {
+      seriesRecord.locked_chapter_count = lockedCount;
+    }
   });
 
   return { series, chapters };
@@ -344,10 +358,11 @@ export function isDemoChapterId(id: string): boolean {
 }
 
 export function getDemoChaptersForSeries(seriesId: string): DemoChapter[] {
-  return DEMO_LIBRARY.chapters
-    .filter((chapter) => chapter.series_id === seriesId)
-    .filter((chapter) => chapter.page_count > 0 || !!chapter.text_content)
-    .sort((a, b) => a.chapter_number - b.chapter_number);
+  return sortDemoChaptersNewestFirst(
+    DEMO_LIBRARY.chapters
+      .filter((chapter) => chapter.series_id === seriesId)
+      .filter((chapter) => chapter.page_count > 0 || !!chapter.text_content)
+  );
 }
 
 export function getDemoChapterById(chapterId: string): DemoChapter | undefined {

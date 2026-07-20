@@ -135,7 +135,8 @@ const Reader = () => {
 
     const siblings = getDemoChaptersForSeries(series.id);
     const related = getRelatedDemoSeries(series.id, 3);
-    const currentIndex = siblings.findIndex((c) => c.id === chapter.id);
+    const chronological = [...siblings].sort((a, b) => a.chapter_number - b.chapter_number);
+    const currentIndex = chronological.findIndex((c) => c.id === chapter.id);
     const prev = chapter.previous_chapter_id
       ? getDemoChapterById(chapter.previous_chapter_id)
       : null;
@@ -175,7 +176,7 @@ const Reader = () => {
         }))}
         endOfChapter
         isMobile={isMobile}
-        chapterPositionLabel={`${currentIndex + 1} / ${siblings.length}`}
+        chapterPositionLabel={`${currentIndex + 1} / ${chronological.length}`}
         demoSeriesIndex={Math.max(
           0,
           Number.parseInt(series.id.slice(-12), 10) - 1 || 0

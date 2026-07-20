@@ -4,6 +4,7 @@ import {
   getDemoAccessType,
   getDemoUnlockCost,
   getFeaturedPageCount,
+  hasChronologicalAccessViolation,
 } from '../../src/features/demo/data/demoChapterCatalog';
 import {
   applyDemoCoinUnlock,
@@ -17,6 +18,7 @@ import {
   getDemoChaptersForSeries,
   getDemoSeriesById,
   getDemoSeriesBySlug,
+  getDemoSeriesList,
   getFeaturedDemoSeries,
 } from '../../src/utils/demoLibraryData';
 
@@ -58,19 +60,71 @@ describe('demo chapter resolution', () => {
     const slug = 'mystic-academy';
     expect(getFeaturedPageCount(slug, 2)).toBe(8 + ((2 + slug.length) % 5));
   });
+
+  it('lists chapters newest to oldest', () => {
+    for (const series of getDemoSeriesList()) {
+      const chapters = getDemoChaptersForSeries(series.id);
+      if (chapters.length < 2) continue;
+      for (let i = 1; i < chapters.length; i++) {
+        expect(chapters[i - 1].chapter_number).toBeGreaterThan(chapters[i].chapter_number);
+      }
+    }
+  });
 });
 
 describe('demo chapter access rules', () => {
-  it('marks chapter 1 free, 2 coins, 3 premium', () => {
-    expect(getDemoAccessType(1)).toBe('free');
-    expect(getDemoAccessType(2)).toBe('coins');
-    expect(getDemoAccessType(3)).toBe('premium');
+  it('applies chronological tiers for three-chapter series', () => {
+    expect(getDemoAccessType(1, 3)).toBe('free');
+    expect(getDemoAccessType(2, 3)).toBe('coins');
+    expect(getDemoAccessType(3, 3)).toBe('premium');
     expect(getDemoUnlockCost('coins')).toBe(15);
+  });
+
+  it('locks newest and keeps earlier free when only two chapters exist', () => {
+    expect(getDemoAccessType(1, 2)).toBe('free');
+    expect(getDemoAccessType(2, 2)).toBe('premium');
+  });
+
+  it('keeps single-chapter series free', () => {
+    expect(getDemoAccessType(1, 1)).toBe('free');
+  });
+
+  it('never allows a locked chapter followed by a newer free chapter in any demo series', () => {
+    for (const series of getDemoSeriesList()) {
+      const chapters = getDemoChaptersForSeries(series.id);
+      expect(hasChronologicalAccessViolation(chapters)).toBe(false);
+
+      const chronological = [...chapters].sort((a, b) => a.chapter_number - b.chapter_number);
+      let seenLocked = false;
+      for (const chapter of chronological) {
+        if (chapter.access_type !== 'free') {
+          seenLocked = true;
+        } else {
+          expect(seenLocked).toBe(false);
+        }
+      }
+    }
+  });
+
+  it('uses free → coins → premium on every featured three-chapter series', () => {
+    for (const series of getFeaturedDemoSeries()) {
+      const chronological = [...getDemoChaptersForSeries(series.id)].sort(
+        (a, b) => a.chapter_number - b.chapter_number
+      );
+      expect(chronological).toHaveLength(3);
+      expect(chronological[0].access_type).toBe('free');
+      expect(chronological[1].access_type).toBe('coins');
+      expect(chronological[2].access_type).toBe('premium');
+      expect(series.locked_chapter_count).toBe(2);
+    }
   });
 
   it('allows guests free chapters only', () => {
     const series = getFeaturedDemoSeries()[0];
-    const [freeCh, coinCh, premiumCh] = getDemoChaptersForSeries(series.id);
+    const chronological = [...getDemoChaptersForSeries(series.id)].sort(
+      (a, b) => a.chapter_number - b.chapter_number
+    );
+    const [freeCh, coinCh, premiumCh] = chronological;
     const guest = {
       role: 'guest' as const,
       coins: 0,
@@ -84,7 +138,10 @@ describe('demo chapter access rules', () => {
 
   it('unlocks coin chapters with demo coins and keeps premium for paid roles', () => {
     const series = getFeaturedDemoSeries()[0];
-    const [, coinCh, premiumCh] = getDemoChaptersForSeries(series.id);
+    const chronological = [...getDemoChaptersForSeries(series.id)].sort(
+      (a, b) => a.chapter_number - b.chapter_number
+    );
+    const [, coinCh, premiumCh] = chronological;
 
     const unlock = applyDemoCoinUnlock(
       { coins: 25, unlockedChapterIds: [] },
@@ -124,10 +181,12 @@ describe('demo chapter access rules', () => {
 
   it('wires previous/next chapter links on featured series', () => {
     const series = getFeaturedDemoSeries()[0];
-    const chapters = getDemoChaptersForSeries(series.id);
-    expect(chapters[0].previous_chapter_id).toBeNull();
-    expect(chapters[0].next_chapter_id).toBe(chapters[1].id);
-    expect(chapters[2].next_chapter_id).toBeNull();
-    expect(chapters[2].previous_chapter_id).toBe(chapters[1].id);
+    const chronological = [...getDemoChaptersForSeries(series.id)].sort(
+      (a, b) => a.chapter_number - b.chapter_number
+    );
+    expect(chronological[0].previous_chapter_id).toBeNull();
+    expect(chronological[0].next_chapter_id).toBe(chronological[1].id);
+    expect(chronological[2].next_chapter_id).toBeNull();
+    expect(chronological[2].previous_chapter_id).toBe(chronological[1].id);
   });
 });

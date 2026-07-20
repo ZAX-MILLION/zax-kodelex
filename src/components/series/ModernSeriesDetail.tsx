@@ -305,14 +305,27 @@ const ModernSeriesDetail = () => {
                           } catch {
                             /* ignore */
                           }
-                          return chapters[0].chapter_number;
+                          // Prefer earliest free chapter (not newest, which may be locked)
+                          const chronological = [...chapters].sort(
+                            (a, b) => a.chapter_number - b.chapter_number
+                          );
+                          const free = chronological.find(
+                            (c) => c.access_type === 'free' || !c.is_locked
+                          );
+                          return (free || chronological[0]).chapter_number;
                         })()
                       }`}
                       onClick={() => {
                         try {
+                          const chronological = [...chapters].sort(
+                            (a, b) => a.chapter_number - b.chapter_number
+                          );
+                          const free = chronological.find(
+                            (c) => c.access_type === 'free' || !c.is_locked
+                          );
                           sessionStorage.setItem(
                             `zax-demo-continue:${series.id}`,
-                            String(chapters[0].chapter_number)
+                            String((free || chronological[0]).chapter_number)
                           );
                         } catch {
                           /* ignore */
