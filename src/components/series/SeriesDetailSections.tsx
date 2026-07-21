@@ -67,6 +67,7 @@ export interface SeriesDetailSectionsProps {
   showSynopsis?: boolean;
   showMetaStats?: boolean;
   denseChapters?: boolean;
+  compactRelated?: boolean;
   className?: string;
 }
 
@@ -229,10 +230,11 @@ export function SeriesDetailSections({
   showSynopsis = true,
   showMetaStats = true,
   denseChapters = false,
+  compactRelated = false,
   className,
 }: SeriesDetailSectionsProps) {
   return (
-    <div className={cn('space-y-6 sm:space-y-8', className)}>
+    <div className={cn('space-y-5 sm:space-y-6', className)}>
       {showSynopsis && <SeriesDetailSynopsis description={series.description} />}
 
       {showMetaStats && (
@@ -256,11 +258,21 @@ export function SeriesDetailSections({
       </section>
 
       <section id="series-related" aria-labelledby="related-section-heading">
-        <h2 id="related-section-heading" className="mb-4 text-xl font-bold sm:text-2xl">
+        <h2
+          id="related-section-heading"
+          className={cn(
+            'mb-3 font-semibold text-muted-foreground',
+            compactRelated ? 'text-sm sm:text-base' : 'mb-4 text-xl font-bold sm:text-2xl'
+          )}
+        >
           Related Titles
         </h2>
         <Suspense fallback={<SectionSkeleton />}>
-          <SeriesRelatedTitles series={relatedSeries} currentTitle={series.title} />
+          <SeriesRelatedTitles
+            series={relatedSeries}
+            currentTitle={series.title}
+            compact={compactRelated}
+          />
         </Suspense>
       </section>
 

@@ -8,9 +8,9 @@ export const SERIES_DETAILS_LAYOUT_BG_PRESETS: Record<
 > = {
   A: {
     position: 'center',
-    overlayDarkness: 82,
-    blur: 2,
-    attachment: 'scroll',
+    overlayDarkness: 62,
+    blur: 4,
+    attachment: 'fixed',
     accentColor: null,
   },
   B: {

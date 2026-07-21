@@ -25,10 +25,16 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
     <>
       <SeriesDetailBreadcrumb title={series.title} />
 
-      <section className="border-b border-border/20" aria-label="Series overview">
-        <div className="container mx-auto px-4 py-4 sm:py-6 lg:py-8">
-          <div className="grid grid-cols-1 items-start gap-4 sm:gap-6 lg:grid-cols-12 lg:gap-8">
-            <div className="lg:col-span-3 xl:col-span-3">
+      <section className="relative border-b border-border/25" aria-label="Series overview">
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/25 via-background/55 to-background"
+          aria-hidden
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+        <div className="container relative mx-auto px-4 py-5 sm:py-6 lg:py-7">
+          <div className="flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-start lg:gap-8 xl:gap-10">
+            <div className="mx-auto shrink-0 lg:mx-0 lg:w-[200px] xl:w-[220px]">
               <SeriesDetailCover
                 seriesId={series.id}
                 title={series.title}
@@ -36,49 +42,54 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
                 status={series.status}
                 ageRating={series.age_rating}
                 size="md"
+                className="mx-auto max-w-[180px] sm:max-w-[200px] lg:mx-0 lg:max-w-none"
               />
             </div>
 
-            <div className="min-w-0 space-y-4 lg:col-span-9 xl:col-span-9">
+            <div className="min-w-0 flex-1 space-y-3 sm:space-y-4">
               <SeriesDetailTitleBlock
                 series={series}
                 chapterCount={chapters.length}
                 accessBadges={accessBadges}
               />
 
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
-                <div className="lg:col-span-7">
-                  <SeriesDetailReadingActions
-                    seriesId={series.id}
-                    seriesTitle={series.title}
-                    startChapter={startChapter}
-                    continueLabel={continueLabel}
-                    progressPercent={readingState.progressPercent}
-                    isInLibrary={readingState.isInLibrary}
-                    hasChapters={chapters.length > 0}
-                    accessBadges={accessBadges}
-                    onContinue={onContinue}
-                    onLibraryToggle={onLibraryToggle}
-                    onShare={onShare}
-                    variant="inline"
-                  />
-                </div>
-              </div>
+              <SeriesDetailReadingActions
+                seriesId={series.id}
+                seriesTitle={series.title}
+                startChapter={startChapter}
+                continueLabel={continueLabel}
+                progressPercent={readingState.progressPercent}
+                isInLibrary={readingState.isInLibrary}
+                hasChapters={chapters.length > 0}
+                accessBadges={accessBadges}
+                onContinue={onContinue}
+                onLibraryToggle={onLibraryToggle}
+                onShare={onShare}
+                variant="inline"
+              />
+
+              {series.description && (
+                <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-relaxed">
+                  {series.description.length > 320
+                    ? `${series.description.slice(0, 320).trim()}…`
+                    : series.description}
+                </p>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pb-24 lg:pb-8">
+      <div className="container mx-auto px-4 pb-24 pt-4 sm:pt-5 lg:pb-8">
         <SeriesDetailSections
           series={series}
           chapters={chapters}
           relatedSeries={relatedSeries}
           isDemo={isDemo}
           seriesIndex={seriesIndex}
-          showSynopsis
-          showMetaStats
-          denseChapters
+          showSynopsis={false}
+          showMetaStats={false}
+          compactRelated
         />
       </div>
 
