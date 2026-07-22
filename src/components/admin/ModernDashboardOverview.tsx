@@ -16,7 +16,8 @@ import {
   Settings,
   AlertCircle,
   CheckCircle,
-  ArrowRight
+  ArrowRight,
+  LayoutGrid
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -80,6 +81,7 @@ const statsCards = [
 const quickActions = [
   { title: "Upload Chapter", path: "/admin/upload", icon: Upload, color: "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20" },
   { title: "Manage Series", path: "/admin/series", icon: BookOpen, color: "bg-green-500/10 text-green-400 hover:bg-green-500/20" },
+  { title: "Customize Series Pages", path: "/admin/series-design", icon: LayoutGrid, color: "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20" },
   { title: "User Analytics", path: "/admin/user-analytics", icon: Users, color: "bg-purple-500/10 text-purple-400 hover:bg-purple-500/20" },
   { title: "Site Settings", path: "/admin/settings", icon: Settings, color: "bg-orange-500/10 text-orange-400 hover:bg-orange-500/20" },
 ];

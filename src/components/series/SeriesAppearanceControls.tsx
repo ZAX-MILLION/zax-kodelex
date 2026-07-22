@@ -31,6 +31,10 @@ interface SeriesAppearanceControlsProps {
   seriesTitle?: string;
   onChanged?: () => void;
   compact?: boolean;
+  /** Controlled mode for Series Design page draft. */
+  mode?: AppearanceMode;
+  onModeChange?: (mode: AppearanceMode) => void;
+  hideActions?: boolean;
 }
 
 /**
@@ -44,16 +48,22 @@ export function SeriesAppearanceControls({
   seriesTitle,
   onChanged,
   compact,
+  mode: controlledMode,
+  onModeChange,
+  hideActions,
 }: SeriesAppearanceControlsProps) {
   const isSeries = Boolean(seriesId);
+  const isControlled = controlledMode !== undefined && onModeChange !== undefined;
   const [useGlobal, setUseGlobal] = useState(() =>
     isSeries && seriesId ? !getSeriesAppearanceOverride(seriesId) : false
   );
-  const [mode, setMode] = useState<AppearanceMode>(() =>
+  const [internalMode, setInternalMode] = useState<AppearanceMode>(() =>
     isSeries && seriesId
       ? getSeriesAppearanceOverride(seriesId) || getGlobalAppearanceMode()
       : getGlobalAppearanceMode()
   );
+  const mode = isControlled ? controlledMode : internalMode;
+  const setMode = isControlled ? onModeChange : setInternalMode;
   const [notice, setNotice] = useState<string | null>(null);
 
   const previewResolved = useMemo(
@@ -162,15 +172,17 @@ export function SeriesAppearanceControls({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <Button type="button" className="min-h-11" onClick={save}>
-          Save appearance
-        </Button>
-        <Button type="button" variant="outline" className="min-h-11 gap-2" onClick={reset}>
-          <RotateCcw className="h-4 w-4" />
-          Reset
-        </Button>
-      </div>
+      {!hideActions && (
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" className="min-h-11" onClick={save}>
+            Save appearance
+          </Button>
+          <Button type="button" variant="outline" className="min-h-11 gap-2" onClick={reset}>
+            <RotateCcw className="h-4 w-4" />
+            Reset
+          </Button>
+        </div>
+      )}
       {notice && (
         <p className="text-sm text-muted-foreground" role="status">
           {notice}

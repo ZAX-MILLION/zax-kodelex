@@ -94,6 +94,10 @@ interface SeriesDetailsLayoutControlsProps {
   seriesTitle?: string;
   onChanged?: () => void;
   compact?: boolean;
+  /** Controlled layout (Series Design page draft — no per-field save). */
+  layout?: SeriesDetailsLayoutId;
+  onLayoutChange?: (layout: SeriesDetailsLayoutId) => void;
+  hideActions?: boolean;
 }
 
 export function SeriesDetailsLayoutControls({
@@ -101,14 +105,20 @@ export function SeriesDetailsLayoutControls({
   seriesTitle,
   onChanged,
   compact,
+  layout: controlledLayout,
+  onLayoutChange,
+  hideActions,
 }: SeriesDetailsLayoutControlsProps) {
   const isSeries = Boolean(seriesId);
+  const isControlled = controlledLayout !== undefined && onLayoutChange !== undefined;
   const resolved = resolveSeriesDetailsLayout(seriesId);
   const initial = isSeries
     ? getSeriesDetailsLayoutOverride(seriesId!) || SERIES_DETAILS_LAYOUT_DEFAULT
     : getGlobalSeriesDetailsLayout() || SERIES_DETAILS_LAYOUT_DEFAULT;
 
-  const [layout, setLayout] = useState<SeriesDetailsLayoutId>(initial);
+  const [internalLayout, setInternalLayout] = useState<SeriesDetailsLayoutId>(initial);
+  const layout = isControlled ? controlledLayout : internalLayout;
+  const setLayout = isControlled ? onLayoutChange : setInternalLayout;
   const [notice, setNotice] = useState<string | null>(null);
 
   const previewResolved = useMemo(
@@ -198,15 +208,17 @@ export function SeriesDetailsLayoutControls({
         })}
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <Button type="button" className="min-h-11" onClick={save}>
-          Save layout
-        </Button>
-        <Button type="button" variant="outline" className="min-h-11 gap-2" onClick={reset}>
-          <RotateCcw className="h-4 w-4" />
-          Reset
-        </Button>
-      </div>
+      {!hideActions && (
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" className="min-h-11" onClick={save}>
+            Save layout
+          </Button>
+          <Button type="button" variant="outline" className="min-h-11 gap-2" onClick={reset}>
+            <RotateCcw className="h-4 w-4" />
+            Reset
+          </Button>
+        </div>
+      )}
       {notice && (
         <p className="text-sm text-muted-foreground" role="status">
           {notice}

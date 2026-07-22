@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Shield,
   Users,
@@ -11,6 +12,7 @@ import {
   Settings,
   Ban,
   Check,
+  LayoutGrid,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -357,15 +359,21 @@ const DemoAdminSim = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Palette className="h-4 w-4" />
-              Manga details backgrounds
+              <LayoutGrid className="h-4 w-4" />
+              Series Design (simulated)
             </CardTitle>
             <CardDescription>
-              Session-only preview controls. Global default applies to all series unless a series override
-              or catalogue URL is set.
+              Session / localStorage only — zero Supabase requests. Same controls as production{' '}
+              <Link to="/admin/series-design" className="text-primary hover:underline">
+                Series Design
+              </Link>{' '}
+              (requires admin login on a real deployment).
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            <p className="text-xs rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-muted-foreground">
+              Simulated admin — changes stay in this browser only and never reach a backend.
+            </p>
             <SeriesDetailsLayoutControls
               compact
               onChanged={() => announce('Layout settings updated in demo state.')}

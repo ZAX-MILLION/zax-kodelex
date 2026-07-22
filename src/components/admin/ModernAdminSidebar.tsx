@@ -36,7 +36,8 @@ import {
   ChevronRight,
   Home,
   Menu,
-  X
+  X,
+  LayoutGrid
 } from "lucide-react";
 import {
   Sidebar,
@@ -131,6 +132,7 @@ const menuSections: MenuSection[] = [
     color: "text-red-400",
     items: [
       { title: "Site Settings", url: "/admin/settings", icon: Settings },
+      { title: "Series Design", url: "/admin/series-design", icon: LayoutGrid },
       { title: "Theme Manager", url: "/admin/themes", icon: Palette },
       { title: "Theme Customizer", url: "/admin/theme-customizer", icon: Palette },
       { title: "Footer Manager", url: "/admin/footer-manager", icon: Layers },

@@ -41,6 +41,12 @@ interface SeriesDetailsBackgroundControlsProps {
   coverImageUrl?: string | null;
   onChanged?: () => void;
   compact?: boolean;
+  /** Controlled draft mode (Series Design page). */
+  url?: string;
+  onUrlChange?: (url: string) => void;
+  theme?: SeriesDetailsBgTheme;
+  onThemeChange?: (theme: SeriesDetailsBgTheme) => void;
+  hideActions?: boolean;
 }
 
 function loadTheme(isSeries: boolean, seriesId?: string): SeriesDetailsBgTheme {
@@ -57,13 +63,27 @@ export function SeriesDetailsBackgroundControls({
   coverImageUrl,
   onChanged,
   compact,
+  url: controlledUrl,
+  onUrlChange,
+  theme: controlledTheme,
+  onThemeChange,
+  hideActions,
 }: SeriesDetailsBackgroundControlsProps) {
   const isSeries = Boolean(seriesId);
+  const isControlled =
+    controlledUrl !== undefined &&
+    onUrlChange !== undefined &&
+    controlledTheme !== undefined &&
+    onThemeChange !== undefined;
   const initial = isSeries
     ? getSeriesDetailsBackgroundOverride(seriesId!) || ''
     : getGlobalSeriesDetailsBackground() || '';
-  const [url, setUrl] = useState(initial);
-  const [theme, setTheme] = useState<SeriesDetailsBgTheme>(() => loadTheme(isSeries, seriesId));
+  const [internalUrl, setInternalUrl] = useState(initial);
+  const [internalTheme, setInternalTheme] = useState<SeriesDetailsBgTheme>(() => loadTheme(isSeries, seriesId));
+  const url = isControlled ? controlledUrl : internalUrl;
+  const setUrl = isControlled ? onUrlChange : setInternalUrl;
+  const theme = isControlled ? controlledTheme : internalTheme;
+  const setTheme = isControlled ? onThemeChange : setInternalTheme;
   const [notice, setNotice] = useState<string | null>(null);
 
   const preview = useMemo(() => {
@@ -143,7 +163,11 @@ export function SeriesDetailsBackgroundControls({
   };
 
   const updateTheme = <K extends keyof SeriesDetailsBgTheme>(key: K, value: SeriesDetailsBgTheme[K]) => {
-    setTheme((prev) => ({ ...prev, [key]: value }));
+    if (isControlled) {
+      onThemeChange({ ...theme, [key]: value });
+    } else {
+      setInternalTheme((prev) => ({ ...prev, [key]: value }));
+    }
   };
 
   return (
@@ -255,15 +279,17 @@ export function SeriesDetailsBackgroundControls({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <Button type="button" className="min-h-11" onClick={save}>
-          Save background
-        </Button>
-        <Button type="button" variant="outline" className="min-h-11 gap-2" onClick={reset}>
-          <RotateCcw className="h-4 w-4" />
-          Reset
-        </Button>
-      </div>
+      {!hideActions && (
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" className="min-h-11" onClick={save}>
+            Save background
+          </Button>
+          <Button type="button" variant="outline" className="min-h-11 gap-2" onClick={reset}>
+            <RotateCcw className="h-4 w-4" />
+            Reset
+          </Button>
+        </div>
+      )}
       {notice && (
         <p className="text-sm text-muted-foreground" role="status">
           {notice}
