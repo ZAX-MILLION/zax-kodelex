@@ -37,6 +37,7 @@ import { SiteSettings } from '@/components/admin/SiteSettings';
 import { SeriesDesignManager } from '@/components/admin/SeriesDesignManager';
 import { AppearanceManager } from '@/components/admin/AppearanceManager';
 import { BackgroundsManager } from '@/components/admin/BackgroundsManager';
+import { HomepageDesignManager } from '@/components/admin/HomepageDesignManager';
 import ThemeManager from '@/components/admin/ThemeManager';
 import { ThemeCustomizer } from '@/components/admin/ThemeCustomizer';
 import { FooterManager } from '@/components/admin/FooterManager';
@@ -95,6 +96,7 @@ const Admin = () => {
               <Route path="series-design" element={<SeriesDesignManager />} />
               <Route path="appearance" element={<AppearanceManager />} />
               <Route path="backgrounds" element={<BackgroundsManager />} />
+              <Route path="homepage-design" element={<HomepageDesignManager />} />
               <Route path="settings" element={<SiteSettings />} />
               <Route path="themes" element={<ThemeManager />} />
               <Route path="theme-customizer" element={<ThemeCustomizer />} />

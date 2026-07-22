@@ -71,6 +71,7 @@ const DemoPaidMemberSim = lazy(() => import('./pages/demo/DemoPaidMemberSim'));
 const DemoBuyerSim = lazy(() => import('./pages/demo/DemoBuyerSim'));
 const DemoRoleAlias = lazy(() => import('./pages/demo/DemoRoleAlias'));
 const DemoStylesCompare = lazy(() => import('./pages/demo/DemoStylesCompare'));
+const DemoHomeStyles = lazy(() => import('./pages/demo/DemoHomeStyles'));
 
 function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
   return (
@@ -134,6 +135,7 @@ function AppContent() {
               <Route path="/demo/admin/*" element={<AppShell><DemoAdminSim /></AppShell>} />
               <Route path="/demo/checkout" element={<AppShell><DemoCheckoutSim /></AppShell>} />
               <Route path="/demo/styles" element={<AppShell><DemoStylesCompare /></AppShell>} />
+              <Route path="/demo/home-styles" element={<AppShell><DemoHomeStyles /></AppShell>} />
               <Route path="/demo/:roleAlias" element={<AppShell><DemoRoleAlias /></AppShell>} />
               <Route path="/series" element={<AppShell><Series /></AppShell>} />
               <Route path="/series/:id" element={<AppShell><SeriesDetail /></AppShell>} />
