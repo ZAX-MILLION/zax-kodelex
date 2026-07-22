@@ -4,6 +4,8 @@ import { Star, Eye, BookOpen, Heart, Users, Globe, Calendar, Tag } from 'lucide-
 import ModernChapterGrid, { type SeriesChapterItem } from './ModernChapterGrid';
 import type { SeriesDetailViewModel } from './SeriesDetailHero';
 import { DemoSeriesCommentsPanel } from './DemoSeriesCommentsPanel';
+import { getChapterListVariant } from '@/features/series/seriesChapterVariant';
+import type { SeriesDetailsLayoutId } from '@/features/series/seriesDetailsLayout';
 import { cn } from '@/lib/utils';
 
 const SeriesReviews = lazy(() =>
@@ -64,6 +66,8 @@ export interface SeriesDetailSectionsProps {
   relatedSeries: DemoSeries[];
   isDemo: boolean;
   seriesIndex: number;
+  /** Drives per-layout chapter + comments presentation (Editorial/Cinematic/Catalogue/Compact). */
+  layoutId: SeriesDetailsLayoutId;
   showSynopsis?: boolean;
   showMetaStats?: boolean;
   denseChapters?: boolean;
@@ -235,6 +239,7 @@ export function SeriesDetailSections({
   relatedSeries,
   isDemo,
   seriesIndex,
+  layoutId,
   showSynopsis = true,
   showMetaStats = true,
   denseChapters = false,
@@ -243,12 +248,14 @@ export function SeriesDetailSections({
   commentsBeforeSecondary = false,
   deemphasizeSecondary = false,
 }: SeriesDetailSectionsProps) {
+  const presentationVariant = getChapterListVariant(layoutId);
+
   const chaptersSection = (
     <section id="series-chapters" aria-labelledby="chapters-section-heading">
       <h2 id="chapters-section-heading" className="sr-only">
         Chapters
       </h2>
-      <ModernChapterGrid chapters={chapters} seriesId={series.id} />
+      <ModernChapterGrid chapters={chapters} seriesId={series.id} variant={presentationVariant} />
     </section>
   );
 
@@ -295,7 +302,11 @@ export function SeriesDetailSections({
     <section id="series-comments" aria-labelledby="comments-section-heading">
       <Suspense fallback={<SectionSkeleton tall />}>
         {isDemo ? (
-          <DemoSeriesCommentsPanel seriesId={series.id} seriesTitle={series.title} />
+          <DemoSeriesCommentsPanel
+            seriesId={series.id}
+            seriesTitle={series.title}
+            variant={presentationVariant}
+          />
         ) : (
           <>
             <h2 id="comments-section-heading" className="mb-4 text-xl font-bold sm:text-2xl">

@@ -1,0 +1,174 @@
+{
+  "baseUrl": "http://127.0.0.1:50770",
+  "generatedAt": "2026-07-22T07:10:11.655Z",
+  "runs": [
+    {
+      "layout": "A",
+      "viewport": "390x844",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\editorial-dark-390.png"
+    },
+    {
+      "layout": "A",
+      "viewport": "768x1024",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "startReadingButtonWidths": [
+        157,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\editorial-dark-768.png"
+    },
+    {
+      "layout": "A",
+      "viewport": "1440x900",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "startReadingButtonWidths": [
+        157,
+        0
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\editorial-dark-1440.png"
+    },
+    {
+      "layout": "B",
+      "viewport": "390x844",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\cinematic-dark-390.png"
+    },
+    {
+      "layout": "B",
+      "viewport": "768x1024",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\cinematic-dark-768.png"
+    },
+    {
+      "layout": "B",
+      "viewport": "1440x900",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "startReadingButtonWidths": [
+        149,
+        0
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\cinematic-dark-1440.png"
+    },
+    {
+      "layout": "C",
+      "viewport": "390x844",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\compact-catalogue-dark-390.png"
+    },
+    {
+      "layout": "C",
+      "viewport": "768x1024",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\compact-catalogue-dark-768.png"
+    },
+    {
+      "layout": "C",
+      "viewport": "1440x900",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "startReadingButtonWidths": [
+        149,
+        0
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\compact-catalogue-dark-1440.png"
+    },
+    {
+      "layout": "D",
+      "viewport": "390x844",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\compact-list-dark-390.png"
+    },
+    {
+      "layout": "D",
+      "viewport": "768x1024",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "startReadingButtonWidths": [
+        149,
+        220
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\compact-list-dark-768.png"
+    },
+    {
+      "layout": "D",
+      "viewport": "1440x900",
+      "scheme": "dark",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "startReadingButtonWidths": [
+        149,
+        0
+      ],
+      "pageErrors": [],
+      "screenshot": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-differentiated\\compact-list-dark-1440.png"
+    }
+  ]
+}

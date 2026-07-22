@@ -19,8 +19,16 @@ interface SeriesDetailReadingActionsProps {
   variant: 'mobile-bar' | 'inline';
   /** Smaller buttons for information-dense layouts (Layout D — Compact List). */
   dense?: boolean;
+  /** Icon-only Library button instead of icon+label (Layout B floating panel, dense rows). */
+  iconOnlyLibrary?: boolean;
 }
 
+/**
+ * Compact, content-width action group — never a full-bleed bar on
+ * desktop/tablet. Primary action caps out around 190–220px; secondary
+ * actions are icon-first so this group stays a supporting element next to
+ * title/cover, not the loudest thing on the page.
+ */
 export function SeriesDetailReadingActions({
   seriesId,
   startChapter,
@@ -34,61 +42,71 @@ export function SeriesDetailReadingActions({
   onShare,
   variant,
   dense = false,
+  iconOnlyLibrary = false,
 }: SeriesDetailReadingActionsProps) {
-  const buttonSize = dense ? 'default' : 'lg';
+  const barHeight = dense ? 'h-9' : 'h-10 sm:h-11';
+
   const inner = (
     <>
-      {hasChapters && (
+      <div className="flex flex-wrap items-center gap-2">
+        {hasChapters && (
+          <Button
+            asChild
+            size="sm"
+            className={cn(
+              'w-auto shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-4 text-sm font-semibold',
+              barHeight,
+              dense ? 'max-w-[170px]' : 'max-w-[220px] sm:px-5'
+            )}
+          >
+            <Link to={`/reader/${seriesId}/${startChapter}`} onClick={onContinue}>
+              <Play className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
+              <span className="truncate">{continueLabel}</span>
+            </Link>
+          </Button>
+        )}
         <Button
-          asChild
-          size={buttonSize}
-          className={cn('w-full gap-2 rounded-xl text-sm sm:text-base', dense ? 'min-h-9' : 'min-h-11')}
+          type="button"
+          variant={isInLibrary ? 'secondary' : 'outline'}
+          size="sm"
+          onClick={onLibraryToggle}
+          className={cn(
+            'w-auto shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm font-medium',
+            barHeight,
+            iconOnlyLibrary && 'px-0'
+          )}
+          aria-label={isInLibrary ? 'Remove from library' : 'Add to library'}
         >
-          <Link to={`/reader/${seriesId}/${startChapter}`} onClick={onContinue}>
-            <Play className={dense ? 'h-4 w-4' : 'h-4 w-4 sm:h-5 sm:w-5'} />
-            {continueLabel}
-          </Link>
+          <Heart className={cn('h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4', isInLibrary && 'fill-current text-red-500')} />
+          {!iconOnlyLibrary && <span className="truncate">{isInLibrary ? 'In Library' : 'Add to Library'}</span>}
         </Button>
-      )}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={onShare}
+          aria-label="Share series"
+          className={cn('shrink-0 rounded-lg border border-border/40', dense ? 'h-9 w-9' : 'h-10 w-10 sm:h-11 sm:w-11')}
+        >
+          <Share2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+        </Button>
+      </div>
+
       {progressPercent > 0 && (
-        <div className="space-y-1">
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Reading progress</span>
+        <div className="max-w-[220px] space-y-1">
+          <div className="flex justify-between text-[11px] text-muted-foreground">
+            <span>Progress</span>
             <span>{progressPercent}%</span>
           </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-muted/50">
+          <div className="h-1 overflow-hidden rounded-full bg-muted/50">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all"
+              className="h-full rounded-full bg-primary transition-all"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
         </div>
       )}
-      <div className={cn('flex gap-2', dense ? 'flex-row' : 'flex-col')}>
-        <Button
-          onClick={onLibraryToggle}
-          size={buttonSize}
-          className={cn(
-            'w-full gap-2 rounded-xl text-sm font-semibold shadow-md transition-all sm:text-base',
-            dense ? 'min-h-9' : 'min-h-11',
-            isInLibrary
-              ? 'bg-gradient-to-r from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700'
-              : 'border border-primary/30 bg-primary text-primary-foreground hover:bg-primary/90'
-          )}
-        >
-          <Heart className={cn('h-4 w-4', !dense && 'sm:h-5 sm:w-5', isInLibrary && 'fill-current')} />
-          {isInLibrary ? 'In Library' : 'Add to Library'}
-        </Button>
-        <Button
-          variant="outline"
-          size={buttonSize}
-          className={cn('w-full gap-2 rounded-xl text-sm sm:text-base', dense ? 'min-h-9' : 'min-h-11')}
-          onClick={onShare}
-        >
-          <Share2 className="h-4 w-4" />
-          Share
-        </Button>
-      </div>
+
       {variant !== 'mobile-bar' && accessBadges.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {accessBadges.includes('free') && (
@@ -116,31 +134,33 @@ export function SeriesDetailReadingActions({
   if (variant === 'mobile-bar') {
     return (
       <div
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border/40 bg-background/95 p-3 backdrop-blur-xl lg:hidden"
-        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-border/40 bg-background/95 p-2.5 backdrop-blur-xl lg:hidden"
+        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
       >
-        <div className="mx-auto flex max-w-lg gap-2">
+        <div className="mx-auto flex max-w-lg items-center justify-center gap-2">
           {hasChapters && (
-            <Button asChild className="min-h-11 flex-1 gap-2 rounded-xl">
+            <Button asChild size="sm" className="h-10 w-auto max-w-[220px] flex-1 gap-1.5 rounded-lg px-4">
               <Link to={`/reader/${seriesId}/${startChapter}`} onClick={onContinue}>
-                <Play className="h-4 w-4" />
-                {continueLabel}
+                <Play className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{continueLabel}</span>
               </Link>
             </Button>
           )}
           <Button
-            variant="outline"
+            type="button"
+            variant={isInLibrary ? 'secondary' : 'outline'}
             size="icon"
-            className="min-h-11 min-w-11 shrink-0 rounded-xl"
+            className="h-10 w-10 shrink-0 rounded-lg"
             onClick={onLibraryToggle}
             aria-label={isInLibrary ? 'Remove from library' : 'Add to library'}
           >
             <Heart className={cn('h-4 w-4', isInLibrary && 'fill-current text-red-500')} />
           </Button>
           <Button
+            type="button"
             variant="outline"
             size="icon"
-            className="min-h-11 min-w-11 shrink-0 rounded-xl"
+            className="h-10 w-10 shrink-0 rounded-lg"
             onClick={onShare}
             aria-label="Share series"
           >
@@ -151,5 +171,5 @@ export function SeriesDetailReadingActions({
     );
   }
 
-  return <div className={cn('space-y-3', dense ? 'mt-3' : 'mt-4 sm:mt-6')}>{inner}</div>;
+  return <div className={cn('space-y-2.5', dense ? 'mt-2' : 'mt-3')}>{inner}</div>;
 }

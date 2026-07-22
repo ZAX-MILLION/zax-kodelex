@@ -14,13 +14,34 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { Heart, MessageCircle, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { ChapterListVariant } from '@/features/series/seriesChapterTypes';
 
 interface DemoSeriesCommentsPanelProps {
   seriesId: string;
   seriesTitle: string;
+  /** Adapts presentation to match the active series-details layout identity. */
+  variant?: ChapterListVariant;
 }
 
-export function DemoSeriesCommentsPanel({ seriesId, seriesTitle }: DemoSeriesCommentsPanelProps) {
+const PANEL_STYLES: Record<ChapterListVariant, string> = {
+  editorial: 'divide-y divide-border/15 rounded-none border-0 border-t border-border/20 bg-transparent p-0',
+  cinematic: 'rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-md sm:p-6',
+  catalogue: 'rounded-md border border-border/20 bg-card/50 p-3',
+  compact: 'rounded-md border border-border/10 bg-transparent p-2',
+};
+
+const COMMENT_CARD_STYLES: Record<ChapterListVariant, string> = {
+  editorial: 'border-0 border-b border-border/15 bg-transparent px-0 py-3 last:border-b-0 rounded-none backdrop-blur-none',
+  cinematic: 'rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm',
+  catalogue: 'rounded-md border border-border/15 bg-card/60 p-3',
+  compact: 'rounded-none border-0 border-b border-border/10 bg-transparent p-2 py-1.5 last:border-b-0',
+};
+
+export function DemoSeriesCommentsPanel({
+  seriesId,
+  seriesTitle,
+  variant = 'catalogue',
+}: DemoSeriesCommentsPanelProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -101,7 +122,7 @@ export function DemoSeriesCommentsPanel({ seriesId, seriesTitle }: DemoSeriesCom
         </div>
       </div>
 
-      <div className="rounded-xl border border-border/25 bg-card/50 p-4">
+      <div className={PANEL_STYLES[variant]}>
         <label htmlFor="series-comment" className="mb-2 flex items-center gap-2 text-sm font-medium">
           Join the discussion
         </label>
@@ -110,9 +131,10 @@ export function DemoSeriesCommentsPanel({ seriesId, seriesTitle }: DemoSeriesCom
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Share your thoughts (demo session only)…"
-          rows={3}
+          rows={variant === 'compact' ? 2 : 3}
+          className={variant === 'cinematic' ? 'bg-black/30' : undefined}
         />
-        <Button className="mt-3 min-h-11" onClick={submit} disabled={!content.trim()}>
+        <Button size={variant === 'compact' ? 'sm' : 'default'} className="mt-2.5 h-9 w-auto px-4" onClick={submit} disabled={!content.trim()}>
           Post comment
         </Button>
       </div>
@@ -139,14 +161,11 @@ export function DemoSeriesCommentsPanel({ seriesId, seriesTitle }: DemoSeriesCom
         </p>
       )}
 
-      <div className="space-y-3">
+      <div className={cn(variant === 'editorial' || variant === 'compact' ? '' : 'space-y-3')}>
         {!loading &&
           !error &&
           sorted.map((comment) => (
-            <article
-              key={comment.id}
-              className="rounded-xl border border-border/20 bg-card/60 p-4 backdrop-blur-sm"
-            >
+            <article key={comment.id} className={COMMENT_CARD_STYLES[variant]}>
               <div className="mb-1 flex items-center justify-between gap-2">
                 <span className="text-sm font-semibold">{comment.author}</span>
                 <span className="text-xs text-muted-foreground">

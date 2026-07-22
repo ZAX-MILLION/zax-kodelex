@@ -5,6 +5,12 @@ import { SeriesDetailReadingActions } from '../SeriesDetailReadingActions';
 import { SeriesDetailSections } from '../SeriesDetailSections';
 import type { SeriesDetailLayoutShellProps } from './types';
 
+/**
+ * Layout A — Editorial.
+ * Magazine-style masthead: cover beside title with strong type hierarchy,
+ * compact actions sit under the synopsis (not the loudest element on the
+ * page), restrained background. Chapters render as publication-style rows.
+ */
 export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps) {
   const {
     series,
@@ -12,6 +18,7 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
     relatedSeries,
     isDemo,
     seriesIndex,
+    layoutId,
     accessBadges,
     startChapter,
     continueLabel,
@@ -47,11 +54,23 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
             </div>
 
             <div className="min-w-0 flex-1 space-y-3 sm:space-y-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary/80">
+                {series.format || series.content_type || 'Series'}
+              </p>
+
               <SeriesDetailTitleBlock
                 series={series}
                 chapterCount={chapters.length}
                 accessBadges={accessBadges}
               />
+
+              {series.description && (
+                <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-relaxed">
+                  {series.description.length > 320
+                    ? `${series.description.slice(0, 320).trim()}…`
+                    : series.description}
+                </p>
+              )}
 
               <SeriesDetailReadingActions
                 seriesId={series.id}
@@ -67,14 +86,6 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
                 onShare={onShare}
                 variant="inline"
               />
-
-              {series.description && (
-                <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-relaxed">
-                  {series.description.length > 320
-                    ? `${series.description.slice(0, 320).trim()}…`
-                    : series.description}
-                </p>
-              )}
             </div>
           </div>
         </div>
@@ -87,6 +98,7 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
           relatedSeries={relatedSeries}
           isDemo={isDemo}
           seriesIndex={seriesIndex}
+          layoutId={layoutId}
           showSynopsis={false}
           showMetaStats={false}
           compactRelated
