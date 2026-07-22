@@ -131,7 +131,7 @@ function AppContent() {
               <Route path="/demo/paid-member" element={<AppShell><DemoPaidMemberSim /></AppShell>} />
               <Route path="/demo/buyer" element={<AppShell><DemoBuyerSim /></AppShell>} />
               <Route path="/demo/uploader" element={<AppShell><DemoUploaderSim /></AppShell>} />
-              <Route path="/demo/admin" element={<AppShell><DemoAdminSim /></AppShell>} />
+              <Route path="/demo/admin/*" element={<AppShell><DemoAdminSim /></AppShell>} />
               <Route path="/demo/checkout" element={<AppShell><DemoCheckoutSim /></AppShell>} />
               <Route path="/demo/styles" element={<AppShell><DemoStylesCompare /></AppShell>} />
               <Route path="/demo/:roleAlias" element={<AppShell><DemoRoleAlias /></AppShell>} />

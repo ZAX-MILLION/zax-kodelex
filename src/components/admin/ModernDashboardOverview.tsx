@@ -14,6 +14,7 @@ import {
   Sun,
   SwatchBook,
   Sparkles,
+  Upload,
   Users,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,13 +35,27 @@ interface RecentAction {
   created_at: string | null;
 }
 
+interface RecentComment {
+  id: string;
+  content: string;
+  created_at: string | null;
+  status?: string | null;
+}
+
+interface PendingUpload {
+  id: string;
+  file_name: string;
+  created_at: string | null;
+  upload_context?: string | null;
+}
+
 const quickActions = [
-  { title: 'Add series', path: '/admin/series', icon: BookOpen },
   { title: 'Manage series designs', path: '/admin/series-design', icon: LayoutGrid },
+  { title: 'Add series', path: '/admin/series', icon: BookOpen },
+  { title: 'Review comments', path: '/admin/comments', icon: MessageSquare },
   { title: 'Preview site', path: '/', icon: Sparkles, external: true },
   { title: 'Open demo style comparison', path: '/demo/styles', icon: SwatchBook, external: true },
-  { title: 'Manage comments', path: '/admin/comments', icon: MessageSquare },
-  { title: 'Open settings', path: '/admin/settings', icon: Settings },
+  { title: 'General settings', path: '/admin/settings', icon: Settings },
 ];
 
 function StatCard({
@@ -79,6 +94,10 @@ export const ModernDashboardOverview = () => {
   const [appearanceMode] = useState(() => getGlobalAppearanceMode());
   const [recentActions, setRecentActions] = useState<RecentAction[]>([]);
   const [activityError, setActivityError] = useState<string | null>(null);
+  const [recentComments, setRecentComments] = useState<RecentComment[]>([]);
+  const [commentsError, setCommentsError] = useState<string | null>(null);
+  const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
+  const [uploadsError, setUploadsError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!appConfig.hasSupabase) return;
@@ -96,6 +115,42 @@ export const ModernDashboardOverview = () => {
         }
         setRecentActions(data || []);
       });
+    supabase
+      .from('comments')
+      .select('id, content, created_at, status')
+      .order('created_at', { ascending: false })
+      .limit(5)
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          setCommentsError(error.message);
+          return;
+        }
+        setRecentComments(data || []);
+      });
+    supabase
+      .from('comments')
+      .select('id, content, created_at, status')
+      .eq('status', 'pending_review')
+      .order('created_at', { ascending: false })
+      .limit(5)
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          setUploadsError(error.message);
+          return;
+        }
+        if (data && data.length > 0) {
+          setPendingUploads(
+            data.map((row) => ({
+              id: row.id,
+              file_name: row.content.slice(0, 80),
+              created_at: row.created_at,
+              upload_context: 'comment review',
+            }))
+          );
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -105,7 +160,7 @@ export const ModernDashboardOverview = () => {
   const layoutMeta = SERIES_DETAILS_LAYOUT_META[globalDesign.layout];
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-[1400px] space-y-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
@@ -184,7 +239,7 @@ export const ModernDashboardOverview = () => {
             </p>
             <p className="text-muted-foreground">Site-wide light / dark / system preference.</p>
             <Button asChild variant="link" className="h-auto p-0 text-sm">
-              <Link to="/admin/series-design#appearance">Change appearance →</Link>
+              <Link to="/admin/appearance">Change appearance →</Link>
             </Button>
           </CardContent>
         </Card>
@@ -210,6 +265,84 @@ export const ModernDashboardOverview = () => {
         </Card>
       </div>
 
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Upload className="h-4 w-4 text-primary" aria-hidden />
+              Upload review
+            </CardTitle>
+            <CardDescription>Pending submissions that need a decision</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!appConfig.hasSupabase ? (
+              <p className="text-sm text-muted-foreground">
+                Connect Supabase to see pending uploads and comment reviews here.
+              </p>
+            ) : uploadsError ? (
+              <p className="text-sm text-destructive" role="alert">
+                Failed to load review queue: {uploadsError}
+              </p>
+            ) : pendingUploads.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nothing waiting for review right now.</p>
+            ) : (
+              <ul className="space-y-3">
+                {pendingUploads.map((item) => (
+                  <li key={item.id} className="rounded-lg bg-muted/30 p-3 text-sm">
+                    <p className="truncate font-medium text-foreground">{item.file_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {item.upload_context} ·{' '}
+                      {item.created_at ? new Date(item.created_at).toLocaleString() : 'Unknown time'}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Button asChild variant="link" className="mt-3 h-auto p-0 text-sm">
+              <Link to="/admin/uploads">Open upload review →</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <MessageSquare className="h-4 w-4 text-primary" aria-hidden />
+              Comments / moderation
+            </CardTitle>
+            <CardDescription>Latest reader comments across the site</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!appConfig.hasSupabase ? (
+              <p className="text-sm text-muted-foreground">
+                Connect Supabase to see recent comments and moderation flags here.
+              </p>
+            ) : commentsError ? (
+              <p className="text-sm text-destructive" role="alert">
+                Failed to load comments: {commentsError}
+              </p>
+            ) : recentComments.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No comments to show yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {recentComments.map((comment) => (
+                  <li key={comment.id} className="rounded-lg bg-muted/30 p-3 text-sm">
+                    <p className="line-clamp-2 text-foreground">{comment.content}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {comment.status === 'pending_review' ? 'Pending review · ' : ''}
+                      {comment.created_at ? new Date(comment.created_at).toLocaleString() : 'Unknown time'}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Button asChild variant="link" className="mt-3 h-auto p-0 text-sm">
+              <Link to="/admin/comments">Manage all comments →</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Quick actions</CardTitle>
@@ -219,19 +352,20 @@ export const ModernDashboardOverview = () => {
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
-              <Button
+              <Link
                 key={action.title}
-                asChild
-                variant="ghost"
-                className="h-auto flex-col gap-2 border border-border/60 p-4 hover:border-primary/40 hover:bg-primary/5"
+                to={action.path}
+                target={action.external ? '_blank' : undefined}
+                rel={action.external ? 'noopener noreferrer' : undefined}
+                className="flex min-h-[96px] flex-col items-start justify-between gap-2 rounded-xl bg-muted/40 p-4 transition-colors hover:bg-primary/10"
               >
-                <Link to={action.path} target={action.external ? '_blank' : undefined} rel={action.external ? 'noopener noreferrer' : undefined}>
-                  <Icon className="h-5 w-5 text-primary" aria-hidden />
-                  <span className="text-center text-xs font-medium leading-tight text-foreground">
-                    {action.title}
-                  </span>
-                </Link>
-              </Button>
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
+                <span className="text-sm font-medium leading-tight text-foreground">
+                  {action.title}
+                </span>
+              </Link>
             );
           })}
         </CardContent>

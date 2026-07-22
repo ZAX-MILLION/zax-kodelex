@@ -52,14 +52,25 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
               <div className="flex items-center gap-3">
                 <SidebarTrigger className="h-9 w-9 hover:bg-accent" aria-label="Toggle admin navigation" />
                 <div className="flex items-center gap-3">
-                  <Link to="/" className="rounded-lg p-2 hover:bg-accent" aria-label="Go to homepage">
-                    <Home className="h-5 w-5 text-muted-foreground hover:text-primary" />
+                  <Link
+                    to="/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-primary"
+                    aria-label="View site (opens in a new tab)"
+                  >
+                    <Home className="h-5 w-5" />
+                    <span className="hidden text-sm font-medium lg:inline">View site</span>
                   </Link>
                   <div>
                     <h1 className="text-lg font-bold text-foreground">Admin Dashboard</h1>
                     <p className="hidden text-xs text-muted-foreground sm:block">Zax Million management console</p>
                   </div>
                 </div>
+                <Badge variant="outline" className="hidden gap-1 border-emerald-500/40 text-emerald-500 sm:flex">
+                  <ShieldCheck className="h-3 w-3" aria-hidden />
+                  Real admin
+                </Badge>
                 {appConfig.isProduction ? (
                   <Badge variant="outline" className="hidden gap-1 border-emerald-500/40 text-emerald-500 sm:flex">
                     Production
@@ -91,16 +102,22 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
                 </Button>
 
                 <div className="flex items-center gap-2 border-l border-border pl-2 lg:pl-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-orange-500">
-                    <User className="h-4 w-4 text-white" aria-hidden />
-                  </div>
-                  <div className="hidden lg:block">
-                    <p className="flex items-center gap-1 text-sm font-medium text-foreground">
-                      {userProfile?.username || 'Admin'}
-                      <ShieldCheck className="h-3.5 w-3.5 text-primary" aria-hidden />
-                    </p>
-                    <p className="text-xs text-muted-foreground">Administrator</p>
-                  </div>
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 hover:bg-accent"
+                    aria-label="Open your admin profile"
+                  >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-orange-500">
+                      <User className="h-4 w-4 text-white" aria-hidden />
+                    </div>
+                    <div className="hidden lg:block">
+                      <p className="flex items-center gap-1 text-sm font-medium text-foreground">
+                        {userProfile?.username || 'Admin'}
+                        <ShieldCheck className="h-3.5 w-3.5 text-primary" aria-hidden />
+                      </p>
+                      <p className="text-xs text-muted-foreground">Administrator</p>
+                    </div>
+                  </Link>
                   <Button
                     variant="ghost"
                     size="sm"

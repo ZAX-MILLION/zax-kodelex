@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, ExternalLink, Laptop, LayoutGrid, Moon, Palette, RotateCcw, Save, Smartphone, Sun, Wallpaper } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertTriangle, Check, ExternalLink, Laptop, LayoutGrid, RotateCcw, Save, Smartphone } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -22,43 +22,48 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import { appConfig } from '@/config/env';
 import { supabase } from '@/integrations/supabase/client';
-import { SeriesDetailsLayoutControls } from '@/components/series/SeriesDetailsLayoutControls';
-import { SeriesAppearanceControls } from '@/components/series/SeriesAppearanceControls';
-import { SeriesDetailsBackgroundControls } from '@/components/series/SeriesDetailsBackgroundControls';
+import { SeriesLayoutThumbnail } from '@/components/series/SeriesLayoutThumbnail';
 import { SeriesDesignLivePreview } from './SeriesDesignLivePreview';
-import { SeriesDesignOverridePanel } from './SeriesDesignOverridePanel';
 import { getFeaturedDemoSeries } from '@/utils/demoLibraryData';
 import {
   getSamplePreviewSeriesId,
   readGlobalSeriesDesignDraft,
-  resetGlobalSeriesDesign,
   saveGlobalSeriesDesign,
   type GlobalSeriesDesignDraft,
 } from '@/features/series/seriesDesignAdmin';
 import {
   clearSeriesDetailsLayoutOverride,
+  getGlobalSeriesDetailsLayout,
   getSeriesDetailsLayoutOverride,
+  setGlobalSeriesDetailsLayout,
+  setSeriesDetailsLayoutOverride,
+  SERIES_DETAILS_LAYOUT_DEFAULT,
+  SERIES_DETAILS_LAYOUT_META,
+  type SeriesDetailsLayoutId,
 } from '@/features/series/seriesDetailsLayout';
-import { getSeriesAppearanceOverride, clearSeriesAppearanceOverride } from '@/features/appearance/appearanceMode';
-import { getSeriesDetailsBackgroundOverride, clearSeriesDetailsBackgroundOverride } from '@/features/series/seriesDetailsBackground';
+import {
+  canSyncSeriesDetailsOverrideToDb,
+  syncSeriesDetailsOverrideToDb,
+} from '@/features/series/seriesDetailsAdminSync';
+
+const LAYOUT_IDS: SeriesDetailsLayoutId[] = ['A', 'B', 'C', 'D'];
 
 interface SeriesOption {
   id: string;
   title: string;
 }
 
-function useSeriesOptions(): { options: SeriesOption[]; loading: boolean } {
+function useSeriesOptions(): { options: SeriesOption[] } {
   const [options, setOptions] = useState<SeriesOption[]>(() =>
     getFeaturedDemoSeries().map((s) => ({ id: s.id, title: s.title }))
   );
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!appConfig.hasSupabase) return;
     let cancelled = false;
-    setLoading(true);
     supabase
       .from('manga_meta')
       .select('id, title')
@@ -66,7 +71,6 @@ function useSeriesOptions(): { options: SeriesOption[]; loading: boolean } {
       .limit(200)
       .then(({ data, error }) => {
         if (cancelled) return;
-        setLoading(false);
         if (error || !data || data.length === 0) return;
         setOptions(data as SeriesOption[]);
       });
@@ -75,17 +79,15 @@ function useSeriesOptions(): { options: SeriesOption[]; loading: boolean } {
     };
   }, []);
 
-  return { options, loading };
+  return { options };
 }
 
 export function SeriesDesignManager() {
   const { toast } = useToast();
-  const location = useLocation();
   const [draft, setDraft] = useState<GlobalSeriesDesignDraft>(() => readGlobalSeriesDesignDraft());
   const [savedDraft, setSavedDraft] = useState<GlobalSeriesDesignDraft>(() => readGlobalSeriesDesignDraft());
   const [notice, setNotice] = useState<{ message: string; tone: 'success' | 'error' } | null>(null);
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
-  const [previewScheme, setPreviewScheme] = useState<'light' | 'dark'>(draft.appearance === 'light' ? 'light' : 'dark');
   const [previewViewport, setPreviewViewport] = useState<'desktop' | 'mobile'>('desktop');
 
   const { options: seriesOptions } = useSeriesOptions();
@@ -98,89 +100,104 @@ export function SeriesDesignManager() {
   }, [seriesOptions, selectedSeriesId]);
   const selectedSeries = seriesOptions.find((s) => s.id === selectedSeriesId);
   const [overrideTick, setOverrideTick] = useState(0);
+  const [seriesLayout, setSeriesLayout] = useState<SeriesDetailsLayoutId>(SERIES_DETAILS_LAYOUT_DEFAULT);
 
-  const hasAnyOverride = useMemo(() => {
+  useEffect(() => {
+    if (!selectedSeriesId) return;
+    const override = getSeriesDetailsLayoutOverride(selectedSeriesId);
+    setSeriesLayout(override || getGlobalSeriesDetailsLayout() || SERIES_DETAILS_LAYOUT_DEFAULT);
+  }, [selectedSeriesId, overrideTick]);
+
+  const hasLayoutOverride = useMemo(() => {
     if (!selectedSeriesId) return false;
-    return Boolean(
-      getSeriesDetailsLayoutOverride(selectedSeriesId) ||
-        getSeriesAppearanceOverride(selectedSeriesId) ||
-        getSeriesDetailsBackgroundOverride(selectedSeriesId)
-    );
+    return Boolean(getSeriesDetailsLayoutOverride(selectedSeriesId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSeriesId, overrideTick]);
 
-  // Deep-link support for /admin/series-design#appearance and #backgrounds
-  useEffect(() => {
-    if (!location.hash) return;
-    const id = location.hash.slice(1);
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [location.hash]);
+  const isDirty = useMemo(() => draft.layout !== savedDraft.layout, [draft, savedDraft]);
 
-  const isDirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(savedDraft), [draft, savedDraft]);
-
-  const updateDraft = useCallback((patch: Partial<GlobalSeriesDesignDraft>) => {
-    setDraft((prev) => {
-      const next = { ...prev, ...patch };
-      if (patch.appearance) setPreviewScheme(patch.appearance === 'light' ? 'light' : 'dark');
-      return next;
-    });
+  const updateLayout = useCallback((layout: SeriesDetailsLayoutId) => {
+    setDraft((prev) => ({ ...prev, layout }));
   }, []);
 
   const handleSave = () => {
     saveGlobalSeriesDesign(draft);
+    setGlobalSeriesDetailsLayout(draft.layout);
     setSavedDraft(draft);
-    setNotice({ message: 'Global series design saved for all series pages.', tone: 'success' });
-    toast({ title: 'Series design saved', description: 'Global defaults updated for all series pages.' });
+    setNotice({ message: 'Global layout saved for all series pages.', tone: 'success' });
+    toast({ title: 'Series design saved', description: 'Global default layout updated for all series pages.' });
   };
 
   const handleConfirmedReset = () => {
-    try {
-      const defaults = resetGlobalSeriesDesign();
-      setDraft(defaults);
-      setSavedDraft(defaults);
-      setPreviewScheme(defaults.appearance === 'light' ? 'light' : 'dark');
-      setNotice({ message: 'Reset to built-in defaults (Editorial layout, Dark appearance).', tone: 'success' });
-      toast({ title: 'Reset complete', description: 'Global series design restored to defaults.' });
-    } catch (error) {
-      setNotice({ message: 'Reset failed. Please try again.', tone: 'error' });
-    } finally {
-      setConfirmResetOpen(false);
-    }
+    setGlobalSeriesDetailsLayout(null);
+    const next = { ...draft, layout: SERIES_DETAILS_LAYOUT_DEFAULT };
+    setDraft(next);
+    setSavedDraft(next);
+    setNotice({ message: 'Reset to the built-in default (Layout A — Editorial).', tone: 'success' });
+    toast({ title: 'Reset complete', description: 'Global layout restored to Editorial (A).' });
+    setConfirmResetOpen(false);
   };
 
   const handlePreviewPage = () => {
     saveGlobalSeriesDesign(draft);
     setSavedDraft(draft);
     window.open(previewPath, '_blank', 'noopener,noreferrer');
-    setNotice({ message: 'Draft applied and saved so the preview tab matches your choices.', tone: 'success' });
+    setNotice({ message: 'Draft applied and saved so the preview tab matches your choice.', tone: 'success' });
   };
 
-  const handleResetSeriesOverrides = () => {
+  const saveSeriesLayout = () => {
+    if (!selectedSeriesId) return;
+    setSeriesDetailsLayoutOverride(selectedSeriesId, seriesLayout);
+    setOverrideTick((n) => n + 1);
+    toast({ title: 'Layout saved', description: `${selectedSeries?.title || 'This series'} now uses ${SERIES_DETAILS_LAYOUT_META[seriesLayout].label}.` });
+    if (canSyncSeriesDetailsOverrideToDb(selectedSeriesId)) {
+      void syncSeriesDetailsOverrideToDb(selectedSeriesId, { details_layout_override: seriesLayout });
+    }
+  };
+
+  const resetSeriesLayout = () => {
     if (!selectedSeriesId) return;
     clearSeriesDetailsLayoutOverride(selectedSeriesId);
-    clearSeriesAppearanceOverride(selectedSeriesId);
-    clearSeriesDetailsBackgroundOverride(selectedSeriesId);
     setOverrideTick((n) => n + 1);
     toast({
-      title: 'Overrides cleared',
-      description: `${selectedSeries?.title || 'This series'} now follows the global defaults.`,
+      title: 'Override cleared',
+      description: `${selectedSeries?.title || 'This series'} now follows the global layout.`,
     });
+    if (canSyncSeriesDetailsOverrideToDb(selectedSeriesId)) {
+      void syncSeriesDetailsOverrideToDb(selectedSeriesId, { details_layout_override: null });
+    }
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold text-foreground">
-          <LayoutGrid className="h-6 w-6 text-primary" />
-          Series Design
-        </h1>
-        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Set the default layout, appearance, and background used by every series details page,
-          preview changes live, and override any individual series.
-        </p>
+    <div className="mx-auto w-full max-w-[1400px] space-y-8">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-foreground sm:text-3xl">
+            <LayoutGrid className="h-6 w-6 text-primary" />
+            Series Design
+          </h1>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            Choose the default layout used by every series details page, preview it live, and
+            override any individual series. Looking for appearance or backgrounds?{' '}
+            <Link to="/admin/appearance" className="text-primary underline">
+              Appearance
+            </Link>{' '}
+            ·{' '}
+            <Link to="/admin/backgrounds" className="text-primary underline">
+              Backgrounds
+            </Link>
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          {isDirty ? (
+            <span className="flex items-center gap-1.5 whitespace-nowrap text-amber-500">
+              <AlertTriangle className="h-4 w-4" aria-hidden />
+              Unsaved changes
+            </span>
+          ) : (
+            <span className="whitespace-nowrap text-muted-foreground">All changes saved</span>
+          )}
+        </div>
       </div>
 
       {notice && (
@@ -196,72 +213,58 @@ export function SeriesDesignManager() {
         </p>
       )}
 
-      {/* ---- Global defaults ---- */}
-      <section id="global-defaults" className="space-y-6" aria-labelledby="global-defaults-heading">
+      {/* ---- Global default layout ---- */}
+      <section className="space-y-4" aria-labelledby="global-layout-heading">
         <div>
-          <h2 id="global-defaults-heading" className="text-lg font-semibold text-foreground">
-            Global defaults
+          <h2 id="global-layout-heading" className="text-lg font-semibold text-foreground">
+            Global default layout
           </h2>
           <p className="text-sm text-muted-foreground">
-            Applied to every series page unless a series has its own override below.
+            Applied to every series page unless a series below has its own override.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-foreground">Layout</CardTitle>
-              <CardDescription>A Editorial · B Cinematic · C Compact · D Compact List</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SeriesDetailsLayoutControls
-                layout={draft.layout}
-                onLayoutChange={(layout) => updateDraft({ layout })}
-                hideActions
-              />
-            </CardContent>
-          </Card>
-
-          <Card id="appearance">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <Palette className="h-4 w-4" />
-                Appearance
-              </CardTitle>
-              <CardDescription>Light, Dark, or System for all series pages</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SeriesAppearanceControls
-                mode={draft.appearance}
-                onModeChange={(appearance) => updateDraft({ appearance })}
-                hideActions
-              />
-            </CardContent>
-          </Card>
-
-          <Card id="backgrounds" className="xl:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <Wallpaper className="h-4 w-4" />
-                Background
-              </CardTitle>
-              <CardDescription>Global default image, overlay darkness, blur, and accent tint</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SeriesDetailsBackgroundControls
-                url={draft.backgroundUrl}
-                theme={draft.backgroundTheme}
-                onUrlChange={(backgroundUrl) => updateDraft({ backgroundUrl })}
-                onThemeChange={(backgroundTheme) => updateDraft({ backgroundTheme })}
-                hideActions
-              />
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {LAYOUT_IDS.map((id) => {
+            const meta = SERIES_DETAILS_LAYOUT_META[id];
+            const selected = draft.layout === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => updateLayout(id)}
+                aria-pressed={selected}
+                className={cn(
+                  'flex flex-col gap-3 rounded-2xl border-2 p-5 text-left transition-all',
+                  selected
+                    ? 'border-primary bg-primary/5 shadow-sm'
+                    : 'border-border/50 bg-card hover:border-primary/30 hover:bg-accent/30'
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
+                    {id}
+                  </span>
+                  {selected && (
+                    <Badge className="gap-1 bg-primary text-primary-foreground">
+                      <Check className="h-3 w-3" />
+                      Selected
+                    </Badge>
+                  )}
+                </div>
+                <SeriesLayoutThumbnail layoutId={id} selected={selected} />
+                <div>
+                  <p className="text-base font-semibold text-foreground">{meta.label}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{meta.description}</p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </section>
 
       {/* ---- Preview ---- */}
-      <section id="preview" className="space-y-4" aria-labelledby="preview-heading">
+      <section className="space-y-4" aria-labelledby="preview-heading">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 id="preview-heading" className="text-lg font-semibold text-foreground">
@@ -274,68 +277,40 @@ export function SeriesDesignManager() {
               </Link>
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1 rounded-lg border border-border/60 p-1">
-              <Button
-                type="button"
-                size="sm"
-                variant={previewScheme === 'light' ? 'default' : 'ghost'}
-                onClick={() => setPreviewScheme('light')}
-                aria-pressed={previewScheme === 'light'}
-                aria-label="Preview in light mode"
-              >
-                <Sun className="h-4 w-4" />
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant={previewScheme === 'dark' ? 'default' : 'ghost'}
-                onClick={() => setPreviewScheme('dark')}
-                aria-pressed={previewScheme === 'dark'}
-                aria-label="Preview in dark mode"
-              >
-                <Moon className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="flex items-center gap-1 rounded-lg border border-border/60 p-1">
-              <Button
-                type="button"
-                size="sm"
-                variant={previewViewport === 'desktop' ? 'default' : 'ghost'}
-                onClick={() => setPreviewViewport('desktop')}
-                aria-pressed={previewViewport === 'desktop'}
-                aria-label="Preview desktop width"
-              >
-                <Laptop className="h-4 w-4" />
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant={previewViewport === 'mobile' ? 'default' : 'ghost'}
-                onClick={() => setPreviewViewport('mobile')}
-                aria-pressed={previewViewport === 'mobile'}
-                aria-label="Preview mobile width"
-              >
-                <Smartphone className="h-4 w-4" />
-              </Button>
-            </div>
+          <div className="flex items-center gap-1 rounded-lg border border-border/60 p-1">
+            <Button
+              type="button"
+              size="sm"
+              variant={previewViewport === 'desktop' ? 'default' : 'ghost'}
+              onClick={() => setPreviewViewport('desktop')}
+              aria-pressed={previewViewport === 'desktop'}
+              aria-label="Preview desktop width"
+            >
+              <Laptop className="h-4 w-4" />
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={previewViewport === 'mobile' ? 'default' : 'ghost'}
+              onClick={() => setPreviewViewport('mobile')}
+              aria-pressed={previewViewport === 'mobile'}
+              aria-label="Preview mobile width"
+            >
+              <Smartphone className="h-4 w-4" />
+            </Button>
           </div>
         </div>
-        <SeriesDesignLivePreview
-          draft={{ ...draft, appearance: previewScheme }}
-          viewport={previewViewport}
-        />
+        <SeriesDesignLivePreview draft={draft} viewport={previewViewport} />
       </section>
 
-      {/* ---- Per-series overrides ---- */}
-      <section id="per-series-overrides" className="space-y-4" aria-labelledby="overrides-heading">
+      {/* ---- Per-series layout override ---- */}
+      <section className="space-y-4" aria-labelledby="per-series-heading">
         <div>
-          <h2 id="overrides-heading" className="text-lg font-semibold text-foreground">
-            Per-series overrides
+          <h2 id="per-series-heading" className="text-lg font-semibold text-foreground">
+            Per-series layout override
           </h2>
           <p className="text-sm text-muted-foreground">
-            Pick a series to override its layout, appearance, or background independently of the
-            global defaults above.
+            Pick one series to give it its own layout, independent of the global default above.
           </p>
         </div>
 
@@ -354,13 +329,13 @@ export function SeriesDesignManager() {
                   ))}
                 </SelectContent>
               </Select>
-              {hasAnyOverride ? (
+              {hasLayoutOverride ? (
                 <Badge variant="outline" className="border-primary/40 text-primary">
-                  Has overrides
+                  Has override
                 </Badge>
               ) : (
                 <Badge variant="outline" className="text-muted-foreground">
-                  Using global defaults
+                  Using global default
                 </Badge>
               )}
             </div>
@@ -369,28 +344,46 @@ export function SeriesDesignManager() {
               variant="outline"
               size="sm"
               className="gap-2"
-              disabled={!hasAnyOverride}
-              onClick={handleResetSeriesOverrides}
+              disabled={!hasLayoutOverride}
+              onClick={resetSeriesLayout}
             >
               <RotateCcw className="h-4 w-4" />
               Reset this series
             </Button>
           </CardHeader>
-          <CardContent>
-            {selectedSeriesId && (
-              <SeriesDesignOverridePanel
-                key={selectedSeriesId}
-                seriesId={selectedSeriesId}
-                seriesTitle={selectedSeries?.title || 'Selected series'}
-              />
-            )}
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {LAYOUT_IDS.map((id) => {
+                const meta = SERIES_DETAILS_LAYOUT_META[id];
+                const selected = seriesLayout === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setSeriesLayout(id)}
+                    aria-pressed={selected}
+                    className={cn(
+                      'flex flex-col gap-2 rounded-xl border p-3 text-left transition-colors',
+                      selected ? 'border-primary bg-primary/5' : 'border-border/40 bg-card/50 hover:border-primary/30'
+                    )}
+                  >
+                    <SeriesLayoutThumbnail layoutId={id} selected={selected} />
+                    <p className="text-xs font-semibold">{meta.label}</p>
+                  </button>
+                );
+              })}
+            </div>
+            <Button type="button" className="min-h-11" onClick={saveSeriesLayout}>
+              <Save className="mr-2 h-4 w-4" />
+              Save layout for {selectedSeries?.title || 'this series'}
+            </Button>
           </CardContent>
         </Card>
       </section>
 
       {/* ---- Sticky actions ---- */}
       <div className="sticky bottom-0 z-30 -mx-4 -mb-6 border-t border-border bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 lg:-mx-6">
-        <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-6">
           <div className="flex items-center gap-2 text-sm">
             {isDirty ? (
               <span className="flex items-center gap-1.5 text-amber-500">
@@ -418,20 +411,20 @@ export function SeriesDesignManager() {
                 onClick={() => setConfirmResetOpen(true)}
               >
                 <RotateCcw className="h-4 w-4" />
-                Reset section
+                Reset to default
               </Button>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Reset global series design?</AlertDialogTitle>
+                  <AlertDialogTitle>Reset global layout?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This restores the built-in defaults (Editorial layout, Dark appearance, no
-                    custom background) for every series page that doesn't already have its own
-                    override. This can't be undone automatically.
+                    This restores the built-in default (Layout A — Editorial) for every series page
+                    that doesn&apos;t already have its own override. This can&apos;t be undone
+                    automatically.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleConfirmedReset}>Reset to defaults</AlertDialogAction>
+                  <AlertDialogAction onClick={handleConfirmedReset}>Reset to default</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

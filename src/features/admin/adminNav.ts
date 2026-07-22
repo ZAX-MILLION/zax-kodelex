@@ -3,7 +3,6 @@ import {
   BadgeCheck,
   BookOpen,
   Coins,
-  ExternalLink,
   FileText,
   Gauge,
   Globe2,
@@ -33,8 +32,6 @@ export interface AdminNavItem {
   url?: string;
   icon: LucideIcon;
   status: AdminNavItemStatus;
-  /** Marks this item as a same-page anchor rather than a distinct screen. */
-  isAnchor?: boolean;
   /** Marks this item as triggering an action (e.g. Logout) instead of navigating. */
   action?: 'logout';
   description?: string;
@@ -80,18 +77,16 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       {
         id: 'appearance',
         title: 'Appearance',
-        url: '/admin/series-design#appearance',
+        url: '/admin/appearance',
         icon: Palette,
         status: 'active',
-        isAnchor: true,
       },
       {
         id: 'backgrounds',
         title: 'Backgrounds',
-        url: '/admin/series-design#backgrounds',
+        url: '/admin/backgrounds',
         icon: Wallpaper,
         status: 'active',
-        isAnchor: true,
       },
       { id: 'reader-settings', title: 'Reader Settings', icon: Sliders, status: 'coming-soon' },
     ],
@@ -135,8 +130,8 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     id: 'account',
     label: 'Account',
     items: [
-      { id: 'view-site', title: 'View Site', url: '/', icon: ExternalLink, status: 'active' },
-      { id: 'admin-profile', title: 'Admin Profile', url: '/profile', icon: UserCog, status: 'active' },
+      // View site and Admin profile live in the header (top-right); keeping
+      // them out of the sidebar too avoids duplicating the same links twice.
       { id: 'logout', title: 'Log out', icon: LogOut, status: 'active', action: 'logout' },
     ],
   },
