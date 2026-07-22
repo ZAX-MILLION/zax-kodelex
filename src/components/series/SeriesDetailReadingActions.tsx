@@ -16,7 +16,9 @@ interface SeriesDetailReadingActionsProps {
   onContinue: () => void;
   onLibraryToggle: () => void;
   onShare: () => void;
-  variant: 'sidebar' | 'mobile-bar' | 'inline';
+  variant: 'mobile-bar' | 'inline';
+  /** Smaller buttons for information-dense layouts (Layout D — Compact List). */
+  dense?: boolean;
 }
 
 export function SeriesDetailReadingActions({
@@ -31,13 +33,19 @@ export function SeriesDetailReadingActions({
   onLibraryToggle,
   onShare,
   variant,
+  dense = false,
 }: SeriesDetailReadingActionsProps) {
+  const buttonSize = dense ? 'default' : 'lg';
   const inner = (
     <>
       {hasChapters && (
-        <Button asChild size="lg" className="min-h-11 w-full gap-2 rounded-xl text-sm sm:text-base">
+        <Button
+          asChild
+          size={buttonSize}
+          className={cn('w-full gap-2 rounded-xl text-sm sm:text-base', dense ? 'min-h-9' : 'min-h-11')}
+        >
           <Link to={`/reader/${seriesId}/${startChapter}`} onClick={onContinue}>
-            <Play className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Play className={dense ? 'h-4 w-4' : 'h-4 w-4 sm:h-5 sm:w-5'} />
             {continueLabel}
           </Link>
         </Button>
@@ -56,28 +64,31 @@ export function SeriesDetailReadingActions({
           </div>
         </div>
       )}
-      <Button
-        onClick={onLibraryToggle}
-        size="lg"
-        className={cn(
-          'min-h-11 w-full gap-2 rounded-xl text-sm font-semibold shadow-md transition-all sm:text-base',
-          isInLibrary
-            ? 'bg-gradient-to-r from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700'
-            : 'border border-primary/30 bg-primary text-primary-foreground hover:bg-primary/90'
-        )}
-      >
-        <Heart className={cn('h-4 w-4 sm:h-5 sm:w-5', isInLibrary && 'fill-current')} />
-        {isInLibrary ? 'In Library' : 'Add to Library'}
-      </Button>
-      <Button
-        variant="outline"
-        size="lg"
-        className="min-h-11 w-full gap-2 rounded-xl text-sm sm:text-base"
-        onClick={onShare}
-      >
-        <Share2 className="h-4 w-4" />
-        Share
-      </Button>
+      <div className={cn('flex gap-2', dense ? 'flex-row' : 'flex-col')}>
+        <Button
+          onClick={onLibraryToggle}
+          size={buttonSize}
+          className={cn(
+            'w-full gap-2 rounded-xl text-sm font-semibold shadow-md transition-all sm:text-base',
+            dense ? 'min-h-9' : 'min-h-11',
+            isInLibrary
+              ? 'bg-gradient-to-r from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700'
+              : 'border border-primary/30 bg-primary text-primary-foreground hover:bg-primary/90'
+          )}
+        >
+          <Heart className={cn('h-4 w-4', !dense && 'sm:h-5 sm:w-5', isInLibrary && 'fill-current')} />
+          {isInLibrary ? 'In Library' : 'Add to Library'}
+        </Button>
+        <Button
+          variant="outline"
+          size={buttonSize}
+          className={cn('w-full gap-2 rounded-xl text-sm sm:text-base', dense ? 'min-h-9' : 'min-h-11')}
+          onClick={onShare}
+        >
+          <Share2 className="h-4 w-4" />
+          Share
+        </Button>
+      </div>
       {variant !== 'mobile-bar' && accessBadges.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {accessBadges.includes('free') && (
@@ -140,15 +151,5 @@ export function SeriesDetailReadingActions({
     );
   }
 
-  if (variant === 'sidebar') {
-    return (
-      <aside className="hidden lg:block">
-        <div className="sticky top-24 space-y-3 rounded-2xl border border-border/30 bg-card/80 p-4 backdrop-blur-xl shadow-lg">
-          {inner}
-        </div>
-      </aside>
-    );
-  }
-
-  return <div className="mt-4 space-y-3 sm:mt-6">{inner}</div>;
+  return <div className={cn('space-y-3', dense ? 'mt-3' : 'mt-4 sm:mt-6')}>{inner}</div>;
 }

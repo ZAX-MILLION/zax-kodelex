@@ -69,6 +69,14 @@ export interface SeriesDetailSectionsProps {
   denseChapters?: boolean;
   compactRelated?: boolean;
   className?: string;
+  /**
+   * When true, comments render immediately after chapters and reviews/related
+   * move below as a secondary, de-emphasized block (Layout D — Compact List).
+   * Default order keeps reviews → related → comments (Layouts A/B/C).
+   */
+  commentsBeforeSecondary?: boolean;
+  /** Visually de-emphasize the reviews + related block (smaller headings, muted). */
+  deemphasizeSecondary?: boolean;
 }
 
 export function SeriesDetailSynopsis({ description }: { description?: string | null }) {
@@ -208,11 +216,11 @@ export function SeriesDetailMetaPanel({
         <dl className="grid grid-cols-1 gap-2 rounded-xl border border-border/25 bg-card/60 p-4 backdrop-blur-sm sm:grid-cols-2 sm:gap-3">
           {detailRows.map(({ label, value, icon: Icon }) => (
             <div key={label} className="flex items-start gap-2 text-sm">
-              {Icon && <Icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />}
-              <div>
-                <dt className="text-xs text-muted-foreground">{label}</dt>
-                <dd className="font-medium">{value}</dd>
-              </div>
+              <dt className="flex items-center gap-2 text-xs text-muted-foreground">
+                {Icon && <Icon className="h-4 w-4 shrink-0" aria-hidden />}
+                {label}
+              </dt>
+              <dd className="font-medium">{value}</dd>
             </div>
           ))}
         </dl>
@@ -232,24 +240,29 @@ export function SeriesDetailSections({
   denseChapters = false,
   compactRelated = false,
   className,
+  commentsBeforeSecondary = false,
+  deemphasizeSecondary = false,
 }: SeriesDetailSectionsProps) {
-  return (
-    <div className={cn('space-y-5 sm:space-y-6', className)}>
-      {showSynopsis && <SeriesDetailSynopsis description={series.description} />}
+  const chaptersSection = (
+    <section id="series-chapters" aria-labelledby="chapters-section-heading">
+      <h2 id="chapters-section-heading" className="sr-only">
+        Chapters
+      </h2>
+      <ModernChapterGrid chapters={chapters} seriesId={series.id} />
+    </section>
+  );
 
-      {showMetaStats && (
-        <SeriesDetailMetaPanel series={series} chapterCount={chapters.length} compact={denseChapters} />
-      )}
-
-      <section id="series-chapters" aria-labelledby="chapters-section-heading">
-        <h2 id="chapters-section-heading" className="sr-only">
-          Chapters
-        </h2>
-        <ModernChapterGrid chapters={chapters} seriesId={series.id} />
-      </section>
-
+  const secondarySection = (
+    <div className={cn(deemphasizeSecondary && 'space-y-5 sm:space-y-6 opacity-90')}>
       <section id="series-reviews" aria-labelledby="reviews-section-heading">
-        <h2 id="reviews-section-heading" className="mb-4 text-xl font-bold sm:text-2xl">
+        <h2
+          id="reviews-section-heading"
+          className={
+            deemphasizeSecondary
+              ? 'mb-3 text-sm font-semibold text-muted-foreground sm:text-base'
+              : 'mb-4 text-xl font-bold sm:text-2xl'
+          }
+        >
           Reviews
         </h2>
         <Suspense fallback={<SectionSkeleton tall />}>
@@ -257,12 +270,12 @@ export function SeriesDetailSections({
         </Suspense>
       </section>
 
-      <section id="series-related" aria-labelledby="related-section-heading">
+      <section id="series-related" aria-labelledby="related-section-heading" className="mt-5 sm:mt-6">
         <h2
           id="related-section-heading"
           className={cn(
             'mb-3 font-semibold text-muted-foreground',
-            compactRelated ? 'text-sm sm:text-base' : 'mb-4 text-xl font-bold sm:text-2xl'
+            compactRelated || deemphasizeSecondary ? 'text-sm sm:text-base' : 'mb-4 text-xl font-bold sm:text-2xl'
           )}
         >
           Related Titles
@@ -271,27 +284,53 @@ export function SeriesDetailSections({
           <SeriesRelatedTitles
             series={relatedSeries}
             currentTitle={series.title}
-            compact={compactRelated}
+            compact={compactRelated || deemphasizeSecondary}
           />
         </Suspense>
       </section>
+    </div>
+  );
 
-      <section id="series-comments" aria-labelledby="comments-section-heading">
-        <Suspense fallback={<SectionSkeleton tall />}>
-          {isDemo ? (
-            <DemoSeriesCommentsPanel seriesId={series.id} seriesTitle={series.title} />
-          ) : (
-            <>
-              <h2 id="comments-section-heading" className="mb-4 text-xl font-bold sm:text-2xl">
-                Comments
-              </h2>
-              <div className="rounded-lg border border-border/25 bg-card/70 p-4 backdrop-blur-sm sm:p-6">
-                <SeriesComments seriesId={series.id} seriesTitle={series.title} />
-              </div>
-            </>
-          )}
-        </Suspense>
-      </section>
+  const commentsSection = (
+    <section id="series-comments" aria-labelledby="comments-section-heading">
+      <Suspense fallback={<SectionSkeleton tall />}>
+        {isDemo ? (
+          <DemoSeriesCommentsPanel seriesId={series.id} seriesTitle={series.title} />
+        ) : (
+          <>
+            <h2 id="comments-section-heading" className="mb-4 text-xl font-bold sm:text-2xl">
+              Comments
+            </h2>
+            <div className="rounded-lg border border-border/25 bg-card/70 p-4 backdrop-blur-sm sm:p-6">
+              <SeriesComments seriesId={series.id} seriesTitle={series.title} />
+            </div>
+          </>
+        )}
+      </Suspense>
+    </section>
+  );
+
+  return (
+    <div className={cn('space-y-5 sm:space-y-6', className)}>
+      {showSynopsis && <SeriesDetailSynopsis description={series.description} />}
+
+      {showMetaStats && (
+        <SeriesDetailMetaPanel series={series} chapterCount={chapters.length} compact={denseChapters} />
+      )}
+
+      {chaptersSection}
+
+      {commentsBeforeSecondary ? (
+        <>
+          {commentsSection}
+          <div className="border-t border-border/15 pt-5 sm:pt-6">{secondarySection}</div>
+        </>
+      ) : (
+        <>
+          {secondarySection}
+          {commentsSection}
+        </>
+      )}
     </div>
   );
 }

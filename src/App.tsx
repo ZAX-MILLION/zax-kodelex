@@ -14,6 +14,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Analytics from './components/Analytics';
 import PWAInstaller from './components/PWAInstaller';
 import { useColorScheme } from './hooks/useColorScheme';
+import { useAppearance } from './hooks/useAppearance';
 import { ThemeProvider } from './components/themes/ThemeProvider';
 import { EnhancedSEOHelmet } from './components/EnhancedSEOHelmet';
 import Home from './pages/Home';
@@ -80,6 +81,7 @@ function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
 
 function AppContent() {
   useColorScheme();
+  useAppearance();
 
   return (
     <InstallationGate>

@@ -111,7 +111,7 @@ function AccessBadge({
     );
   }
   return (
-    <Badge variant="default" className={cn(className, 'bg-green-600 hover:bg-green-700')}>
+    <Badge variant="default" className={cn(className, 'bg-green-700 text-white hover:bg-green-800')}>
       <CheckCircle className="h-3 w-3" />
       Free
     </Badge>
@@ -240,8 +240,8 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
             isLockedVisual
               ? 'border-2 border-destructive/30 bg-destructive text-destructive-foreground'
               : status === 'unlocked'
-                ? 'border-2 border-blue-500/30 bg-blue-500 text-white'
-                : 'border-2 border-green-600/30 bg-green-600 text-white'
+                ? 'border-2 border-blue-500/30 bg-blue-600 text-white'
+                : 'border-2 border-green-600/30 bg-green-700 text-white'
           )}
         >
           {chapter.chapter_number}
@@ -313,8 +313,8 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
             isLockedVisual
               ? 'bg-destructive/90 text-destructive-foreground'
               : status === 'unlocked'
-                ? 'bg-blue-500 text-white'
-                : 'bg-green-600 text-white'
+                ? 'bg-blue-600 text-white'
+                : 'bg-green-700 text-white'
           )}
         >
           {chapter.chapter_number}
@@ -375,8 +375,8 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
             isLockedVisual
               ? 'bg-destructive/90 text-destructive-foreground'
               : status === 'unlocked'
-                ? 'bg-blue-500 text-white'
-                : 'bg-green-600 text-white'
+                ? 'bg-blue-600 text-white'
+                : 'bg-green-700 text-white'
           )}
         >
           {chapter.chapter_number}
@@ -416,7 +416,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
             aria-label="Search chapters"
           />
           <Select value={accessFilter} onValueChange={(v) => setAccessFilter(v as AccessFilter)}>
-            <SelectTrigger className="min-h-10 w-full min-w-0 sm:w-32">
+            <SelectTrigger className="min-h-10 w-full min-w-0 sm:w-32" aria-label="Filter chapters by access">
               <SelectValue placeholder="Access" />
             </SelectTrigger>
             <SelectContent>
@@ -427,7 +427,7 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({ chapters = [], se
             </SelectContent>
           </Select>
           <Select value={readFilter} onValueChange={(v) => setReadFilter(v as ReadFilter)}>
-            <SelectTrigger className="min-h-10 w-full min-w-0 sm:w-32">
+            <SelectTrigger className="min-h-10 w-full min-w-0 sm:w-32" aria-label="Filter chapters by read status">
               <SelectValue placeholder="Read status" />
             </SelectTrigger>
             <SelectContent>

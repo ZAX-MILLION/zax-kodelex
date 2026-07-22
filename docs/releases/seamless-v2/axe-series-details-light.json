@@ -1,0 +1,30 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "generatedAt": "2026-07-22T00:42:47.016Z",
+  "results": [
+    {
+      "layout": "A",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "layout": "B",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "layout": "C",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "layout": "D",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    }
+  ]
+}

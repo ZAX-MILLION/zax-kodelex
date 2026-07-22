@@ -27,6 +27,13 @@ export const SERIES_DETAILS_LAYOUT_BG_PRESETS: Record<
     attachment: 'scroll',
     accentColor: null,
   },
+  D: {
+    position: 'top',
+    overlayDarkness: 93,
+    blur: 0,
+    attachment: 'scroll',
+    accentColor: null,
+  },
 };
 
 export function getLayoutBgPreset(layoutId: SeriesDetailsLayoutId): Partial<SeriesDetailsBgTheme> {

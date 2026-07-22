@@ -60,6 +60,23 @@ describe('resolveSeriesDetailsLayout', () => {
     expect(getGlobalSeriesDetailsLayout()).toBeNull();
     expect(resolveSeriesDetailsLayout()).toBe('A');
   });
+
+  it('accepts Layout D — Compact List as a valid override', () => {
+    setSeriesDetailsLayoutOverride('demo-series-1', 'D');
+    expect(resolveSeriesDetailsLayout('demo-series-1')).toBe('D');
+  });
+
+  it('database-persisted override wins over local override and global default', () => {
+    setGlobalSeriesDetailsLayout('B');
+    setSeriesDetailsLayoutOverride('demo-series-1', 'C');
+    expect(resolveSeriesDetailsLayout('demo-series-1', 'D')).toBe('D');
+  });
+
+  it('ignores an invalid database override and falls back through the normal chain', () => {
+    setGlobalSeriesDetailsLayout('B');
+    expect(resolveSeriesDetailsLayout('demo-series-1', 'not-a-layout')).toBe('B');
+    expect(resolveSeriesDetailsLayout('demo-series-1', null)).toBe('B');
+  });
 });
 
 describe('layout bg presets merge', () => {
@@ -95,5 +112,20 @@ describe('layout bg presets merge', () => {
     });
     expect(result.theme.blur).toBe(0);
     expect(result.theme.overlayDarkness).toBeGreaterThanOrEqual(88);
+  });
+
+  it('applies a non-fixed, high-readability preset for layout D (Compact List)', async () => {
+    const { resolveSeriesDetailsBackground } = await import(
+      '../../src/features/series/seriesDetailsBackground'
+    );
+    const { getLayoutBgPreset } = await import(
+      '../../src/features/series/seriesDetailsLayoutBgPresets'
+    );
+    const result = resolveSeriesDetailsBackground({
+      seriesId: 'demo-series-1',
+      layoutPreset: getLayoutBgPreset('D'),
+    });
+    expect(result.theme.attachment).toBe('scroll');
+    expect(result.theme.overlayDarkness).toBeGreaterThanOrEqual(90);
   });
 });

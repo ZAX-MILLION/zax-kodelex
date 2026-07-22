@@ -1456,12 +1456,20 @@ export type Database = {
         Row: {
           age_rating: string | null
           alt_names: string[] | null
+          appearance_override: string | null
           artist: string | null
           author: string | null
           content_type: string | null
           cover_image_url: string | null
           created_at: string
           description: string | null
+          details_background_url: string | null
+          details_bg_accent_color: string | null
+          details_bg_attachment: string | null
+          details_bg_blur: number | null
+          details_bg_overlay_darkness: number | null
+          details_bg_position: string | null
+          details_layout_override: string | null
           genres: string[] | null
           id: string
           language: string | null
@@ -1483,12 +1491,20 @@ export type Database = {
         Insert: {
           age_rating?: string | null
           alt_names?: string[] | null
+          appearance_override?: string | null
           artist?: string | null
           author?: string | null
           content_type?: string | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
+          details_background_url?: string | null
+          details_bg_accent_color?: string | null
+          details_bg_attachment?: string | null
+          details_bg_blur?: number | null
+          details_bg_overlay_darkness?: number | null
+          details_bg_position?: string | null
+          details_layout_override?: string | null
           genres?: string[] | null
           id?: string
           language?: string | null
@@ -1510,12 +1526,20 @@ export type Database = {
         Update: {
           age_rating?: string | null
           alt_names?: string[] | null
+          appearance_override?: string | null
           artist?: string | null
           author?: string | null
           content_type?: string | null
           cover_image_url?: string | null
           created_at?: string
           description?: string | null
+          details_background_url?: string | null
+          details_bg_accent_color?: string | null
+          details_bg_attachment?: string | null
+          details_bg_blur?: number | null
+          details_bg_overlay_darkness?: number | null
+          details_bg_position?: string | null
+          details_layout_override?: string | null
           genres?: string[] | null
           id?: string
           language?: string | null

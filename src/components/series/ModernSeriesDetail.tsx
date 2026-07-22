@@ -25,11 +25,32 @@ import {
   toggleSeriesLibrary,
 } from '@/features/series/seriesReadingProgress';
 import { resolveSeriesDetailsLayout } from '@/features/series/seriesDetailsLayout';
+import { useSeriesAppearanceOverride } from '@/hooks/useAppearance';
+import type { SeriesDetailsBgTheme } from '@/features/series/seriesDetailsBackground';
 import type { SeriesDetailViewModel } from './SeriesDetailHero';
 
 interface MangaSeries extends SeriesDetailViewModel {
   details_background_url?: string | null;
+  /** Database-persisted per-series overrides (staging/production only — see migration 20260722020000). */
+  details_layout_override?: string | null;
+  appearance_override?: string | null;
+  details_bg_position?: string | null;
+  details_bg_overlay_darkness?: number | null;
+  details_bg_blur?: number | null;
+  details_bg_accent_color?: string | null;
+  details_bg_attachment?: string | null;
   tags: string[];
+}
+
+function dbBgThemeOverride(series: MangaSeries | null): Partial<SeriesDetailsBgTheme> | null {
+  if (!series) return null;
+  const override: Partial<SeriesDetailsBgTheme> = {};
+  if (series.details_bg_position) override.position = series.details_bg_position as SeriesDetailsBgTheme['position'];
+  if (series.details_bg_overlay_darkness != null) override.overlayDarkness = series.details_bg_overlay_darkness;
+  if (series.details_bg_blur != null) override.blur = series.details_bg_blur;
+  if (series.details_bg_accent_color) override.accentColor = series.details_bg_accent_color;
+  if (series.details_bg_attachment) override.attachment = series.details_bg_attachment as SeriesDetailsBgTheme['attachment'];
+  return Object.keys(override).length > 0 ? override : null;
 }
 
 function mapDemoSeriesToDetail(demoSeries: DemoSeries): MangaSeries {
@@ -112,9 +133,11 @@ const ModernSeriesDetail = () => {
 
   const isDemo = id ? isDemoSeriesId(id) || shouldUseOfflineDemo() : shouldUseOfflineDemo();
   const layoutId = useMemo(
-    () => resolveSeriesDetailsLayout(series?.id || id),
-    [series?.id, id, layoutTick]
+    () => resolveSeriesDetailsLayout(series?.id || id, series?.details_layout_override),
+    [series?.id, id, series?.details_layout_override, layoutTick]
   );
+
+  useSeriesAppearanceOverride(series?.id, series?.appearance_override);
 
   useEffect(() => {
     const onStorage = () => setLayoutTick((n) => n + 1);
@@ -302,6 +325,7 @@ const ModernSeriesDetail = () => {
       seriesCustomUrl={series.details_background_url}
       coverImageUrl={coverForBg}
       layoutId={layoutId}
+      dbThemeOverride={dbBgThemeOverride(series)}
     >
       <EnhancedSEOHelmet
         title={`${series.title} — Read Online`}

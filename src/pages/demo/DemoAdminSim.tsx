@@ -21,6 +21,7 @@ import { EnhancedSEOHelmet } from '@/components/EnhancedSEOHelmet';
 import { DemoSimChrome } from '@/components/demo/DemoSimChrome';
 import { SeriesDetailsBackgroundControls } from '@/components/series/SeriesDetailsBackgroundControls';
 import { SeriesDetailsLayoutControls } from '@/components/series/SeriesDetailsLayoutControls';
+import { SeriesAppearanceControls } from '@/components/series/SeriesAppearanceControls';
 import { useDemoRole } from '@/contexts/DemoRoleContext';
 import { DEMO_SIMULATED_ACTION_MESSAGE } from '@/features/demo/demoAuthPolicy';
 import { getFeaturedDemoSeries } from '@/utils/demoLibraryData';
@@ -373,6 +374,13 @@ const DemoAdminSim = () => {
               compact
               onChanged={() => announce('Background settings updated in demo state.')}
             />
+            <div className="border-t border-border/40 pt-4">
+              <p className="mb-3 text-sm font-medium">Global appearance — Light / Dark / System</p>
+              <SeriesAppearanceControls
+                compact
+                onChanged={() => announce('Global appearance updated in demo state.')}
+              />
+            </div>
             <div className="space-y-4 border-t border-border/40 pt-4">
               <p className="text-sm font-medium">Per-series layout overrides (featured demo catalogue)</p>
               {featuredSeries.map((series) => (
@@ -405,6 +413,24 @@ const DemoAdminSim = () => {
                     coverImageUrl={series.cover_image_url}
                     onChanged={() =>
                       announce(`Background updated for ${series.title} in demo state.`)
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="space-y-4 border-t border-border/40 pt-4">
+              <p className="text-sm font-medium">Per-series appearance overrides (featured demo catalogue)</p>
+              {featuredSeries.map((series) => (
+                <div
+                  key={`appearance-${series.id}`}
+                  className="rounded-xl border border-border/50 bg-muted/10 p-3 sm:p-4"
+                >
+                  <SeriesAppearanceControls
+                    compact
+                    seriesId={series.id}
+                    seriesTitle={series.title}
+                    onChanged={() =>
+                      announce(`Appearance updated for ${series.title} in demo state.`)
                     }
                   />
                 </div>

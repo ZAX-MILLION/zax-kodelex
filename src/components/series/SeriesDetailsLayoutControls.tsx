@@ -14,8 +14,13 @@ import {
   setSeriesDetailsLayoutOverride,
   type SeriesDetailsLayoutId,
 } from '@/features/series/seriesDetailsLayout';
+import {
+  canSyncSeriesDetailsOverrideToDb,
+  syncSeriesDetailsOverrideToDb,
+  type SeriesDetailsDbSyncResult,
+} from '@/features/series/seriesDetailsAdminSync';
 
-const LAYOUT_IDS: SeriesDetailsLayoutId[] = ['A', 'B', 'C'];
+const LAYOUT_IDS: SeriesDetailsLayoutId[] = ['A', 'B', 'C', 'D'];
 
 function LayoutThumbnail({ layoutId, selected }: { layoutId: SeriesDetailsLayoutId; selected: boolean }) {
   return (
@@ -62,6 +67,24 @@ function LayoutThumbnail({ layoutId, selected }: { layoutId: SeriesDetailsLayout
           </div>
         </div>
       )}
+      {layoutId === 'D' && (
+        <div className="flex h-full flex-col gap-1 p-2">
+          <div className="flex gap-1">
+            <div className="h-7 w-5 shrink-0 rounded bg-primary/30" />
+            <div className="flex flex-1 flex-col gap-0.5">
+              <div className="h-1.5 w-full rounded bg-foreground/20" />
+              <div className="h-1 w-1/2 rounded bg-muted-foreground/25" />
+              <div className="h-1 w-3/4 rounded bg-primary/25" />
+            </div>
+          </div>
+          <div className="mt-0.5 space-y-0.5">
+            {[1, 2].map((i) => (
+              <div key={i} className="h-1.5 rounded bg-muted-foreground/15" />
+            ))}
+          </div>
+          <div className="mt-0.5 h-2.5 rounded bg-secondary/30" />
+        </div>
+      )}
     </div>
   );
 }
@@ -96,7 +119,18 @@ export function SeriesDetailsLayoutControls({
   const save = () => {
     if (isSeries && seriesId) {
       setSeriesDetailsLayoutOverride(seriesId, layout);
-      setNotice(`Layout saved for ${seriesTitle || 'this series'}.`);
+      setNotice(`Layout saved for ${seriesTitle || 'this series'} (local preview).`);
+      if (canSyncSeriesDetailsOverrideToDb(seriesId)) {
+        void syncSeriesDetailsOverrideToDb(seriesId, { details_layout_override: layout }).then(
+          (result: SeriesDetailsDbSyncResult) => {
+            if (result.ok) {
+              setNotice(`Layout saved for ${seriesTitle || 'this series'}.`);
+              return;
+            }
+            setNotice(`Layout saved locally, but database sync failed: ${result.error ?? 'unknown error'}`);
+          }
+        );
+      }
     } else {
       setGlobalSeriesDetailsLayout(layout);
       setNotice('Global manga details layout saved.');
@@ -109,6 +143,9 @@ export function SeriesDetailsLayoutControls({
       clearSeriesDetailsLayoutOverride(seriesId);
       setLayout(resolveSeriesDetailsLayout(seriesId));
       setNotice('Series layout override cleared.');
+      if (canSyncSeriesDetailsOverrideToDb(seriesId)) {
+        void syncSeriesDetailsOverrideToDb(seriesId, { details_layout_override: null });
+      }
     } else {
       setGlobalSeriesDetailsLayout(null);
       setLayout(SERIES_DETAILS_LAYOUT_DEFAULT);
@@ -131,8 +168,12 @@ export function SeriesDetailsLayoutControls({
         Priority: per-series override → global default → Layout A (Editorial). Currently active:{' '}
         <strong>{SERIES_DETAILS_LAYOUT_META[previewResolved].label}</strong>
       </p>
+      <p className="text-[11px] text-muted-foreground">
+        Note: the chapter grid&apos;s 1 / 2 / 3 column toggle is a reader view density preference, not a
+        page style — it applies inside every layout below.
+      </p>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {LAYOUT_IDS.map((id) => {
           const meta = SERIES_DETAILS_LAYOUT_META[id];
           const selected = layout === id;

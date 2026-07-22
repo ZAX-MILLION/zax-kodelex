@@ -1,0 +1,150 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "generatedAt": "2026-07-22T00:45:49.647Z",
+  "shots": [
+    {
+      "layout": "A",
+      "mode": "light",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-A-light-390.png"
+    },
+    {
+      "layout": "A",
+      "mode": "light",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-A-light-768.png"
+    },
+    {
+      "layout": "A",
+      "mode": "light",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-A-light-1440.png"
+    },
+    {
+      "layout": "A",
+      "mode": "dark",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-A-dark-390.png"
+    },
+    {
+      "layout": "A",
+      "mode": "dark",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-A-dark-768.png"
+    },
+    {
+      "layout": "A",
+      "mode": "dark",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-A-dark-1440.png"
+    },
+    {
+      "layout": "B",
+      "mode": "light",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-B-light-390.png"
+    },
+    {
+      "layout": "B",
+      "mode": "light",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-B-light-768.png"
+    },
+    {
+      "layout": "B",
+      "mode": "light",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-B-light-1440.png"
+    },
+    {
+      "layout": "B",
+      "mode": "dark",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-B-dark-390.png"
+    },
+    {
+      "layout": "B",
+      "mode": "dark",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-B-dark-768.png"
+    },
+    {
+      "layout": "B",
+      "mode": "dark",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-B-dark-1440.png"
+    },
+    {
+      "layout": "C",
+      "mode": "light",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-C-light-390.png"
+    },
+    {
+      "layout": "C",
+      "mode": "light",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-C-light-768.png"
+    },
+    {
+      "layout": "C",
+      "mode": "light",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-C-light-1440.png"
+    },
+    {
+      "layout": "C",
+      "mode": "dark",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-C-dark-390.png"
+    },
+    {
+      "layout": "C",
+      "mode": "dark",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-C-dark-768.png"
+    },
+    {
+      "layout": "C",
+      "mode": "dark",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-C-dark-1440.png"
+    },
+    {
+      "layout": "D",
+      "mode": "light",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-D-light-390.png"
+    },
+    {
+      "layout": "D",
+      "mode": "light",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-D-light-768.png"
+    },
+    {
+      "layout": "D",
+      "mode": "light",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-D-light-1440.png"
+    },
+    {
+      "layout": "D",
+      "mode": "dark",
+      "viewport": "390",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-D-dark-390.png"
+    },
+    {
+      "layout": "D",
+      "mode": "dark",
+      "viewport": "768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-D-dark-768.png"
+    },
+    {
+      "layout": "D",
+      "mode": "dark",
+      "viewport": "1440",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-details-four-themes\\layout-D-dark-1440.png"
+    }
+  ]
+}

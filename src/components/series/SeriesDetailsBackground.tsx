@@ -5,6 +5,7 @@ import {
   resolveSeriesDetailsBackground,
   SERIES_DETAILS_BG_FALLBACK,
   type SeriesDetailsBgSource,
+  type SeriesDetailsBgTheme,
 } from '@/features/series/seriesDetailsBackground';
 import { getLayoutBgPreset } from '@/features/series/seriesDetailsLayoutBgPresets';
 import type { SeriesDetailsLayoutId } from '@/features/series/seriesDetailsLayout';
@@ -16,6 +17,8 @@ interface SeriesDetailsBackgroundProps {
   globalDefaultUrl?: string | null;
   coverImageUrl?: string | null;
   layoutId?: SeriesDetailsLayoutId;
+  /** Per-series background theme persisted in the database (staging/production). */
+  dbThemeOverride?: Partial<SeriesDetailsBgTheme> | null;
   className?: string;
   children: React.ReactNode;
 }
@@ -30,6 +33,7 @@ export function SeriesDetailsBackground({
   globalDefaultUrl,
   coverImageUrl,
   layoutId = 'A',
+  dbThemeOverride,
   className,
   children,
 }: SeriesDetailsBackgroundProps) {
@@ -42,8 +46,9 @@ export function SeriesDetailsBackground({
         globalDefaultUrl,
         coverImageUrl,
         layoutPreset,
+        dbThemeOverride,
       }),
-    [seriesId, seriesCustomUrl, globalDefaultUrl, coverImageUrl, layoutId]
+    [seriesId, seriesCustomUrl, globalDefaultUrl, coverImageUrl, layoutId, dbThemeOverride]
   );
 
   const [src, setSrc] = useState(() => getOptimizedSeriesDetailsBgUrl(resolved.url));
@@ -57,10 +62,11 @@ export function SeriesDetailsBackground({
       globalDefaultUrl,
       coverImageUrl,
       layoutPreset: getLayoutBgPreset(layoutId),
+      dbThemeOverride,
     });
     setSrc(getOptimizedSeriesDetailsBgUrl(next.url));
     setSource(next.source);
-  }, [seriesId, seriesCustomUrl, globalDefaultUrl, coverImageUrl, layoutId]);
+  }, [seriesId, seriesCustomUrl, globalDefaultUrl, coverImageUrl, layoutId, dbThemeOverride]);
 
   const overlayAlpha = theme.overlayDarkness / 100;
   const accentStyle = theme.accentColor

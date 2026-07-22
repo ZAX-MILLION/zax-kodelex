@@ -88,12 +88,17 @@ export const useChildTheme = () => {
       setLoading(true);
       setError(null);
 
-      // Demo / no backend: apply built-in theme immediately (no network wait)
+      // Demo / no backend: track the built-in theme for any UI that reads it, but do NOT
+      // push its colors as inline styles on the document root. Inline styles win over every
+      // CSS rule (including the .light/.dark appearance classes from useAppearance), so
+      // applying this redundant fallback here would silently break Light/Dark/System on
+      // every page. The :root/.dark/.light tokens in index.css already provide a complete,
+      // correct default — this hook only needs to apply colors for a *real* admin-selected
+      // child theme (see the two `applyTheme(activeTheme)` calls below).
       if (isDemoModeEnabled() || !isSupabaseConfigured) {
         const fallbackTheme = getBuiltInDefaultTheme();
         setAvailableThemes([fallbackTheme]);
         setCurrentTheme(fallbackTheme);
-        applyTheme(fallbackTheme);
         return;
       }
 
@@ -127,10 +132,10 @@ export const useChildTheme = () => {
       console.error('Error loading themes:', err);
       setError(err instanceof Error ? err.message : 'Failed to load themes');
       
-      // Fallback to built-in default theme
+      // Fallback to built-in default theme — track it, but don't apply inline color
+      // styles (see comment above); index.css already covers this via useAppearance.
       const fallbackTheme = getBuiltInDefaultTheme();
       setCurrentTheme(fallbackTheme);
-      applyTheme(fallbackTheme);
     } finally {
       setLoading(false);
     }

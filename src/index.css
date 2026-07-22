@@ -81,42 +81,140 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /*
+   * Explicit .dark class — identical to the :root defaults above. :root stays dark
+   * so any markup rendered before the appearance class lands (or admin surfaces that
+   * don't opt into the toggle) keeps ZAX Million's established look with zero
+   * regression. When the Light/Dark/System control (Settings → Appearance, or the
+   * admin global/per-series appearance override) resolves to "dark", this class is
+   * added explicitly for determinism — matching the ThemeCustomizer classList pattern.
+   */
   .dark {
-    --background: 222.2 84% 4.9%;
+    --font-language: 'Noto Sans', sans-serif;
+    --background: 220 13% 18%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 220 13% 16%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 13% 15%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 220 13% 18%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 220 13% 22%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 13% 20%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 220 13% 24%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 222.2 84% 4.9%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 220 13% 26%;
+    --input: 220 13% 20%;
+    --ring: 25 95% 53%;
+
+    --manga-red: 0 72% 51%;
+    --manga-red-hover: 0 72% 46%;
+    --manga-gold: 25 95% 53%;
+    --manga-blue: 210 100% 60%;
+    --reader-bg: 220 13% 15%;
+    --chapter-progress: 142 76% 36%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(220 13% 18%), hsl(220 13% 22%));
+    --gradient-card: linear-gradient(145deg, hsl(220 13% 16%), hsl(220 13% 14%));
+    --gradient-accent: linear-gradient(90deg, hsl(25 95% 53%), hsl(33 100% 50%));
+    --gradient-surface: linear-gradient(180deg, hsl(220 13% 20%), hsl(220 13% 16%));
+
+    --shadow-manga: 0 8px 25px -5px hsl(0 0% 0% / 0.3);
+    --shadow-card: 0 4px 15px -2px hsl(0 0% 0% / 0.2);
+    --shadow-glow: 0 0 20px hsl(25 95% 53% / 0.15);
+    --shadow-hover: 0 6px 20px -3px hsl(0 0% 0% / 0.25);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 13% 15%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 25 95% 53%;
+    --sidebar-primary-foreground: 220 13% 18%;
+    --sidebar-accent: 220 13% 22%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 220 13% 26%;
+    --sidebar-ring: 25 95% 53%;
+  }
+
+  /*
+   * True light palette — not an inversion. Same warm-orange brand primary and manga
+   * accent hues as dark mode, remapped onto light surfaces with real contrast (card
+   * elevation via pure white vs. warm-tinted page background, darker readable text,
+   * visible borders/inputs). Every layout (A/B/C/D) and shared section (chapters,
+   * comments, reviews, related, badges, buttons, overlays) consumes these same
+   * semantic tokens, so no per-layout or per-page light stylesheet is needed.
+   */
+  .light {
+    --font-language: 'Noto Sans', sans-serif;
+    --background: 30 20% 97%;
+    --foreground: 222 25% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 25% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 25% 13%;
+
+    /* 34% lightness (not 46%) keeps white button/badge text and text-primary-on-tint genre
+       pills at >=4.5:1 contrast (WCAG AA) — verified via axe on all 4 layouts. */
+    --primary: 25 88% 34%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 25% 93%;
+    --secondary-foreground: 222 20% 16%;
+
+    --muted: 30 20% 92%;
+    --muted-foreground: 220 10% 40%;
+
+    --accent: 25 55% 91%;
+    --accent-foreground: 222 20% 16%;
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 15% 84%;
+    --input: 30 15% 89%;
+    --ring: 25 88% 34%;
+
+    --manga-red: 0 70% 45%;
+    --manga-red-hover: 0 70% 40%;
+    --manga-gold: 25 88% 34%;
+    --manga-blue: 210 85% 36%;
+    --reader-bg: 30 18% 95%;
+    --chapter-progress: 142 60% 30%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(30 20% 97%), hsl(30 25% 93%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(30 20% 96%));
+    --gradient-accent: linear-gradient(90deg, hsl(25 88% 34%), hsl(33 92% 33%));
+    --gradient-surface: linear-gradient(180deg, hsl(30 20% 95%), hsl(0 0% 100%));
+
+    --shadow-manga: 0 8px 25px -5px hsl(222 25% 20% / 0.14);
+    --shadow-card: 0 4px 15px -2px hsl(222 25% 20% / 0.08);
+    --shadow-glow: 0 0 20px hsl(25 88% 34% / 0.18);
+    --shadow-hover: 0 6px 20px -3px hsl(222 25% 20% / 0.1);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 20% 16%;
+    --sidebar-primary: 25 88% 34%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 30 20% 93%;
+    --sidebar-accent-foreground: 222 20% 16%;
+    --sidebar-border: 30 15% 86%;
+    --sidebar-ring: 25 88% 34%;
   }
 
   /* Admin Dashboard Theme Variants */

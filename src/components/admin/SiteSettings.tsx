@@ -22,6 +22,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SeriesDetailsBackgroundControls } from "@/components/series/SeriesDetailsBackgroundControls";
 import { SeriesDetailsLayoutControls } from "@/components/series/SeriesDetailsLayoutControls";
+import { SeriesAppearanceControls } from "@/components/series/SeriesAppearanceControls";
 
 interface SiteSettings {
   site_title: string;
@@ -566,6 +567,15 @@ export const SiteSettings = () => {
                   tools.
                 </p>
                 <SeriesDetailsLayoutControls compact />
+              </div>
+
+              <div className="rounded-xl border border-border/40 bg-muted/10 p-4 sm:p-5">
+                <h4 className="mb-1 text-sm font-semibold">Site appearance — Light / Dark / System</h4>
+                <p className="mb-4 text-xs text-muted-foreground">
+                  Global default for every public page and all four series-details layouts. Per-series
+                  overrides can be set in demo admin tools.
+                </p>
+                <SeriesAppearanceControls compact />
               </div>
 
               <div className="space-y-2">

@@ -17,6 +17,11 @@ const Compact = lazy(() =>
     default: m.SeriesDetailsLayoutCompact,
   }))
 );
+const CompactList = lazy(() =>
+  import('./SeriesDetailsLayoutCompactList').then((m) => ({
+    default: m.SeriesDetailsLayoutCompactList,
+  }))
+);
 
 function LayoutFallback() {
   return (
@@ -36,6 +41,7 @@ const SHELLS: Record<
   A: Editorial,
   B: Cinematic,
   C: Compact,
+  D: CompactList,
 };
 
 export function SeriesDetailsLayoutShell({

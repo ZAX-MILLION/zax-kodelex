@@ -3,7 +3,7 @@
  * Priority: per-series override → global default → Layout A (Editorial).
  */
 
-export type SeriesDetailsLayoutId = 'A' | 'B' | 'C';
+export type SeriesDetailsLayoutId = 'A' | 'B' | 'C' | 'D';
 
 export const SERIES_DETAILS_LAYOUT_DEFAULT: SeriesDetailsLayoutId = 'A';
 
@@ -23,12 +23,16 @@ export const SERIES_DETAILS_LAYOUT_META: Record<
     label: 'Layout C — Compact Catalogue',
     description: 'Small hero, chapters first, maximum information density.',
   },
+  D: {
+    label: 'Layout D — Compact List',
+    description: 'Cover beside info, chapters then comments, no hero — built for long catalogues.',
+  },
 };
 
 const GLOBAL_KEY = 'zax-series-details-layout-global';
 const OVERRIDES_KEY = 'zax-series-details-layout-overrides';
 
-const VALID: SeriesDetailsLayoutId[] = ['A', 'B', 'C'];
+const VALID: SeriesDetailsLayoutId[] = ['A', 'B', 'C', 'D'];
 
 function isLayoutId(value: unknown): value is SeriesDetailsLayoutId {
   return typeof value === 'string' && VALID.includes(value as SeriesDetailsLayoutId);
@@ -95,9 +99,14 @@ export function clearSeriesDetailsLayoutOverride(seriesId: string) {
 
 /**
  * Resolve layout for a series details page.
- * Priority: series override → global → A (Editorial).
+ * Priority: database-persisted series override (staging/production) → local preview
+ * series override (demo/admin preview) → global default → A (Editorial).
  */
-export function resolveSeriesDetailsLayout(seriesId?: string): SeriesDetailsLayoutId {
+export function resolveSeriesDetailsLayout(
+  seriesId?: string,
+  dbOverride?: string | null
+): SeriesDetailsLayoutId {
+  if (isLayoutId(dbOverride)) return dbOverride;
   if (seriesId) {
     const seriesOverride = getSeriesDetailsLayoutOverride(seriesId);
     if (seriesOverride) return seriesOverride;

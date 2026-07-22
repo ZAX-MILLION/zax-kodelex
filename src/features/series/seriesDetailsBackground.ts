@@ -168,17 +168,19 @@ export function clearSeriesDetailsBgThemeOverride(seriesId: string) {
 
 export function resolveSeriesDetailsBgTheme(
   seriesId?: string,
-  layoutPreset?: Partial<SeriesDetailsBgTheme> | null
+  layoutPreset?: Partial<SeriesDetailsBgTheme> | null,
+  dbThemeOverride?: Partial<SeriesDetailsBgTheme> | null
 ): SeriesDetailsBgTheme {
   const global = getGlobalSeriesDetailsBgTheme();
   if (!seriesId) {
-    return mergeTheme(DEFAULT_SERIES_DETAILS_BG_THEME, global, layoutPreset);
+    return mergeTheme(DEFAULT_SERIES_DETAILS_BG_THEME, global, layoutPreset, dbThemeOverride);
   }
   const seriesOverride = getSeriesDetailsBgThemeOverride(seriesId);
   return mergeTheme(
     DEFAULT_SERIES_DETAILS_BG_THEME,
     global,
     layoutPreset,
+    dbThemeOverride,
     seriesOverride
   );
 }
@@ -194,8 +196,14 @@ export function resolveSeriesDetailsBackground(options: {
   globalDefaultUrl?: string | null;
   coverImageUrl?: string | null;
   layoutPreset?: Partial<SeriesDetailsBgTheme> | null;
+  /** Per-series theme persisted in the database (staging/production). */
+  dbThemeOverride?: Partial<SeriesDetailsBgTheme> | null;
 }): ResolvedSeriesDetailsBackground {
-  const theme = resolveSeriesDetailsBgTheme(options.seriesId, options.layoutPreset);
+  const theme = resolveSeriesDetailsBgTheme(
+    options.seriesId,
+    options.layoutPreset,
+    options.dbThemeOverride
+  );
 
   const localOverride = getSeriesDetailsBackgroundOverride(options.seriesId);
   if (localOverride) {

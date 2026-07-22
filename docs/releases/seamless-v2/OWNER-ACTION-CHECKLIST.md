@@ -14,6 +14,18 @@
 - [ ] Confirm wallet RLS hardening migration is applied
 - [ ] Complete one sandbox coin purchase
 
+## Before enabling database-persisted series-details overrides (Layout D / four themes work)
+
+- [ ] Apply `supabase/migrations/20260722020000_series_details_appearance_overrides.sql` on
+      staging/production (adds nullable `manga_meta` columns — no data migration needed,
+      every existing series is compatible by default). See
+      `docs/releases/seamless-v2/SERIES-DETAILS-FOUR-THEMES.md` for full details.
+- [ ] Regenerate `src/integrations/supabase/types.ts` from the live schema once applied
+      (this PR hand-edited the types file to match the migration; running the Supabase CLI
+      codegen afterward keeps it authoritative).
+- [ ] Spot-check the admin "Site appearance" and per-series layout/appearance controls in
+      staging save correctly to the database (not just localStorage).
+
 ## Before live payments
 
 - [ ] Confirm PayPal Business can receive USD for digital goods
