@@ -57,7 +57,7 @@ import { CuratedReset10x10 } from '@/components/admin/CuratedReset10x10';
 
 const Admin = () => {
   return (
-    <AdminRoute>
+    <AdminRoute fallbackPath="/admin/login">
       <AdminDashboardProvider>
         <AdminLayout>
           <Suspense fallback={<LoadingFallback type="dashboard" />}>

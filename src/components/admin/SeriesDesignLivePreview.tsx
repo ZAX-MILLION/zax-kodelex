@@ -33,12 +33,14 @@ function mapChapters(series: DemoSeries, seriesId: string): SeriesChapterItem[] 
 interface SeriesDesignLivePreviewProps {
   draft: GlobalSeriesDesignDraft;
   className?: string;
+  /** Emulated viewport width — 'mobile' constrains the preview to a phone-sized column. */
+  viewport?: 'desktop' | 'mobile';
 }
 
 /**
  * Embedded live preview — renders draft layout/appearance/background without persisting.
  */
-export function SeriesDesignLivePreview({ draft, className }: SeriesDesignLivePreviewProps) {
+export function SeriesDesignLivePreview({ draft, className, viewport = 'desktop' }: SeriesDesignLivePreviewProps) {
   const sample = getFeaturedDemoSeries()[0];
   const seriesId = sample?.id || '00000000-0000-4000-a000-000000000001';
   const scheme = resolveEffectiveScheme(draft.appearance as AppearanceMode);
@@ -82,11 +84,13 @@ export function SeriesDesignLivePreview({ draft, className }: SeriesDesignLivePr
   return (
     <div
       className={cn(
-        'overflow-hidden rounded-xl border border-border/50 bg-background',
+        'overflow-hidden rounded-xl border border-border/50 bg-background transition-[max-width]',
+        viewport === 'mobile' ? 'mx-auto max-w-[390px]' : 'max-w-full',
         scheme,
         className
       )}
       data-series-design-preview
+      data-viewport={viewport}
     >
       <div className="max-h-[480px] overflow-y-auto pointer-events-none select-none">
         <SeriesDetailsBackground

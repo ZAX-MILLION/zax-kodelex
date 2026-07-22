@@ -1,6 +1,6 @@
 {
-  "baseUrl": "http://127.0.0.1:4173",
-  "generatedAt": "2026-07-22T00:45:49.703Z",
+  "baseUrl": "http://localhost:65258",
+  "generatedAt": "2026-07-22T05:13:59.819Z",
   "screenshots": [
     {
       "route": "/",

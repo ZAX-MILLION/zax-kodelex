@@ -31,6 +31,7 @@ const LoginRedirect = lazy(() => import('./pages/LoginRedirect'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Admin = lazy(() => import('./pages/Admin'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const Author = lazy(() => import('./pages/Author'));
 const Support = lazy(() => import('./pages/Support'));
 const Subscribe = lazy(() => import('./pages/Subscribe'));
@@ -69,6 +70,7 @@ const DemoMemberSim = lazy(() => import('./pages/demo/DemoMemberSim'));
 const DemoPaidMemberSim = lazy(() => import('./pages/demo/DemoPaidMemberSim'));
 const DemoBuyerSim = lazy(() => import('./pages/demo/DemoBuyerSim'));
 const DemoRoleAlias = lazy(() => import('./pages/demo/DemoRoleAlias'));
+const DemoStylesCompare = lazy(() => import('./pages/demo/DemoStylesCompare'));
 
 function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
   return (
@@ -114,6 +116,7 @@ function AppContent() {
               <Route path="/reader/:chapterId" element={<AppShell><Reader /></AppShell>} />
               <Route path="/reader/:seriesId/:chapterNumber" element={<AppShell><Reader /></AppShell>} />
               <Route path="/profile" element={<AppShell><Profile /></AppShell>} />
+              <Route path="/admin/login" element={<AdminRouteGuard><AdminLogin /></AdminRouteGuard>} />
               <Route path="/admin/*" element={<AdminRouteGuard><Admin /></AdminRouteGuard>} />
               <Route path="/author/*" element={<Author />} />
               <Route path="/support" element={<AppShell><Support /></AppShell>} />
@@ -130,6 +133,7 @@ function AppContent() {
               <Route path="/demo/uploader" element={<AppShell><DemoUploaderSim /></AppShell>} />
               <Route path="/demo/admin" element={<AppShell><DemoAdminSim /></AppShell>} />
               <Route path="/demo/checkout" element={<AppShell><DemoCheckoutSim /></AppShell>} />
+              <Route path="/demo/styles" element={<AppShell><DemoStylesCompare /></AppShell>} />
               <Route path="/demo/:roleAlias" element={<AppShell><DemoRoleAlias /></AppShell>} />
               <Route path="/series" element={<AppShell><Series /></AppShell>} />
               <Route path="/series/:id" element={<AppShell><SeriesDetail /></AppShell>} />

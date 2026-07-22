@@ -24,7 +24,13 @@ import {
   shareSeries,
   toggleSeriesLibrary,
 } from '@/features/series/seriesReadingProgress';
-import { resolveSeriesDetailsLayout } from '@/features/series/seriesDetailsLayout';
+import {
+  getSeriesDetailsLayoutOverride,
+  resolveSeriesDetailsLayout,
+  setSeriesDetailsLayoutOverride,
+  type SeriesDetailsLayoutId,
+} from '@/features/series/seriesDetailsLayout';
+import { DemoLayoutSwitcher } from './DemoLayoutSwitcher';
 import { useSeriesAppearanceOverride } from '@/hooks/useAppearance';
 import type { SeriesDetailsBgTheme } from '@/features/series/seriesDetailsBackground';
 import type { SeriesDetailViewModel } from './SeriesDetailHero';
@@ -248,6 +254,18 @@ const ModernSeriesDetail = () => {
     });
   };
 
+  const handleDemoLayoutSelect = (nextLayout: SeriesDetailsLayoutId) => {
+    if (!series) return;
+    setSeriesDetailsLayoutOverride(series.id, nextLayout);
+    setLayoutTick((n) => n + 1);
+  };
+
+  const handleDemoLayoutReset = () => {
+    if (!series) return;
+    setSeriesDetailsLayoutOverride(series.id, null);
+    setLayoutTick((n) => n + 1);
+  };
+
   const handleShare = async () => {
     if (!series) return;
     const result = await shareSeries(series.id, series.title);
@@ -360,6 +378,15 @@ const ModernSeriesDetail = () => {
         onLibraryToggle={handleLibraryToggle}
         onShare={handleShare}
       />
+
+      {(isDemo || isDemoSeriesId(series.id)) && (
+        <DemoLayoutSwitcher
+          currentLayout={layoutId}
+          onSelect={handleDemoLayoutSelect}
+          onReset={handleDemoLayoutReset}
+          hasOverride={Boolean(getSeriesDetailsLayoutOverride(series.id))}
+        />
+      )}
     </SeriesDetailsBackground>
   );
 };

@@ -63,7 +63,7 @@ export function SeriesDesignOverridePanel({
         <CardDescription>
           Override the global layout, appearance, or background for this series only.
           Leave each section at default to use the global design from{' '}
-          <a href="/admin/series-design" className="text-primary hover:underline">
+          <a href="/admin/series-design" className="text-primary underline">
             Series Design
           </a>
           .

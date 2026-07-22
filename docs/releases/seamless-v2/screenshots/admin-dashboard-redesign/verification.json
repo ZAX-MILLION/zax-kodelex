@@ -1,0 +1,27 @@
+{
+  "baseUrl": "http://localhost:4183",
+  "generatedAt": "2026-07-22T05:09:59.379Z",
+  "captured": [
+    "dashboard-home-dark-390",
+    "series-design-dark-390",
+    "mobile-nav-dark-390",
+    "dashboard-home-dark-768",
+    "series-design-dark-768",
+    "dashboard-home-dark-1440",
+    "series-design-dark-1440",
+    "dashboard-home-light-390",
+    "series-design-light-390",
+    "mobile-nav-light-390",
+    "dashboard-home-light-768",
+    "series-design-light-768",
+    "dashboard-home-light-1440",
+    "series-design-light-1440",
+    "admin-login-dark-390",
+    "admin-login-dark-768",
+    "admin-login-dark-1440",
+    "admin-login-light-390",
+    "admin-login-light-768",
+    "admin-login-light-1440"
+  ],
+  "errors": []
+}

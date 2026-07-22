@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +58,13 @@ interface GlobalSettings {
 }
 
 export const SiteSettings = () => {
+  const [searchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const initialTab = ['general', 'colors', 'appearance', 'features', 'security', 'advanced'].includes(
+    requestedTab || ''
+  )
+    ? requestedTab!
+    : 'general';
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     site_title: "Zax Million",
     logo_url: null,
@@ -237,7 +245,7 @@ export const SiteSettings = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="general" className="w-full">
+      <Tabs defaultValue={initialTab} className="w-full">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="colors">Colors</TabsTrigger>

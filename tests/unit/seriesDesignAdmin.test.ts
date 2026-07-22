@@ -99,8 +99,8 @@ describe('Series Design admin routing', () => {
     const { readFileSync } = await import('fs');
     const { resolve } = await import('path');
     const adminPage = readFileSync(resolve(process.cwd(), 'src/pages/Admin.tsx'), 'utf-8');
-    const sidebar = readFileSync(
-      resolve(process.cwd(), 'src/components/admin/ModernAdminSidebar.tsx'),
+    const navConfig = readFileSync(
+      resolve(process.cwd(), 'src/features/admin/adminNav.ts'),
       'utf-8'
     );
     const dashboard = readFileSync(
@@ -109,9 +109,9 @@ describe('Series Design admin routing', () => {
     );
     expect(adminPage).toContain('path="series-design"');
     expect(adminPage).toContain('SeriesDesignManager');
-    expect(sidebar).toContain('Series Design');
-    expect(sidebar).toContain('/admin/series-design');
-    expect(dashboard).toContain('Customize Series Pages');
+    expect(navConfig).toContain('Series Designs');
+    expect(navConfig).toContain('/admin/series-design');
+    expect(dashboard).toContain('/admin/series-design');
   });
 });
 
