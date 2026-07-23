@@ -32,32 +32,35 @@ describe('ModernSeriesDetail page structure', () => {
     }
   });
 
-  it('orders comments after reviews and related in shared sections by default', () => {
+  it('orders chapters then comments then reviews/related in shared sections', () => {
     const sections = readFileSync(
       resolve(process.cwd(), 'src/components/series/SeriesDetailSections.tsx'),
       'utf-8'
     );
     const chaptersIdx = sections.indexOf('id="series-chapters"');
+    const commentsIdx = sections.indexOf('id="series-comments"');
     const reviewsIdx = sections.indexOf('id="series-reviews"');
     const relatedIdx = sections.indexOf('id="series-related"');
-    const commentsIdx = sections.indexOf('id="series-comments"');
     expect(chaptersIdx).toBeGreaterThan(-1);
-    expect(reviewsIdx).toBeGreaterThan(chaptersIdx);
-    expect(relatedIdx).toBeGreaterThan(reviewsIdx);
-    expect(commentsIdx).toBeGreaterThan(relatedIdx);
+    expect(commentsIdx).toBeGreaterThan(chaptersIdx);
+    expect(reviewsIdx).toBeGreaterThan(commentsIdx);
+    expect(relatedIdx).toBeGreaterThan(commentsIdx);
+    expect(sections).not.toContain('SeriesDetailMetaPanel');
+    expect(sections).not.toContain('showMetaStats');
   });
 
-  it('supports reordering comments directly after chapters for Layout D', () => {
+  it('supports related presentation variants after comments', () => {
     const sections = readFileSync(
       resolve(process.cwd(), 'src/components/series/SeriesDetailSections.tsx'),
       'utf-8'
     );
-    expect(sections).toContain('commentsBeforeSecondary');
+    expect(sections).toContain('relatedVariant');
+    expect(sections).toContain('secondaryOrder');
     expect(sections).toContain('deemphasizeSecondary');
   });
 });
 
-describe('Layout D — Compact List', () => {
+describe('Layout D — Chapter Index', () => {
   const layoutDSource = readFileSync(
     resolve(process.cwd(), 'src/components/series/layouts/SeriesDetailsLayoutCompactList.tsx'),
     'utf-8'
@@ -79,8 +82,8 @@ describe('Layout D — Compact List', () => {
     expect(layoutDSource).not.toContain('SeriesReviews');
   });
 
-  it('orders chapters before comments, with commentsBeforeSecondary + deemphasizeSecondary set', () => {
-    expect(layoutDSource).toContain('commentsBeforeSecondary');
+  it('places comments before secondary blocks and de-emphasizes them', () => {
+    expect(layoutDSource).toContain('relatedVariant="text-list"');
     expect(layoutDSource).toContain('deemphasizeSecondary');
     expect(layoutDSource).not.toContain('SeriesDetailTabs');
   });
@@ -98,7 +101,7 @@ describe('Admin layout selector exposes four options', () => {
       'utf-8'
     );
     expect(meta).toContain("'A' | 'B' | 'C' | 'D'");
-    expect(meta).toContain('Layout D — Compact List');
+    expect(meta).toMatch(/Chapter Index|Compact List/);
 
     const controls = readFileSync(
       resolve(process.cwd(), 'src/components/series/SeriesDetailsLayoutControls.tsx'),

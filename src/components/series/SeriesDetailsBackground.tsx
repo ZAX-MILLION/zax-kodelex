@@ -125,7 +125,7 @@ export function SeriesDetailsBackground({
           />
         )}
       </div>
-      <div className="relative z-0">{children}</div>
+      <div className="relative z-10 isolate">{children}</div>
     </div>
   );
 }

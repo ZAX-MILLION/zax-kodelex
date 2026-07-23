@@ -100,8 +100,8 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
           seriesIndex={seriesIndex}
           layoutId={layoutId}
           showSynopsis={false}
-          showMetaStats={false}
-          compactRelated
+          relatedVariant="rail"
+          secondaryOrder="reviews-related"
         />
       </div>
 

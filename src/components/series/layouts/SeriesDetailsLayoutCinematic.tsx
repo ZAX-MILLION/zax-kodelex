@@ -100,7 +100,8 @@ export function SeriesDetailsLayoutCinematic(props: SeriesDetailLayoutShellProps
           seriesIndex={seriesIndex}
           layoutId={layoutId}
           showSynopsis={false}
-          showMetaStats
+          relatedVariant="visual-grid"
+          secondaryOrder="related-reviews"
         />
       </div>
 

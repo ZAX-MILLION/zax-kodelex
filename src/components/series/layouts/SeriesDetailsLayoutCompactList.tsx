@@ -109,9 +109,8 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
           seriesIndex={seriesIndex}
           layoutId={layoutId}
           showSynopsis={false}
-          showMetaStats={false}
-          denseChapters
-          commentsBeforeSecondary
+          relatedVariant="text-list"
+          secondaryOrder="reviews-related"
           deemphasizeSecondary
         />
       </div>

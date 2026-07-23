@@ -84,8 +84,8 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
           seriesIndex={seriesIndex}
           layoutId={layoutId}
           showSynopsis={false}
-          showMetaStats
-          denseChapters
+          relatedVariant="tile-grid"
+          secondaryOrder="related-reviews"
         />
       </div>
 
