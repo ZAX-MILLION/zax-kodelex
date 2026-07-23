@@ -25,9 +25,12 @@ export const useInstallationStatus = (): InstallationStatus => {
       const skipSetup = localStorage.getItem('skipSetup') === 'true';
       const installationComplete = localStorage.getItem('installation_complete') === 'true';
       const skipOverride = import.meta.env.VITE_SKIP_SETUP === 'true';
+      const isPublicDemo =
+        import.meta.env.VITE_APP_ENV === 'demo' || import.meta.env.VITE_DEMO_MODE === 'true';
       const hasCredentials = hasSupabaseCredentials();
 
-      if (isPreview || skipSetup || skipOverride) {
+      // Public demo builds are fully local — never prompt for Supabase setup.
+      if (isPublicDemo || isPreview || skipSetup || skipOverride) {
         setStatus({
           isInstalled: true,
           isLoading: false,

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200" role="img" aria-label="Shadow Ninja Academy action page 9">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="55%" stop-color="#121826"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2236"/>
+      <stop offset="100%" stop-color="#0f1524"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect x="28" y="28" width="744" height="1144" rx="18" fill="none" stroke="#64748b" stroke-opacity="0.35" stroke-width="2"/>
+  
+  <polygon points="70,180 730,140 730,520 70,560" fill="url(#panel)" stroke="#64748b" stroke-width="3"/>
+  <polygon points="90,600 710,580 680,1040 120,1060" fill="#111827" stroke="#475569" stroke-width="2"/>
+  <path d="M140 340 L360 260 L520 380 L300 460 Z" fill="#64748b" fill-opacity="0.85"/>
+  <path d="M420 720 L640 680 L600 900 L380 920 Z" fill="#64748b" fill-opacity="0.45"/>
+  <text x="400" y="320" text-anchor="middle" fill="#fff" font-family="Impact, system-ui, sans-serif" font-size="54" letter-spacing="3">CLASH</text>
+  <text x="400" y="820" text-anchor="middle" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="24">Action panel · motion study</text>
+
+</svg>

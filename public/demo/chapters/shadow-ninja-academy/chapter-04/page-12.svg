@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200" role="img" aria-label="Shadow Ninja Academy chapter 4 end page">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="55%" stop-color="#121826"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2236"/>
+      <stop offset="100%" stop-color="#0f1524"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect x="28" y="28" width="744" height="1144" rx="18" fill="none" stroke="#64748b" stroke-opacity="0.35" stroke-width="2"/>
+  
+  <rect x="100" y="360" width="600" height="360" rx="20" fill="url(#panel)" stroke="#64748b" stroke-width="2"/>
+  <text x="400" y="480" text-anchor="middle" fill="#f8fafc" font-family="Georgia, serif" font-size="40" font-weight="700">End of Chapter 4</text>
+  <text x="400" y="540" text-anchor="middle" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20">Shadow Ninja Academy</text>
+  <text x="400" y="600" text-anchor="middle" fill="#64748b" font-family="system-ui, sans-serif" font-size="18">Continue to the next chapter when ready</text>
+
+</svg>

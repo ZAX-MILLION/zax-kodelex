@@ -86,6 +86,34 @@ const MangaReader = () => {
         // Extract chapter number from slug (format: chapter-001)
         const chapterNumber = parseInt(chapterSlug.split('-')[1]);
 
+        // Public demo: resolve local catalogue and hand off to the shared reader route.
+        const {
+          activateDemoMode,
+          getDemoChapterBySlugs,
+          getDemoSeriesById,
+          getDemoSeriesBySlug,
+          isDemoSeriesId,
+        } = await import('@/utils/demoLibraryData');
+        const { appConfig } = await import('@/config/env');
+        const { isSupabaseConfigured } = await import('@/integrations/supabase/client');
+
+        const demoSeries =
+          getDemoSeriesBySlug(seriesSlug) ||
+          (isDemoSeriesId(seriesSlug) ? getDemoSeriesById(seriesSlug) : undefined);
+        if (demoSeries && (appConfig.isDemo || !isSupabaseConfigured || demoSeries)) {
+          const demoChapter =
+            getDemoChapterBySlugs(demoSeries.slug, chapterSlug) ||
+            getDemoChapterBySlugs(
+              demoSeries.slug,
+              `chapter-${String(chapterNumber).padStart(3, '0')}`
+            );
+          if (demoChapter) {
+            activateDemoMode();
+            navigate(`/reader/${demoSeries.id}/${demoChapter.chapter_number}`, { replace: true });
+            return;
+          }
+        }
+
         // Fetch series data
         const { data: seriesData, error: seriesError } = await supabase
           .from('manga_meta')

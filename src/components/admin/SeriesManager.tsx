@@ -45,6 +45,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CoverUploadModal } from "./CoverUploadModal";
 import { MangaEditModal } from "./MangaEditModal";
+import { SeriesDesignOverridePanel } from "./SeriesDesignOverridePanel";
 
 interface MangaInfo {
   id: string;
@@ -1005,6 +1006,12 @@ export const SeriesManager = () => {
           </Card>
         </div>
       </div>
+
+          <SeriesDesignOverridePanel
+            seriesId={mangaInfo.id}
+            seriesTitle={mangaInfo.title}
+            coverImageUrl={mangaInfo.cover_image_url}
+          />
         </>
       )}
 

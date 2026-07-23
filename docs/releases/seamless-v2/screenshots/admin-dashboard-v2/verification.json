@@ -1,0 +1,38 @@
+{
+  "baseUrl": "http://127.0.0.1:4174",
+  "generatedAt": "2026-07-22T07:16:06.811Z",
+  "captured": [
+    "demo-admin-home-dark-390",
+    "demo-series-design-dark-390",
+    "demo-appearance-dark-390",
+    "demo-backgrounds-dark-390",
+    "demo-admin-home-dark-768",
+    "demo-series-design-dark-768",
+    "demo-appearance-dark-768",
+    "demo-backgrounds-dark-768",
+    "demo-admin-home-dark-1440",
+    "demo-series-design-dark-1440",
+    "demo-appearance-dark-1440",
+    "demo-backgrounds-dark-1440"
+  ],
+  "errors": [
+    {
+      "area": "real-admin",
+      "scheme": "dark",
+      "viewport": "390",
+      "fatal": "TimeoutError: page.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#admin-email')\n"
+    },
+    {
+      "area": "real-admin",
+      "scheme": "dark",
+      "viewport": "768",
+      "fatal": "TimeoutError: page.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#admin-email')\n"
+    },
+    {
+      "area": "real-admin",
+      "scheme": "dark",
+      "viewport": "1440",
+      "fatal": "TimeoutError: page.fill: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#admin-email')\n"
+    }
+  ]
+}

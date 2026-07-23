@@ -1,16 +1,18 @@
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
+import { isRealAuthEnabled } from '@/features/demo/demoAuthPolicy';
 
-const DEV_ONLY_ERROR = { message: 'Test accounts are only available in development mode.' };
+const UNAVAILABLE = {
+  message: 'Test accounts are only available in development with real Supabase auth.',
+};
 
 export const useTestAccounts = () => {
   const { toast } = useToast();
-  const isDev = import.meta.env.DEV;
+  const allowed = import.meta.env.DEV && isRealAuthEnabled() && isSupabaseConfigured;
 
   const loginAsAdmin = async () => {
-    if (!isDev) {
-      toast({ title: 'Unavailable', description: DEV_ONLY_ERROR.message, variant: 'destructive' });
-      return { error: DEV_ONLY_ERROR };
+    if (!allowed) {
+      return { error: UNAVAILABLE };
     }
 
     try {
@@ -69,9 +71,8 @@ export const useTestAccounts = () => {
   };
 
   const loginAsMember = async () => {
-    if (!isDev) {
-      toast({ title: 'Unavailable', description: DEV_ONLY_ERROR.message, variant: 'destructive' });
-      return { error: DEV_ONLY_ERROR };
+    if (!allowed) {
+      return { error: UNAVAILABLE };
     }
 
     try {

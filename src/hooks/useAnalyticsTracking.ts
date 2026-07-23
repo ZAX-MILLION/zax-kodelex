@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, isSupabaseConfigured } from '@/integrations/supabase/client';
 import { useLocation } from 'react-router-dom';
+import { appConfig } from '@/config/env';
 
 interface AnalyticsEvent {
   activity_type: string;
@@ -79,6 +80,8 @@ export const useAnalyticsTracking = () => {
 
   // Internal tracking function
   const trackEventInternal = async (event: AnalyticsEvent) => {
+    if (appConfig.isDemo || !isSupabaseConfigured) return;
+
     const optedOut = await checkOptOut();
     if (optedOut) return;
 
@@ -222,8 +225,13 @@ export const useAnalyticsTracking = () => {
     const handleBeforeUnload = () => {
       const sessionDuration = Math.round((Date.now() - pageStartTimeRef.current) / 1000);
       
-      // Use sendBeacon for reliable tracking on page unload
-      if (navigator.sendBeacon && user) {
+      // Use sendBeacon for reliable tracking on page unload (never in demo / offline)
+      if (
+        navigator.sendBeacon &&
+        user &&
+        isSupabaseConfigured &&
+        !appConfig.isDemo
+      ) {
         const event = {
           activity_type: 'session_end',
           page_url: location.pathname,

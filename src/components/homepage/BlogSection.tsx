@@ -10,88 +10,65 @@ export const BlogSection = () => {
   const blogCount = settings?.blog_posts_count || 6;
   const { posts, loading } = useBlogPosts(blogCount);
 
+  const [featured, ...rest] = posts;
+
   if (loading) {
     return (
-      <section className="w-full">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="h-5 w-5 text-primary" />
-              <h2 className="text-2xl font-bold text-foreground">Latest Articles</h2>
-            </div>
-            <p className="text-muted-foreground">Stay updated with our latest news and insights</p>
-          </div>
-          <Button variant="outline" asChild>
-            <Link to="/blog">
-              View All
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Link>
-          </Button>
+      <section className="w-full container mx-auto px-4 sm:px-6 lg:px-8 py-10" aria-busy="true">
+        <div className="flex items-center gap-2 mb-6">
+          <BookOpen className="h-5 w-5 text-primary" />
+          <h2 className="text-2xl font-bold">From the journal</h2>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="bg-muted rounded-lg h-48 mb-4" />
-              <div className="space-y-3">
-                <div className="h-4 bg-muted rounded w-3/4" />
-                <div className="h-3 bg-muted rounded w-full" />
-                <div className="h-3 bg-muted rounded w-2/3" />
-                <div className="flex justify-between">
-                  <div className="h-3 bg-muted rounded w-16" />
-                  <div className="h-3 bg-muted rounded w-12" />
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="animate-pulse space-y-6">
+          <div className="h-56 rounded-2xl bg-muted" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-64 rounded-2xl bg-muted" />
+            ))}
+          </div>
         </div>
       </section>
     );
   }
 
   if (!posts.length) {
-    return (
-      <section className="w-full">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="h-5 w-5 text-primary" />
-              <h2 className="text-2xl font-bold text-foreground">Latest Articles</h2>
-            </div>
-            <p className="text-muted-foreground">Stay updated with our latest news and insights</p>
-          </div>
-        </div>
-        
-        <div className="text-center py-12">
-          <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">No blog posts available</p>
-        </div>
-      </section>
-    );
+    return null;
   }
 
   return (
-    <section className="w-full container mx-auto px-4">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+    <section
+      aria-labelledby="home-blog-heading"
+      className="w-full container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12"
+    >
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <BookOpen className="h-5 w-5 text-primary" />
-            <h2 className="text-2xl font-bold text-foreground">Latest Articles</h2>
+            <h2 id="home-blog-heading" className="text-2xl sm:text-3xl font-bold">
+              From the journal
+            </h2>
           </div>
-          <p className="text-muted-foreground">Stay updated with our latest news and insights</p>
+          <p className="text-muted-foreground max-w-xl">
+            Platform notes, membership clarity, and product updates from Zax Million.
+          </p>
         </div>
-        <Button variant="outline" asChild className="w-full sm:w-auto">
+        <Button variant="outline" asChild className="w-full sm:w-auto min-h-11">
           <Link to="/blog">
-            View All
+            All articles
             <ChevronRight className="h-4 w-4 ml-1" />
           </Link>
         </Button>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <BlogPostCard key={post.id} post={post} />
-        ))}
+
+      <div className="space-y-6">
+        {featured && <BlogPostCard post={featured} featured />}
+        {rest.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {rest.map((post) => (
+              <BlogPostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

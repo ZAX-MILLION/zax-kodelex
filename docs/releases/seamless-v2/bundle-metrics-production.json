@@ -1,0 +1,147 @@
+{
+  "measuredAt": "2026-07-20T06:29:32.027Z",
+  "distTotalBytes": 4495323,
+  "assetsTotalBytes": 2435402,
+  "chunkCount": 93,
+  "mainBundle": {
+    "f": "index-DXnDLcn_.js",
+    "raw": 551482,
+    "gz": 159201
+  },
+  "adminBundle": {
+    "f": "Admin-D8j8xb7S.js",
+    "raw": 511920,
+    "gz": 119192
+  },
+  "uiBundle": {
+    "f": "ui-BBq6wgUt.js",
+    "raw": 194543,
+    "gz": 62243
+  },
+  "vendorBundle": {
+    "f": "vendor-_a9xXGlj.js",
+    "raw": 26,
+    "gz": 46
+  },
+  "cssBundle": {
+    "f": "index-CtlBQVw0.css",
+    "raw": 154954,
+    "gz": 23789
+  },
+  "topChunks": [
+    {
+      "f": "index-DXnDLcn_.js",
+      "raw": 551482,
+      "gz": 159201
+    },
+    {
+      "f": "Admin-D8j8xb7S.js",
+      "raw": 511920,
+      "gz": 119192
+    },
+    {
+      "f": "charts-CBte5fWk.js",
+      "raw": 408646,
+      "gz": 109783
+    },
+    {
+      "f": "ui-BBq6wgUt.js",
+      "raw": 194543,
+      "gz": 62243
+    },
+    {
+      "f": "index-CtlBQVw0.css",
+      "raw": 154954,
+      "gz": 23789
+    },
+    {
+      "f": "MangaEditModal-D6TmlNLh.js",
+      "raw": 96264,
+      "gz": 25387
+    },
+    {
+      "f": "Author-DCQlcbhZ.js",
+      "raw": 37911,
+      "gz": 8483
+    },
+    {
+      "f": "Profile-1jXP0lHx.js",
+      "raw": 31308,
+      "gz": 8461
+    },
+    {
+      "f": "Help-CD7bT_Pe.js",
+      "raw": 29899,
+      "gz": 8003
+    },
+    {
+      "f": "Browse-C20Tp4tg.js",
+      "raw": 29810,
+      "gz": 8500
+    },
+    {
+      "f": "SeriesDetail-NCkzcg9s.js",
+      "raw": 24592,
+      "gz": 6710
+    },
+    {
+      "f": "utils-CYC2HZ_g.js",
+      "raw": 21033,
+      "gz": 7130
+    },
+    {
+      "f": "select-oKBScZVA.js",
+      "raw": 20934,
+      "gz": 7270
+    },
+    {
+      "f": "LoadingFallback-CCEv9nmI.js",
+      "raw": 19541,
+      "gz": 4820
+    },
+    {
+      "f": "legalDocuments-CLPTBt4H.js",
+      "raw": 15534,
+      "gz": 6495
+    },
+    {
+      "f": "format-CNFVZqfM.js",
+      "raw": 13054,
+      "gz": 3470
+    },
+    {
+      "f": "Contact-CtiHGhQ-.js",
+      "raw": 12961,
+      "gz": 3937
+    },
+    {
+      "f": "Buy-4Ck2zrtS.js",
+      "raw": 12733,
+      "gz": 4066
+    },
+    {
+      "f": "hero-bg-qHGMQnLN.jpg",
+      "raw": 12460,
+      "gz": 190
+    },
+    {
+      "f": "Settings-CnuO6uEV.js",
+      "raw": 12303,
+      "gz": 2989
+    }
+  ],
+  "robots": "User-agent: *\nAllow: /\nDisallow: /demo\nDisallow: /demo/\nDisallow: /admin\nDisallow: /admin/\nDisallow: /author\nDisallow: /login\nDisallow: /reset-password\nDisallow: /settings\nDisallow: /profile\nDisallow: /buy\nDisallow: /coins\nDisallow: /subscribe\nDisallow: /monetization\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: https://example-prod.zaxmillion.com/sitemap.xml\n",
+  "seoMeta": {
+    "allowIndexing": true,
+    "appEnv": "production",
+    "siteUrl": "https://example-prod.zaxmillion.com",
+    "sitemapUrl": "https://example-prod.zaxmillion.com/sitemap.xml",
+    "generatedAt": "2026-07-20T06:29:28.037Z"
+  },
+  "adminInAssetList": true,
+  "demoAdminSimChunk": {
+    "f": "DemoAdminSim-7l0nu3pA.js",
+    "raw": 1505,
+    "gz": 774
+  }
+}

@@ -1,0 +1,641 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "generatedAt": "2026-07-22T07:22:52.204Z",
+  "screenshots": [
+    {
+      "route": "/",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\home-360x800.png"
+    },
+    {
+      "route": "/series",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-360x800.png"
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-detail-360x800.png"
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\reader-360x800.png"
+    },
+    {
+      "route": "/blog",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\blog-360x800.png"
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\article-360x800.png"
+    },
+    {
+      "route": "/demo",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\role-lab-360x800.png"
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\checkout-360x800.png"
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\uploader-360x800.png"
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "360x800",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\admin-360x800.png"
+    },
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\home-390x844.png"
+    },
+    {
+      "route": "/series",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-390x844.png"
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-detail-390x844.png"
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\reader-390x844.png"
+    },
+    {
+      "route": "/blog",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\blog-390x844.png"
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\article-390x844.png"
+    },
+    {
+      "route": "/demo",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\role-lab-390x844.png"
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\checkout-390x844.png"
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\uploader-390x844.png"
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "390x844",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\admin-390x844.png"
+    },
+    {
+      "route": "/",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\home-768x1024.png"
+    },
+    {
+      "route": "/series",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-768x1024.png"
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-detail-768x1024.png"
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\reader-768x1024.png"
+    },
+    {
+      "route": "/blog",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\blog-768x1024.png"
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\article-768x1024.png"
+    },
+    {
+      "route": "/demo",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\role-lab-768x1024.png"
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\checkout-768x1024.png"
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\uploader-768x1024.png"
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "768x1024",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\admin-768x1024.png"
+    },
+    {
+      "route": "/",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\home-1024x768.png"
+    },
+    {
+      "route": "/series",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-1024x768.png"
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-detail-1024x768.png"
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\reader-1024x768.png"
+    },
+    {
+      "route": "/blog",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\blog-1024x768.png"
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\article-1024x768.png"
+    },
+    {
+      "route": "/demo",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\role-lab-1024x768.png"
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\checkout-1024x768.png"
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\uploader-1024x768.png"
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "1024x768",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\admin-1024x768.png"
+    },
+    {
+      "route": "/",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\home-1440x900.png"
+    },
+    {
+      "route": "/series",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-1440x900.png"
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\series-detail-1440x900.png"
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\reader-1440x900.png"
+    },
+    {
+      "route": "/blog",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\blog-1440x900.png"
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\article-1440x900.png"
+    },
+    {
+      "route": "/demo",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\role-lab-1440x900.png"
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\checkout-1440x900.png"
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\uploader-1440x900.png"
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "1440x900",
+      "file": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\responsive-final\\admin-1440x900.png"
+    }
+  ],
+  "overflow": [
+    {
+      "route": "/",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/series",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/blog",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/demo",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "360x800",
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "overflowX": false
+    },
+    {
+      "route": "/",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/series",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/blog",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/demo",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "390x844",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "route": "/",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/series",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/blog",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/demo",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "768x1024",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "route": "/",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/series",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/blog",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/demo",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "1024x768",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "overflowX": false
+    },
+    {
+      "route": "/",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/series",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/series/00000000-0000-4000-a000-000000000001",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/blog",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/blog/introducing-zax-seamless-v2",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/demo",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/checkout",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/uploader",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "route": "/demo/admin",
+      "viewport": "1440x900",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    }
+  ],
+  "axe": [
+    {
+      "route": "/",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "route": "/series",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "route": "/demo",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "route": "/blog",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    },
+    {
+      "route": "/reader/00000000-0000-4000-a000-000000000001/1",
+      "violationCount": 0,
+      "seriousOrCritical": 0,
+      "violations": []
+    }
+  ],
+  "errors": []
+}

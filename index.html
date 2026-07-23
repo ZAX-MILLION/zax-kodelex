@@ -24,11 +24,60 @@
     <meta property="og:title" content="Zax Million — Premium Manga Reading" />
     <meta property="og:description" content="Read manga online with Zax Million — premium themes, smooth reader, and curated library." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/zax-million-favicon.png" />
+    <meta property="og:image" content="/zax-million-og.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@zaxmillion" />
-    <meta name="twitter:image" content="/zax-million-favicon.png" />
+    <meta name="twitter:image" content="/zax-million-og.png" />
+
+    <!--
+      Anti-FOUC appearance bootstrap. Runs synchronously before first paint so the
+      page never flashes the wrong theme. Mirrors src/features/appearance/appearanceMode.ts —
+      keep the storage keys and default in sync if either file changes.
+    -->
+    <script>
+      (function () {
+        try {
+          var GLOBAL_KEY = 'zax-appearance-global';
+          var SERIES_OVERRIDES_KEY = 'zax-appearance-series-overrides';
+          var DEFAULT_MODE = 'dark';
+          var VALID = ['light', 'dark', 'system'];
+
+          function isMode(v) {
+            return typeof v === 'string' && VALID.indexOf(v) !== -1;
+          }
+
+          var mode = null;
+
+          var match = window.location.pathname.match(/series\/([^/?#]+)/);
+          if (match && match[1]) {
+            try {
+              var overrides = JSON.parse(localStorage.getItem(SERIES_OVERRIDES_KEY) || '{}');
+              if (isMode(overrides[match[1]])) mode = overrides[match[1]];
+            } catch (e) {}
+          }
+
+          if (!mode) {
+            var stored = localStorage.getItem(GLOBAL_KEY);
+            mode = isMode(stored) ? stored : DEFAULT_MODE;
+          }
+
+          var scheme = mode;
+          if (mode === 'system') {
+            scheme =
+              window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          }
+
+          var root = document.documentElement;
+          root.classList.add(scheme);
+          root.style.colorScheme = scheme;
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
 
   <body>

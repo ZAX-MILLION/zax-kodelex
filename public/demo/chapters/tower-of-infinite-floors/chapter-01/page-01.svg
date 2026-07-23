@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200" role="img" aria-label="Tower of Infinite Floors chapter 1 title page">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="55%" stop-color="#121826"/>
+      <stop offset="100%" stop-color="#164e63"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2236"/>
+      <stop offset="100%" stop-color="#0f1524"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect x="28" y="28" width="744" height="1144" rx="18" fill="none" stroke="#0891b2" stroke-opacity="0.35" stroke-width="2"/>
+  
+  <rect x="80" y="220" width="640" height="520" rx="16" fill="url(#panel)" stroke="#0891b2" stroke-width="2"/>
+  <text x="400" y="340" text-anchor="middle" fill="#0891b2" font-family="Georgia, serif" font-size="28" letter-spacing="4">ZAX DEMO</text>
+  <text x="400" y="420" text-anchor="middle" fill="#f8fafc" font-family="Georgia, serif" font-size="42" font-weight="700">Tower of Infinite Floors</text>
+  <text x="400" y="490" text-anchor="middle" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="26">Chapter 1</text>
+  <text x="400" y="540" text-anchor="middle" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20">The Awakening</text>
+  <text x="400" y="650" text-anchor="middle" fill="#64748b" font-family="system-ui, sans-serif" font-size="16">Original demo artwork · not affiliated with any published comic</text>
+
+</svg>

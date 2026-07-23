@@ -1,7 +1,28 @@
-export const CHAPTERS_PER_SERIES = 20;
+import {
+  buildFeaturedChapterPages,
+  getDemoAccessType,
+  getDemoLockedChapterCount,
+  getDemoSeriesChapterCount,
+  getDemoUnlockCost,
+  getFeaturedMetaByIndex,
+  isFeaturedDemoSeriesIndex,
+  resolveDemoSeriesSlug,
+  type DemoAccessType,
+} from '@/features/demo/data/demoChapterCatalog';
+
+/** Newest → Oldest for chapter list UIs. */
+export function sortDemoChaptersNewestFirst<T extends { chapter_number: number }>(
+  chapters: T[]
+): T[] {
+  return [...chapters].sort((a, b) => b.chapter_number - a.chapter_number);
+}
+
+/** Upper bound for demo catalogue chapter counts (featured max = 10). */
+export const CHAPTERS_PER_SERIES = 10;
 
 export interface DemoSeries {
   id: string;
+  slug: string;
   title: string;
   description: string;
   author: string;
@@ -22,12 +43,19 @@ export interface DemoSeries {
   created_at: string;
   updated_at: string;
   locked_chapter_count: number;
+  featured: boolean;
+  alt_title?: string | null;
+  followers_count?: number;
+  /** Optional catalogue background for the series details page. */
+  details_background_url?: string | null;
 }
 
 export interface DemoChapter {
   id: string;
   series_id: string;
+  series_slug: string;
   chapter_number: number;
+  chapter_slug: string;
   title: string;
   pages: string[];
   page_count: number;
@@ -35,41 +63,61 @@ export interface DemoChapter {
   view_count: number;
   is_locked: boolean;
   unlock_cost: number;
+  access_type: DemoAccessType;
   sort_order: number;
   content_type: 'image' | 'text';
   text_content?: string;
   created_at: string;
+  previous_chapter_id: string | null;
+  next_chapter_id: string | null;
+  comment_count?: number;
 }
 
 const MANGA_TITLES = [
-  'Crimson Blade Chronicles', 'Dragon Throne Wars', 'Mystic Academy', 'Shadow Ninja Academy',
-  'Mecha Guardian Force', 'Demon Hunter Legacy', 'Dragon Slayer Chronicles', 'Forest Guardian Spirits',
+  'Crimson Blade Chronicles',
+  'Dragon Throne Wars',
+  'Mystic Academy',
+  'Shadow Ninja Academy',
+  'Mecha Guardian Force',
+  'Demon Hunter Legacy',
+  'Dragon Slayer Chronicles',
+  'Forest Guardian Spirits',
 ];
 
 const MANHWA_TITLES = [
-  "Solo Ascension: Ranker's Path", 'Tower of Infinite Floors', 'Villainess Rewritten',
-  'Murim Chronicles: Iron Fist', "I Became the Duke's Secret Advisor",
+  "Solo Ascension: Ranker's Path",
+  'Tower of Infinite Floors',
+  'Villainess Rewritten',
+  'Murim Chronicles: Iron Fist',
+  "I Became the Duke's Secret Advisor",
 ];
 
 const MANHUA_TITLES = [
-  'Immortal Cultivation: Nine Heavens', 'Spirit Blade Sovereign', "Urban Cultivator's Return",
+  'Immortal Cultivation: Nine Heavens',
+  'Spirit Blade Sovereign',
+  "Urban Cultivator's Return",
   'Heavenly Dao Reincarnation',
 ];
 
 const NOVEL_TITLES = [
-  'Digital Immortality', 'Memories of Tomorrow', 'The Ancient Runes Mystery',
+  'Digital Immortality',
+  'Memories of Tomorrow',
+  'The Ancient Runes Mystery',
   'Space Colony Alpha',
 ];
 
 const CHAPTER_TITLE_POOL = [
-  'The Awakening', 'First Steps', 'Hidden Power', 'The Rival Appears', 'Trial by Fire',
-  'Unexpected Alliance', 'Secrets Unearthed', 'The Turning Point', 'Dark Revelation',
-  'Point of No Return', 'Fractured Bonds', 'The Counterattack', 'Into the Abyss',
-  'Light in Darkness', 'The Final Gambit', 'Echoes of the Past', 'Rising Storm',
-  'Breaking the Seal', 'Last Stand', 'Dawn of a New Era',
+  'The Awakening',
+  'Rising Stakes',
+  'Hidden Paths',
+  'The Rival Appears',
+  'Trial by Fire',
+  'Crossroads',
+  'Into the Depths',
+  'Unlikely Allies',
+  'The Reckoning',
+  'New Horizons',
 ];
-
-const LOCK_COUNTS = [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5];
 
 let demoModeActive = false;
 
@@ -81,8 +129,10 @@ export function isDemoModeActive() {
   return demoModeActive;
 }
 
+import { isDemoModeEnabled as isDemoEnv } from '@/config/env';
+
 export function isDemoModeEnabled(): boolean {
-  return import.meta.env.DEV || import.meta.env.VITE_DEMO_MODE === 'true';
+  return isDemoEnv();
 }
 
 /** True when we should never hit Supabase (demo build or missing credentials). */
@@ -105,22 +155,18 @@ function makeChapterId(seriesId: string, chapterNumber: number): string {
   return `${seriesId}-ch-${String(chapterNumber).padStart(3, '0')}`;
 }
 
+function makeChapterSlug(chapterNumber: number): string {
+  return `chapter-${String(chapterNumber).padStart(3, '0')}`;
+}
+
 function getCoverUrl(index: number): string {
-  // Local covers — no slow external picsum redirects on the public demo
   const base = import.meta.env.BASE_URL || '/';
   return `${base}demo-covers/${(index % 8) + 1}.jpg`;
 }
 
-function getPageUrls(seriesIndex: number, chapterNum: number, pageCount: number): string[] {
-  return Array.from(
-    { length: pageCount },
-    (_, i) => `https://picsum.photos/seed/zax-page-${seriesIndex}-${chapterNum}-${i}/800/1200`
-  );
-}
-
 function generateDescription(title: string, format: string): string {
   const intros: Record<string, string> = {
-    manga: `In ${title}, a young hero faces impossible odds in a world of ancient powers and modern conflict.`,
+    manga: `In ${title}, a young hero faces impossible odds in a world of ancient powers and modern conflict. This demo series includes original sample pages so you can try the reader.`,
     manhwa: `${title} follows a determined protagonist through a vertical-scroll epic of leveling and redemption.`,
     manhua: `Cultivation, destiny, and martial arts collide in ${title}.`,
     novel: `${title} unfolds through rich prose for immersive long-form reading.`,
@@ -186,22 +232,15 @@ const SERIES_DEFINITIONS = [
   ...NOVEL_TITLES.map((title, i) => buildSeriesDefinition(title, 'novel', 'novel', i + 17)),
 ];
 
-function isChapterLocked(chapterNum: number, lockedCount: number): boolean {
-  return chapterNum > CHAPTERS_PER_SERIES - lockedCount;
-}
-
-function getCoinCost(chapterNum: number, lockedCount: number): number {
-  const positionFromLatest = CHAPTERS_PER_SERIES - chapterNum + 1;
-  const base = 8 + lockedCount * 2;
-  return Math.min(30, base + positionFromLatest * 2);
-}
-
-function generateNovelContent(seriesTitle: string, chapterNum: number): string {
-  return `# ${CHAPTER_TITLE_POOL[chapterNum - 1] || `Chapter ${chapterNum}`}
-
-The story of *${seriesTitle}* continues in chapter ${chapterNum}. Alliances shift, secrets surface, and the stakes keep rising.
-
-*"We don't get to choose the battles that find us — only how we answer them."*`;
+function buildReadablePages(
+  seriesSlug: string,
+  chapterNumber: number,
+  contentType: 'manga' | 'novel'
+): string[] {
+  if (contentType === 'novel') {
+    return [];
+  }
+  return buildFeaturedChapterPages(seriesSlug, chapterNumber);
 }
 
 function buildDemoLibrary() {
@@ -210,7 +249,13 @@ function buildDemoLibrary() {
 
   SERIES_DEFINITIONS.forEach((def, index) => {
     const id = makeDemoId(index);
-    const lockedCount = LOCK_COUNTS[index];
+    const featured = isFeaturedDemoSeriesIndex(index);
+    const featuredMeta = getFeaturedMetaByIndex(index);
+    const slug = resolveDemoSeriesSlug(def.title, index);
+    const chapterCount =
+      featuredMeta?.readableChapterCount ?? getDemoSeriesChapterCount(index, featured);
+    const lockedChapterCount =
+      featuredMeta?.lockedChapterCount ?? getDemoLockedChapterCount(index);
     const daysAgo = 180 + index * 14;
     const pubDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
     const createdAt = new Date(Date.now() - (daysAgo + 7) * 24 * 60 * 60 * 1000);
@@ -218,16 +263,22 @@ function buildDemoLibrary() {
 
     series.push({
       id,
+      slug,
       title: def.title,
+      ...(index % 4 === 1 ? { alt_title: `${def.title} (Official)` } : {}),
       description: def.description,
       author: def.author,
       artist: def.artist,
       status: def.status,
       genres: def.genres,
+      ...(index === 0
+        ? { details_background_url: 'https://picsum.photos/seed/crimson-blade-details/1600/900' }
+        : {}),
       tags: [
         ...def.tags,
         ...(def.format === 'manhwa' ? ['Full Color'] : []),
         ...(def.format === 'manhua' ? ['Wuxia'] : []),
+        ...(featured ? ['Featured Demo'] : []),
       ],
       content_type: def.content_type,
       format: def.format,
@@ -236,35 +287,67 @@ function buildDemoLibrary() {
       view_count: viewBase + index * 4200,
       rating_average: Number((3.8 + (index % 10) * 0.1).toFixed(1)),
       rating_count: 500 + index * 320,
+      followers_count: 1200 + index * 890,
       age_rating: def.age_rating,
       language: def.language,
       publication_date: pubDate.toISOString().split('T')[0],
       created_at: createdAt.toISOString(),
       updated_at: new Date(Date.now() - index * 3 * 24 * 60 * 60 * 1000).toISOString(),
-      locked_chapter_count: lockedCount,
+      locked_chapter_count: 0,
+      featured,
     });
 
-    for (let ch = 1; ch <= CHAPTERS_PER_SERIES; ch++) {
-      const isLocked = isChapterLocked(ch, lockedCount);
-      const releaseDate = new Date(Date.now() - (CHAPTERS_PER_SERIES - ch + index) * 2 * 24 * 60 * 60 * 1000);
+    const seriesChapterIds: string[] = [];
+    let lockedCount = 0;
 
-      // Demo preview lists chapters but does not ship page artwork (keeps preview clean / legal-safe).
+    for (let ch = 1; ch <= chapterCount; ch++) {
+      const access = getDemoAccessType(ch, chapterCount, lockedChapterCount);
+      const unlockCost = getDemoUnlockCost(access);
+      if (access !== 'free') lockedCount += 1;
+      const pages = buildReadablePages(slug, ch, def.content_type);
+      const chapterId = makeChapterId(id, ch);
+      seriesChapterIds.push(chapterId);
+      const releaseDate = new Date(Date.now() - (chapterCount - ch + index) * 2 * 24 * 60 * 60 * 1000);
+
       chapters.push({
-        id: makeChapterId(id, ch),
+        id: chapterId,
         series_id: id,
+        series_slug: slug,
         chapter_number: ch,
+        chapter_slug: makeChapterSlug(ch),
         title: `Ch. ${ch}: ${CHAPTER_TITLE_POOL[ch - 1] || `Chapter ${ch}`}`,
-        pages: [],
-        page_count: 0,
+        pages,
+        page_count: pages.length,
         release_date: releaseDate.toISOString(),
         view_count: 200 + ch * 50 + index * 30,
-        is_locked: isLocked,
-        unlock_cost: isLocked ? getCoinCost(ch, lockedCount) : 0,
+        is_locked: access !== 'free',
+        unlock_cost: unlockCost,
+        access_type: access,
         sort_order: ch,
-        content_type: def.content_type === 'novel' ? 'text' : 'image',
-        text_content: undefined,
+        content_type: def.content_type === 'novel' && pages.length === 0 ? 'text' : 'image',
+        text_content:
+          def.content_type === 'novel' && pages.length === 0
+            ? `# ${CHAPTER_TITLE_POOL[ch - 1] || `Chapter ${ch}`}\n\nA short demo excerpt from *${def.title}*, chapter ${ch} of ${chapterCount}.`
+            : undefined,
         created_at: releaseDate.toISOString(),
+        previous_chapter_id: null,
+        next_chapter_id: null,
+        comment_count: featured ? 4 + ch + (index % 3) : Math.max(1, (ch + index) % 6),
       });
+    }
+
+    // Wire previous/next after creation
+    for (let i = 0; i < seriesChapterIds.length; i++) {
+      const chapter = chapters.find((c) => c.id === seriesChapterIds[i]);
+      if (!chapter) continue;
+      chapter.previous_chapter_id = i > 0 ? seriesChapterIds[i - 1] : null;
+      chapter.next_chapter_id =
+        i < seriesChapterIds.length - 1 ? seriesChapterIds[i + 1] : null;
+    }
+
+    const seriesRecord = series[series.length - 1];
+    if (seriesRecord) {
+      seriesRecord.locked_chapter_count = lockedCount;
     }
   });
 
@@ -281,6 +364,10 @@ export function getDemoSeriesById(id: string): DemoSeries | undefined {
   return DEMO_LIBRARY.series.find((series) => series.id === id);
 }
 
+export function getDemoSeriesBySlug(slug: string): DemoSeries | undefined {
+  return DEMO_LIBRARY.series.find((series) => series.slug === slug);
+}
+
 export function isDemoSeriesId(id: string): boolean {
   return DEMO_LIBRARY.series.some((series) => series.id === id);
 }
@@ -290,17 +377,52 @@ export function isDemoChapterId(id: string): boolean {
 }
 
 export function getDemoChaptersForSeries(seriesId: string): DemoChapter[] {
-  return DEMO_LIBRARY.chapters
-    .filter((chapter) => chapter.series_id === seriesId)
-    .sort((a, b) => a.chapter_number - b.chapter_number);
+  return sortDemoChaptersNewestFirst(
+    DEMO_LIBRARY.chapters
+      .filter((chapter) => chapter.series_id === seriesId)
+      .filter((chapter) => chapter.page_count > 0 || !!chapter.text_content)
+  );
 }
 
 export function getDemoChapterById(chapterId: string): DemoChapter | undefined {
   return DEMO_LIBRARY.chapters.find((chapter) => chapter.id === chapterId);
 }
 
+export function getDemoChapterBySeriesAndNumber(
+  seriesId: string,
+  chapterNumber: number
+): DemoChapter | undefined {
+  return DEMO_LIBRARY.chapters.find(
+    (chapter) => chapter.series_id === seriesId && chapter.chapter_number === chapterNumber
+  );
+}
+
+export function getDemoChapterBySlugs(
+  seriesSlug: string,
+  chapterSlug: string
+): DemoChapter | undefined {
+  return DEMO_LIBRARY.chapters.find(
+    (chapter) => chapter.series_slug === seriesSlug && chapter.chapter_slug === chapterSlug
+  );
+}
+
+export function getRelatedDemoSeries(seriesId: string, limit = 3): DemoSeries[] {
+  const current = getDemoSeriesById(seriesId);
+  if (!current) return getDemoSeriesList().filter((s) => s.featured).slice(0, limit);
+  return DEMO_LIBRARY.series
+    .filter((series) => series.id !== seriesId)
+    .filter(
+      (series) =>
+        series.featured ||
+        series.genres.some((g) => current.genres.includes(g)) ||
+        series.format === current.format
+    )
+    .slice(0, limit);
+}
+
 export function getDemoChapterFeed(limit = 10) {
   return [...DEMO_LIBRARY.chapters]
+    .filter((chapter) => chapter.page_count > 0 || chapter.content_type === 'text')
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, limit)
     .map((chapter) => {
@@ -315,10 +437,15 @@ export function getDemoChapterFeed(limit = 10) {
         created_at: chapter.created_at,
         is_locked: chapter.is_locked,
         unlock_cost: chapter.unlock_cost,
+        access_type: chapter.access_type,
       };
     });
 }
 
 export function activateDemoMode() {
   setDemoModeActive(true);
+}
+
+export function getFeaturedDemoSeries(): DemoSeries[] {
+  return DEMO_LIBRARY.series.filter((series) => series.featured);
 }

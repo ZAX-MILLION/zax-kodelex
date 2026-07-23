@@ -29,8 +29,13 @@ jobs:
         run: npm ci
       - name: Build demo
         env:
+          VITE_APP_ENV: demo
           VITE_DEMO_MODE: 'true'
           VITE_SKIP_SETUP: 'true'
+          VITE_DISABLE_PAYMENTS: 'true'
+          VITE_DISABLE_ADMIN: 'true'
+          # Project-site path today. For user-site root use VITE_BASE: '/'
+          # after ADMIN completes docs/runbooks/GITHUB-PAGES-ROOT-MIGRATION.md
           VITE_BASE: '/zax-kodelex/'
         run: npm run build
       - name: SPA fallback for GitHub Pages

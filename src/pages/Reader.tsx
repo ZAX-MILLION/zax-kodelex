@@ -1,198 +1,263 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
+import { WebtoonReader } from '@/components/reader/WebtoonReader';
+import { DemoChapterGate } from '@/components/demo/DemoChapterGate';
+import { useDemoRole } from '@/contexts/DemoRoleContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useMangaData, useReadingProgress, useBookmarks } from '@/hooks/useMangaData';
 import { useSeriesChapters } from '@/hooks/useSeriesChapters';
 import { useChapterPages } from '@/hooks/useChapterPages';
-import { useAuth } from '@/contexts/AuthContext';
-import { useSubscription } from '@/hooks/useSubscription';
-import ChapterComments from '@/components/ChapterComments';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Menu, 
-  X, 
-  SkipBack, 
-  SkipForward,
-  Home,
-  List,
-  BookOpen,
-  Scroll,
-  Bookmark,
-  BookmarkCheck,
-  Loader2,
-  Columns3,
-  Monitor,
-  ZoomIn,
-  ZoomOut,
-  RotateCcw
-} from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { WebtoonReader } from '@/components/reader/WebtoonReader';
-import { supabase } from '@/integrations/supabase/client';
-import readerBackground from '@/assets/reader-bg.jpg';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { appConfig } from '@/config/env';
+import { isSupabaseConfigured, supabase } from '@/integrations/supabase/client';
+import {
+  activateDemoMode,
+  getDemoChapterById,
+  getDemoChapterBySeriesAndNumber,
+  getDemoChaptersForSeries,
+  getDemoSeriesById,
+  getRelatedDemoSeries,
+  isDemoChapterId,
+  isDemoSeriesId,
+  type DemoChapter,
+  type DemoSeries,
+} from '@/utils/demoLibraryData';
+
+function resolveDemoChapter(
+  chapterId?: string,
+  seriesId?: string,
+  chapterNumber?: string
+): { chapter: DemoChapter; series: DemoSeries } | null {
+  if (chapterId && isDemoChapterId(chapterId)) {
+    const chapter = getDemoChapterById(chapterId);
+    if (!chapter) return null;
+    const series = getDemoSeriesById(chapter.series_id);
+    if (!series) return null;
+    return { chapter, series };
+  }
+  if (seriesId && isDemoSeriesId(seriesId) && chapterNumber) {
+    const chapter = getDemoChapterBySeriesAndNumber(seriesId, parseInt(chapterNumber, 10));
+    if (!chapter) return null;
+    const series = getDemoSeriesById(seriesId);
+    if (!series) return null;
+    return { chapter, series };
+  }
+  return null;
+}
 
 const Reader = () => {
-  const { chapterId, seriesId, chapterNumber } = useParams<{ chapterId?: string; seriesId?: string; chapterNumber?: string }>();
+  const { chapterId, seriesId, chapterNumber } = useParams<{
+    chapterId?: string;
+    seriesId?: string;
+    chapterNumber?: string;
+  }>();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const demoRole = useDemoRole();
+  const useDemoPath =
+    appConfig.isDemo ||
+    !isSupabaseConfigured ||
+    Boolean(
+      (chapterId && isDemoChapterId(chapterId)) ||
+        (seriesId && isDemoSeriesId(seriesId))
+    );
+
+  const demoResolved = useMemo(
+    () => (useDemoPath ? resolveDemoChapter(chapterId, seriesId, chapterNumber) : null),
+    [useDemoPath, chapterId, seriesId, chapterNumber]
+  );
+
+  const [unlockTick, setUnlockTick] = useState(0);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
+  useEffect(() => {
+    if (demoResolved) activateDemoMode();
+  }, [demoResolved]);
+
+  useEffect(() => {
+    const initialPage = parseInt(searchParams.get('page') || '0', 10);
+    if (initialPage > 0) setCurrentPageIndex(initialPage);
+    else setCurrentPageIndex(0);
+  }, [demoResolved?.chapter.id, searchParams]);
+
+  useEffect(() => {
+    if (!demoResolved) return;
+    try {
+      sessionStorage.setItem(
+        `zax-demo-continue:${demoResolved.series.id}`,
+        String(demoResolved.chapter.chapter_number)
+      );
+    } catch {
+      /* ignore */
+    }
+  }, [demoResolved]);
+
+  // ---------- Demo reader path (no Supabase) ----------
+  if (useDemoPath) {
+    if (!demoResolved) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-background px-4">
+          <Card className="p-8 text-center max-w-md space-y-4">
+            <h1 className="text-2xl font-bold">Chapter not found</h1>
+            <p className="text-muted-foreground">
+              That demo chapter does not exist in the local catalogue.
+            </p>
+            <Button asChild className="min-h-11">
+              <Link to="/">Back home</Link>
+            </Button>
+          </Card>
+        </div>
+      );
+    }
+
+    const { chapter, series } = demoResolved;
+    const access = demoRole.canAccessChapter(chapter);
+    // re-read when unlockTick changes
+    void unlockTick;
+
+    if (!access.allowed) {
+      return (
+        <DemoChapterGate
+          chapterTitle={chapter.title}
+          chapterId={chapter.id}
+          seriesId={series.id}
+          access={access}
+          previewImage={chapter.pages[0] || series.cover_image_url}
+          onUnlocked={() => setUnlockTick((n) => n + 1)}
+        />
+      );
+    }
+
+    const siblings = getDemoChaptersForSeries(series.id);
+    const related = getRelatedDemoSeries(series.id, 3);
+    const chronological = [...siblings].sort((a, b) => a.chapter_number - b.chapter_number);
+    const currentIndex = chronological.findIndex((c) => c.id === chapter.id);
+    const prev = chapter.previous_chapter_id
+      ? getDemoChapterById(chapter.previous_chapter_id)
+      : null;
+    const next = chapter.next_chapter_id ? getDemoChapterById(chapter.next_chapter_id) : null;
+
+    return (
+      <WebtoonReader
+        pages={chapter.pages}
+        currentPage={currentPageIndex}
+        onPageChange={setCurrentPageIndex}
+        onNavigateHome={() => navigate('/')}
+        onNavigateChapterList={() => navigate(`/series/${series.id}`)}
+        onPreviousChapter={() => {
+          if (prev) navigate(`/reader/${series.id}/${prev.chapter_number}`);
+        }}
+        onNextChapter={() => {
+          if (next) navigate(`/reader/${series.id}/${next.chapter_number}`);
+        }}
+        onSelectChapter={(n) => navigate(`/reader/${series.id}/${n}`)}
+        hasPreviousChapter={Boolean(prev)}
+        hasNextChapter={Boolean(next)}
+        chapterTitle={chapter.title}
+        chapterNumber={chapter.chapter_number}
+        seriesTitle={series.title}
+        seriesId={series.id}
+        seriesCoverUrl={series.cover_image_url}
+        chapters={siblings.map((c) => ({
+          id: c.id,
+          chapter_number: c.chapter_number,
+          title: c.title,
+          access: c.access_type === 'free' ? 'free' : c.access_type === 'premium' ? 'premium' : 'coins',
+        }))}
+        relatedSeries={related.map((item) => ({
+          id: item.id,
+          title: item.title,
+          cover_image_url: item.cover_image_url,
+        }))}
+        endOfChapter
+        isMobile={isMobile}
+        chapterPositionLabel={`${currentIndex + 1} / ${chronological.length}`}
+        demoSeriesIndex={Math.max(
+          0,
+          Number.parseInt(series.id.slice(-12), 10) - 1 || 0
+        )}
+        chapterId={chapter.id}
+      />
+    );
+  }
+
+  // ---------- Production / staging path ----------
+  return <ProductionReader />;
+};
+
+function ProductionReader() {
+  const { chapterId, seriesId, chapterNumber } = useParams<{
+    chapterId?: string;
+    seriesId?: string;
+    chapterNumber?: string;
+  }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [detectedSeriesId, setDetectedSeriesId] = useState<string | null>(seriesId || null);
-  
-  // First try to get chapters using the seriesId from URL params, or detect it from the chapterId
-  const { chapters: seriesChapters, loading: seriesLoading } = useSeriesChapters(detectedSeriesId || undefined);
+  const { chapters: seriesChapters, loading: seriesLoading } = useSeriesChapters(
+    detectedSeriesId || undefined
+  );
   const { chapters: allChapters, loading: allLoading } = useMangaData();
   const { user } = useAuth();
   const { isPremium } = useSubscription();
   const { updateProgress } = useReadingProgress(user?.id);
-  const { bookmarks, toggleBookmark } = useBookmarks(user?.id);
-  
+  useBookmarks(user?.id);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const [showControls, setShowControls] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isWebtoonMode, setIsWebtoonMode] = useState(false);
-  const [showComments, setShowComments] = useState(false);
-  const [isColumnMode, setIsColumnMode] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(25); // Percentage 10-100%
-  
-  // Auto-detect series ID from chapter if not provided in URL
+
   useEffect(() => {
     if (chapterId && !detectedSeriesId) {
-      console.log('📍 Detecting series ID for chapter:', chapterId);
-      const chapterFromAll = allChapters.find(c => c.id === chapterId);
-      if (chapterFromAll) {
-        console.log('📍 Found chapter in allChapters:', chapterFromAll);
-        // Get the series_id from the chapter data by making a direct query
-        const detectSeriesFromChapter = async () => {
-          try {
-            console.log('📍 Querying database for chapter series_id...');
-            const { data, error } = await supabase
-              .from('chapters')
-              .select('series_id')
-              .eq('id', chapterId)
-              .single();
-            
-            if (data && !error) {
-              console.log('📍 Detected series ID:', data.series_id);
-              setDetectedSeriesId(data.series_id);
-            } else {
-              console.error('📍 Failed to detect series ID:', error);
-            }
-          } catch (err) {
-            console.error('Error detecting series from chapter:', err);
-          }
-        };
-        detectSeriesFromChapter();
-      } else {
-        console.log('📍 Chapter not found in allChapters, total chapters:', allChapters.length);
-      }
+      const detect = async () => {
+        const { data } = await supabase
+          .from('chapters')
+          .select('series_id')
+          .eq('id', chapterId)
+          .maybeSingle();
+        if (data?.series_id) setDetectedSeriesId(data.series_id);
+      };
+      void detect();
     }
-  }, [chapterId, detectedSeriesId, allChapters]);
-  
-  // Use the appropriate chapters and loading state
+  }, [chapterId, detectedSeriesId]);
+
   const chapters = detectedSeriesId ? seriesChapters : allChapters;
   const loading = detectedSeriesId ? seriesLoading : allLoading;
-  
-  // Get chapter pages specifically for this chapter
   const { pages: chapterPages, loading: pagesLoading } = useChapterPages(chapterId);
-  
-  // Find chapter by ID or by series + chapter number
-  const chapter = chapterId 
-    ? chapters.find(c => c.id === chapterId)
-    : chapters.find(c => c.chapter_number === parseInt(chapterNumber || '0'));
 
-  // Debug logging
+  const chapter = chapterId
+    ? chapters.find((c) => c.id === chapterId)
+    : chapters.find((c) => c.chapter_number === parseInt(chapterNumber || '0', 10));
+
+  const pages = chapterPages.length > 0 ? chapterPages : chapter?.pages || [];
+
   useEffect(() => {
-    console.log('📍 Reader Debug Info:');
-    console.log('- chapterId:', chapterId);
-    console.log('- detectedSeriesId:', detectedSeriesId);
-    console.log('- chapters count:', chapters.length);
-    console.log('- chapter found:', !!chapter);
-    console.log('- chapterPages count:', chapterPages.length);
-    console.log('- loading states:', { loading, pagesLoading });
-    if (chapter) {
-      console.log('- chapter details:', { id: chapter.id, title: chapter.title, chapter_number: chapter.chapter_number });
-    }
-  }, [chapterId, detectedSeriesId, chapters, chapter, chapterPages, loading, pagesLoading]);
-  
-  // Use chapter pages from the hook, fallback to chapter.pages if available
-  const pages = chapterPages.length > 0 ? chapterPages : (chapter?.pages || []);
-  
-  const initialPage = parseInt(searchParams.get('page') || '0');
-
-  // Check if chapter is early access or premium only
-  const isEarlyAccess = chapter ? (() => {
-    const releaseTime = new Date(chapter.release_date).getTime();
-    const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-    return releaseTime > sevenDaysAgo;
-  })() : false;
-
-  const isPremiumOnly = chapter ? chapter.chapter_number % 5 === 0 : false;
-
-  // Check if user can access this chapter
-  const canAccessChapter = () => {
-    if (!chapter) return false;
-    if (isPremiumOnly && !isPremium) return false;
-    if (isEarlyAccess && !isPremium) return false;
-    return true;
-  };
-  
-  useEffect(() => {
+    const initialPage = parseInt(searchParams.get('page') || '0', 10);
     if (initialPage > 0 && pages.length > 0) {
       setCurrentPageIndex(Math.min(initialPage, pages.length - 1));
     }
-  }, [initialPage, pages]);
-  
+  }, [searchParams, pages.length]);
+
   useEffect(() => {
     if (chapter && user && pages.length > 0) {
       updateProgress(chapter.id, currentPageIndex, pages.length);
     }
-  }, [currentPageIndex, chapter, user, updateProgress, pages]);
+  }, [currentPageIndex, chapter, user, updateProgress, pages.length]);
 
-  useEffect(() => {
-    // Auto-hide controls after 3 seconds on desktop, 5 seconds on mobile
-    const timer = setTimeout(() => {
-      setShowControls(false);
-    }, isMobile ? 5000 : 3000);
-    
-    return () => clearTimeout(timer);
-  }, [showControls, isMobile]);
-
-  // Swipe gesture handlers for mobile
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      if (isMobile) goToNextPage();
-    },
-    onSwipedRight: () => {
-      if (isMobile) goToPreviousPage();
-    },
-    onTap: () => {
-      if (isMobile) setShowControls(!showControls);
-    },
-    preventScrollOnSwipe: true,
-    trackMouse: false
-  });
-
-  const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-      goToPreviousPage();
-    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-      goToNextPage();
-    } else if (e.key === ' ') {
-      e.preventDefault();
-      setShowControls(!showControls);
+  const goToNextChapter = useCallback(() => {
+    const idx = chapters.findIndex((c) => c.id === chapter?.id);
+    if (idx >= 0 && idx < chapters.length - 1) {
+      navigate(`/reader/${chapters[idx + 1].id}`);
     }
-  }, [showControls]);
+  }, [chapters, chapter, navigate]);
 
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [handleKeyPress]);
+  const goToPreviousChapter = useCallback(() => {
+    const idx = chapters.findIndex((c) => c.id === chapter?.id);
+    if (idx > 0) navigate(`/reader/${chapters[idx - 1].id}`);
+  }, [chapters, chapter, navigate]);
 
   if (loading || pagesLoading) {
     return (
@@ -205,8 +270,8 @@ const Reader = () => {
   if (!chapter) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-reader-bg">
-        <Card className="p-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Chapter Not Found</h1>
+        <Card className="p-8 text-center space-y-4">
+          <h1 className="text-2xl font-bold">Chapter Not Found</h1>
           <Button onClick={() => navigate('/')} variant="manga">
             Back to Home
           </Button>
@@ -215,16 +280,26 @@ const Reader = () => {
     );
   }
 
-  // All chapters are now accessible through coin system
+  const isPremiumOnly = chapter.chapter_number % 5 === 0;
+  if (isPremiumOnly && !isPremium) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-reader-bg px-4">
+        <Card className="p-8 text-center max-w-md space-y-4">
+          <h1 className="text-2xl font-bold">Premium chapter</h1>
+          <p className="text-muted-foreground">This chapter requires an active Premium membership.</p>
+          <Button asChild>
+            <Link to="/premium">View Premium</Link>
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   if (pages.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-reader-bg">
-        <Card className="p-8 text-center max-w-md">
-          <h1 className="text-2xl font-bold mb-4">Demo preview</h1>
-          <p className="text-muted-foreground mb-4">
-            Chapter pages are not included in the demo. Browse series covers and the library UI instead.
-          </p>
+        <Card className="p-8 text-center max-w-md space-y-4">
+          <h1 className="text-2xl font-bold">Pages unavailable</h1>
           <Button onClick={() => navigate('/')} variant="manga">
             Back to Home
           </Button>
@@ -233,71 +308,26 @@ const Reader = () => {
     );
   }
 
-  const goToNextPage = () => {
-    if (currentPageIndex < pages.length - 1) {
-      setCurrentPageIndex(prev => prev + 1);
-      setShowControls(true);
-    } else {
-      // Go to next chapter
-      const currentChapterIndex = chapters.findIndex(c => c.id === chapterId);
-      if (currentChapterIndex < chapters.length - 1) {
-        const nextChapter = chapters[currentChapterIndex + 1];
-        navigate(`/reader/${nextChapter.id}`);
-      }
-    }
-  };
+  const currentChapterIndex = chapters.findIndex((c) => c.id === chapter.id);
 
-  const goToPreviousPage = () => {
-    if (currentPageIndex > 0) {
-      setCurrentPageIndex(prev => prev - 1);
-      setShowControls(true);
-    } else {
-      // Go to previous chapter
-      const currentChapterIndex = chapters.findIndex(c => c.id === chapterId);
-      if (currentChapterIndex > 0) {
-        const prevChapter = chapters[currentChapterIndex - 1];
-        navigate(`/reader/${prevChapter.id}?page=${prevChapter.page_count - 1}`);
-      }
-    }
-  };
-
-  const goToNextChapter = () => {
-      const currentChapterIndex = chapters.findIndex(c => c.id === chapterId);
-      if (currentChapterIndex < chapters.length - 1) {
-        const nextChapter = chapters[currentChapterIndex + 1];
-        navigate(`/reader/${nextChapter.id}`);
-      }
-  };
-
-  const goToPreviousChapter = () => {
-    const currentChapterIndex = chapters.findIndex(c => c.id === chapterId);
-    if (currentChapterIndex > 0) {
-      const prevChapter = chapters[currentChapterIndex - 1];
-      navigate(`/reader/${prevChapter.id}`);
-    }
-  };
-
-  const progressPercentage = ((currentPageIndex + 1) / pages.length) * 100;
-  const currentChapterIndex = chapters.findIndex(c => c.id === chapterId);
-  const hasNextChapter = currentChapterIndex < chapters.length - 1;
-  const hasPrevChapter = currentChapterIndex > 0;
-
-  // Use WebtoonReader as the default and only reading mode
   return (
     <WebtoonReader
       pages={pages}
       currentPage={currentPageIndex}
       onPageChange={setCurrentPageIndex}
       onNavigateHome={() => navigate('/')}
-      onNavigateChapterList={() => navigate('/chapters')}
+      onNavigateChapterList={() =>
+        navigate(detectedSeriesId ? `/series/${detectedSeriesId}` : '/series')
+      }
       onPreviousChapter={goToPreviousChapter}
       onNextChapter={goToNextChapter}
-      hasPreviousChapter={hasPrevChapter}
-      hasNextChapter={hasNextChapter}
+      hasPreviousChapter={currentChapterIndex > 0}
+      hasNextChapter={currentChapterIndex < chapters.length - 1}
       chapterTitle={chapter.title}
       chapterNumber={chapter.chapter_number}
+      isMobile={isMobile}
     />
   );
-};
+}
 
 export default Reader;

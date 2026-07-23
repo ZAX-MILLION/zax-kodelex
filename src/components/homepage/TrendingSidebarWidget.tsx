@@ -131,9 +131,9 @@ const TrendingSidebarWidget = ({
                   </span>
                   {item.status && (
                     <span className={`text-xs px-1.5 py-0.5 rounded ${
-                      item.status === 'ongoing' ? 'bg-green-500/10 text-green-600' :
-                      item.status === 'completed' ? 'bg-blue-500/10 text-blue-600' :
-                      'bg-orange-500/10 text-orange-600'
+                      item.status === 'ongoing' ? 'bg-emerald-800 text-white' :
+                      item.status === 'completed' ? 'bg-sky-800 text-white' :
+                      'bg-amber-800 text-white'
                     }`}>
                       {item.status}
                     </span>
@@ -142,7 +142,7 @@ const TrendingSidebarWidget = ({
                 
                 {/* Rating and Views */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
+                  <div className="hidden md:flex items-center gap-1">
                     {renderStars(rating)}
                     <span className="text-xs text-muted-foreground ml-1">
                       {rating.toFixed(1)}

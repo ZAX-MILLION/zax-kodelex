@@ -7,11 +7,14 @@ import Layout from './components/Layout';
 import React, { Suspense, ReactNode, lazy } from 'react';
 import { LoadingState } from './components/LoadingSpinner';
 import { AuthProvider } from './contexts/AuthContext';
+import { DemoRoleProvider } from './contexts/DemoRoleContext';
 import { FeatureFlagProvider } from './contexts/FeatureFlagContext';
+import { AdminRouteGuard, PaymentsRouteGuard } from './components/guards/FeatureRouteGuard';
 import ErrorBoundary from './components/ErrorBoundary';
 import Analytics from './components/Analytics';
 import PWAInstaller from './components/PWAInstaller';
 import { useColorScheme } from './hooks/useColorScheme';
+import { useAppearance } from './hooks/useAppearance';
 import { ThemeProvider } from './components/themes/ThemeProvider';
 import { EnhancedSEOHelmet } from './components/EnhancedSEOHelmet';
 import Home from './pages/Home';
@@ -28,6 +31,7 @@ const LoginRedirect = lazy(() => import('./pages/LoginRedirect'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Admin = lazy(() => import('./pages/Admin'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const Author = lazy(() => import('./pages/Author'));
 const Support = lazy(() => import('./pages/Support'));
 const Subscribe = lazy(() => import('./pages/Subscribe'));
@@ -58,6 +62,16 @@ const WordPressCrawler = lazy(() =>
 );
 const Settings = lazy(() => import('./pages/Settings'));
 const Chapters = lazy(() => import('./pages/Chapters'));
+const DemoRoleLab = lazy(() => import('./pages/DemoRoleLab'));
+const DemoUploaderSim = lazy(() => import('./pages/demo/DemoUploaderSim'));
+const DemoAdminSim = lazy(() => import('./pages/demo/DemoAdminSim'));
+const DemoCheckoutSim = lazy(() => import('./pages/demo/DemoCheckoutSim'));
+const DemoMemberSim = lazy(() => import('./pages/demo/DemoMemberSim'));
+const DemoPaidMemberSim = lazy(() => import('./pages/demo/DemoPaidMemberSim'));
+const DemoBuyerSim = lazy(() => import('./pages/demo/DemoBuyerSim'));
+const DemoRoleAlias = lazy(() => import('./pages/demo/DemoRoleAlias'));
+const DemoStylesCompare = lazy(() => import('./pages/demo/DemoStylesCompare'));
+const DemoHomeStyles = lazy(() => import('./pages/demo/DemoHomeStyles'));
 
 function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
   return (
@@ -70,6 +84,7 @@ function AppShell({ children, seo }: { children: ReactNode; seo?: ReactNode }) {
 
 function AppContent() {
   useColorScheme();
+  useAppearance();
 
   return (
     <InstallationGate>
@@ -102,15 +117,26 @@ function AppContent() {
               <Route path="/reader/:chapterId" element={<AppShell><Reader /></AppShell>} />
               <Route path="/reader/:seriesId/:chapterNumber" element={<AppShell><Reader /></AppShell>} />
               <Route path="/profile" element={<AppShell><Profile /></AppShell>} />
-              <Route path="/admin/*" element={<Admin />} />
+              <Route path="/admin/login" element={<AdminRouteGuard><AdminLogin /></AdminRouteGuard>} />
+              <Route path="/admin/*" element={<AdminRouteGuard><Admin /></AdminRouteGuard>} />
               <Route path="/author/*" element={<Author />} />
               <Route path="/support" element={<AppShell><Support /></AppShell>} />
-              <Route path="/subscribe" element={<AppShell><Subscribe /></AppShell>} />
+              <Route path="/coins" element={<PaymentsRouteGuard><AppShell><Coins /></AppShell></PaymentsRouteGuard>} />
+              <Route path="/monetization" element={<PaymentsRouteGuard><AppShell><Monetization /></AppShell></PaymentsRouteGuard>} />
+              <Route path="/subscribe" element={<PaymentsRouteGuard><AppShell><Subscribe /></AppShell></PaymentsRouteGuard>} />
               <Route path="/premium" element={<AppShell><Premium /></AppShell>} />
-              <Route path="/buy" element={<AppShell><Buy /></AppShell>} />
+              <Route path="/buy" element={<PaymentsRouteGuard><AppShell><Buy /></AppShell></PaymentsRouteGuard>} />
               <Route path="/contests" element={<AppShell><Contests /></AppShell>} />
-              <Route path="/coins" element={<AppShell><Coins /></AppShell>} />
-              <Route path="/monetization" element={<AppShell><Monetization /></AppShell>} />
+              <Route path="/demo" element={<AppShell><DemoRoleLab /></AppShell>} />
+              <Route path="/demo/member" element={<AppShell><DemoMemberSim /></AppShell>} />
+              <Route path="/demo/paid-member" element={<AppShell><DemoPaidMemberSim /></AppShell>} />
+              <Route path="/demo/buyer" element={<AppShell><DemoBuyerSim /></AppShell>} />
+              <Route path="/demo/uploader" element={<AppShell><DemoUploaderSim /></AppShell>} />
+              <Route path="/demo/admin/*" element={<AppShell><DemoAdminSim /></AppShell>} />
+              <Route path="/demo/checkout" element={<AppShell><DemoCheckoutSim /></AppShell>} />
+              <Route path="/demo/styles" element={<AppShell><DemoStylesCompare /></AppShell>} />
+              <Route path="/demo/home-styles" element={<AppShell><DemoHomeStyles /></AppShell>} />
+              <Route path="/demo/:roleAlias" element={<AppShell><DemoRoleAlias /></AppShell>} />
               <Route path="/series" element={<AppShell><Series /></AppShell>} />
               <Route path="/series/:id" element={<AppShell><SeriesDetail /></AppShell>} />
               <Route path="/browse" element={<AppShell><Browse /></AppShell>} />
@@ -156,11 +182,13 @@ const App = () => (
       <HelmetProvider>
         <TooltipProvider>
           <AuthProvider>
-            <FeatureFlagProvider>
-              <Toaster />
-              <Sonner />
-              <AppContent />
-            </FeatureFlagProvider>
+            <DemoRoleProvider>
+              <FeatureFlagProvider>
+                <Toaster />
+                <Sonner />
+                <AppContent />
+              </FeatureFlagProvider>
+            </DemoRoleProvider>
           </AuthProvider>
         </TooltipProvider>
       </HelmetProvider>

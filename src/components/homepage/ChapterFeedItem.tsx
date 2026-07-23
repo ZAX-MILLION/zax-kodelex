@@ -26,7 +26,7 @@ export const ChapterFeedItem = ({
             New
           </Badge>
           {chapter.is_locked && (
-            <Badge variant="destructive" className="text-xs flex items-center gap-1">
+            <Badge className="text-xs flex items-center gap-1 bg-rose-700 text-white hover:bg-rose-700 border-0">
               <Lock className="w-3 h-3" /> Locked
             </Badge>
           )}

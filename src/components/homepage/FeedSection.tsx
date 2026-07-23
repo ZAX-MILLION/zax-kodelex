@@ -78,7 +78,7 @@ export const FeedSection = () => {
       
       <Card>
         <CardContent className="p-4">
-          <ScrollArea className="h-[400px] w-full">
+          <ScrollArea className="h-[320px] sm:h-[400px] w-full">
             <div className="space-y-2">
               {chapters.map((chapter) => (
                 <ChapterFeedItem key={chapter.chapter_id} chapter={chapter} />

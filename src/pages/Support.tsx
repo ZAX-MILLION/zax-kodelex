@@ -5,10 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Heart, Coffee, DollarSign, Check, ExternalLink } from 'lucide-react';
-
-const KOFI_SUPPORT_URL = 'https://ko-fi.com/zaxmi';
+import { appConfig } from '@/config/env';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+
+const KOFI_SUPPORT_URL = 'https://ko-fi.com/zaxmi';
 
 declare global {
   interface Window {
@@ -16,7 +17,7 @@ declare global {
   }
 }
 
-const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+const PAYPAL_CLIENT_ID = appConfig.features.paypal ? import.meta.env.VITE_PAYPAL_CLIENT_ID : undefined;
 
 const Support = () => {
   const [amount, setAmount] = useState('5.00');

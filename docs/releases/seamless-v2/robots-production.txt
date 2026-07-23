@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /demo
+Disallow: /demo/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /author
+Disallow: /login
+Disallow: /reset-password
+Disallow: /settings
+Disallow: /profile
+Disallow: /buy
+Disallow: /coins
+Disallow: /subscribe
+Disallow: /monetization
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://example-prod.zaxmillion.com/sitemap.xml

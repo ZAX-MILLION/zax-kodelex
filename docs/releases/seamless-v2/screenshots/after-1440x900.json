@@ -1,0 +1,12 @@
+{
+  "url": "http://127.0.0.1:4173/",
+  "viewport": {
+    "name": "1440x900",
+    "width": 1440,
+    "height": 900
+  },
+  "errors": [
+    "WebSocket connection to 'wss://placeholder.supabase.co/realtime/v1/websocket?apikey=placeholder-key&vsn=1.0.0' failed: Error in connection establishment: net::ERR_NAME_NOT_RESOLVED",
+    "WebSocket connection to 'wss://placeholder.supabase.co/realtime/v1/websocket?apikey=placeholder-key&vsn=1.0.0' failed: Error in connection establishment: net::ERR_NAME_NOT_RESOLVED"
+  ]
+}

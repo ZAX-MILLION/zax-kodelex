@@ -56,7 +56,7 @@ export const HeroSlider = ({
 
   return (
     <TooltipProvider>
-      <div className="w-full mb-8">
+      <div className="w-full mb-4 sm:mb-6">
         {/* Compact icon filters */}
         {showFilters && (
           <div className="mb-3 flex justify-center">
@@ -64,8 +64,10 @@ export const HeroSlider = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    type="button"
+                    aria-label="Show trending series"
                     onClick={() => setCurrentFilter('trending')}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`min-h-11 min-w-11 w-11 h-11 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       currentFilter === 'trending' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -82,8 +84,10 @@ export const HeroSlider = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    type="button"
+                    aria-label="Show latest series"
                     onClick={() => setCurrentFilter('new')}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`min-h-11 min-w-11 w-11 h-11 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       currentFilter === 'new' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -100,8 +104,10 @@ export const HeroSlider = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    type="button"
+                    aria-label="Show random series"
                     onClick={() => setCurrentFilter('random')}
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 ${
+                    className={`min-h-11 min-w-11 w-11 h-11 sm:w-11 sm:h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       currentFilter === 'random' 
                         ? 'bg-primary text-primary-foreground' 
                         : 'text-muted-foreground hover:text-foreground'
@@ -119,7 +125,7 @@ export const HeroSlider = ({
         )}
 
         {/* Infinite Carousel */}
-        <div className="relative">
+        <div className="relative container mx-auto px-3 sm:px-4 lg:px-8">
           <Carousel
             opts={{
               align: "start",
@@ -135,9 +141,9 @@ export const HeroSlider = ({
             ]}
             className="w-full"
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselContent className="-ml-3 sm:-ml-4">
               {displaySeries.map((item: SeriesCard, index: number) => (
-                <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+                <CarouselItem key={item.id} className="pl-3 sm:pl-4 basis-[82%] sm:basis-[70%] md:basis-1/3 lg:basis-1/5 xl:basis-1/6">
                   <Link 
                     to={`/series/${item.id}`} 
                     onClick={() => handleSeriesClick(item.id)} 
@@ -161,7 +167,7 @@ export const HeroSlider = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-300" />
                         
                         {/* Rating badge */}
-                        <div className="absolute top-2 left-2 bg-yellow-500/90 backdrop-blur-sm text-black px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                        <div className="absolute top-2 left-2 hidden md:flex bg-yellow-500/90 backdrop-blur-sm text-black px-2 py-1 rounded-full text-xs font-bold items-center gap-1 shadow-lg">
                           <Star className="h-3 w-3 fill-current" />
                           <span>4.{Math.floor(Math.random() * 9) + 1}</span>
                         </div>
@@ -179,10 +185,10 @@ export const HeroSlider = ({
                         
                         {/* Title and view count */}
                         <div className="absolute bottom-0 left-0 right-0 p-3">
-                          <h3 className="text-white font-bold text-sm leading-tight line-clamp-2 drop-shadow-lg mb-1">
+                          <h3 className="text-white font-bold text-xs sm:text-sm leading-tight line-clamp-2 drop-shadow-lg mb-1">
                             {item.title}
                           </h3>
-                          <div className="flex items-center gap-1 text-white/90 text-xs">
+                          <div className="hidden md:flex items-center gap-1 text-white/90 text-xs">
                             <Eye className="h-3 w-3" />
                             <span>{(item.view_count || Math.floor(Math.random() * 50000) + 1000).toLocaleString()}</span>
                           </div>
@@ -193,8 +199,8 @@ export const HeroSlider = ({
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex absolute left-2 lg:-left-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
-            <CarouselNext className="hidden md:flex absolute right-2 lg:-right-6 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm" />
+            <CarouselPrevious className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm min-h-11 min-w-11" />
+            <CarouselNext className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 border-white/20 text-white backdrop-blur-sm min-h-11 min-w-11" />
           </Carousel>
         </div>
       </div>

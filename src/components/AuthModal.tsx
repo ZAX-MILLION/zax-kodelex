@@ -9,6 +9,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mail, Lock, User, Crown, UserCheck, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTestAccounts } from '@/hooks/useTestAccounts';
+import { isRealAuthEnabled, shouldUseDemoRolePreview } from '@/features/demo/demoAuthPolicy';
+import DemoRolePreviewModal from '@/components/DemoRolePreviewModal';
+import { Link } from 'react-router-dom';
+import { appConfig } from '@/config/env';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -26,7 +30,35 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { signIn, signUp, resetPassword } = useAuth();
   const { loginAsAdmin, loginAsMember } = useTestAccounts();
-  const isDev = import.meta.env.DEV;
+  const showQuickTest = import.meta.env.DEV && isRealAuthEnabled();
+
+  if (shouldUseDemoRolePreview()) {
+    return <DemoRolePreviewModal isOpen={isOpen} onClose={onClose} />;
+  }
+
+  if (!isRealAuthEnabled()) {
+    return (
+      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Sign in unavailable</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Authentication needs a configured Supabase project in your environment file. This host
+            is not connected to live auth, so login requests are not sent.
+          </p>
+          {appConfig.features.roleLab && (
+            <Button asChild className="min-h-11 w-full" onClick={onClose}>
+              <Link to="/demo">Open Role Lab (no password)</Link>
+            </Button>
+          )}
+          <Button variant="outline" className="min-h-11" onClick={onClose}>
+            Close
+          </Button>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   const resetForm = () => {
     setEmail('');
@@ -149,7 +181,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
           </form>
         ) : (
           <>
-            {isDev && (
+            {showQuickTest && (
               <div className="space-y-3 mb-6">
                 <p className="text-sm font-medium text-center text-muted-foreground">Quick Test Login (dev only)</p>
                 <div className="grid grid-cols-2 gap-3">

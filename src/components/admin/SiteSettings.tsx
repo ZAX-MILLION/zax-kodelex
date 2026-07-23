@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +21,9 @@ import {
   Eye
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SeriesDetailsBackgroundControls } from "@/components/series/SeriesDetailsBackgroundControls";
+import { SeriesDetailsLayoutControls } from "@/components/series/SeriesDetailsLayoutControls";
+import { SeriesAppearanceControls } from "@/components/series/SeriesAppearanceControls";
 
 interface SiteSettings {
   site_title: string;
@@ -54,6 +58,13 @@ interface GlobalSettings {
 }
 
 export const SiteSettings = () => {
+  const [searchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const initialTab = ['general', 'colors', 'appearance', 'features', 'security', 'advanced'].includes(
+    requestedTab || ''
+  )
+    ? requestedTab!
+    : 'general';
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     site_title: "Zax Million",
     logo_url: null,
@@ -234,7 +245,7 @@ export const SiteSettings = () => {
         </div>
       </div>
 
-      <Tabs defaultValue="general" className="w-full">
+      <Tabs defaultValue={initialTab} className="w-full">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="colors">Colors</TabsTrigger>
@@ -546,6 +557,33 @@ export const SiteSettings = () => {
                     <SelectItem value="80vh">Full Height (80vh)</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="rounded-xl border border-border/40 bg-muted/10 p-4 sm:p-5">
+                <h4 className="mb-1 text-sm font-semibold">Manga details page background</h4>
+                <p className="mb-4 text-xs text-muted-foreground">
+                  Global default behind series detail pages. Per-series overrides can be set in catalogue
+                  metadata or demo admin tools.
+                </p>
+                <SeriesDetailsBackgroundControls compact />
+              </div>
+
+              <div className="rounded-xl border border-border/40 bg-muted/10 p-4 sm:p-5">
+                <h4 className="mb-1 text-sm font-semibold">Manga details page layout</h4>
+                <p className="mb-4 text-xs text-muted-foreground">
+                  Choose the default series details layout. Per-series overrides can be set in demo admin
+                  tools.
+                </p>
+                <SeriesDetailsLayoutControls compact />
+              </div>
+
+              <div className="rounded-xl border border-border/40 bg-muted/10 p-4 sm:p-5">
+                <h4 className="mb-1 text-sm font-semibold">Site appearance — Light / Dark / System</h4>
+                <p className="mb-4 text-xs text-muted-foreground">
+                  Global default for every public page and all four series-details layouts. Per-series
+                  overrides can be set in demo admin tools.
+                </p>
+                <SeriesAppearanceControls compact />
               </div>
 
               <div className="space-y-2">

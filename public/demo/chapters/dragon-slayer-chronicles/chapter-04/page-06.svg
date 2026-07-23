@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200" role="img" aria-label="Dragon Slayer Chronicles transition page 6">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="55%" stop-color="#121826"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2236"/>
+      <stop offset="100%" stop-color="#0f1524"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect x="28" y="28" width="744" height="1144" rx="18" fill="none" stroke="#2563eb" stroke-opacity="0.35" stroke-width="2"/>
+  
+  <rect x="80" y="180" width="300" height="380" rx="10" fill="url(#panel)" stroke="#334155"/>
+  <rect x="420" y="240" width="300" height="380" rx="10" fill="url(#panel)" stroke="#334155"/>
+  <rect x="180" y="680" width="440" height="280" rx="10" fill="url(#panel)" stroke="#2563eb"/>
+  <text x="400" y="830" text-anchor="middle" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="22">Scene transition</text>
+  <text x="400" y="870" text-anchor="middle" fill="#64748b" font-family="system-ui, sans-serif" font-size="16">Page 6</text>
+
+</svg>

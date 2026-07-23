@@ -1,0 +1,51 @@
+{
+  "project": "zax-kodelex",
+  "branch": "upgrade/zax-seamless-v2",
+  "baselineTag": "pre-seamless-v2-b8c42a0",
+  "measuredAt": "2026-07-20T15:45:00Z",
+  "deployedCommit": "4ebadca008e6edacdd2a3534795f59fd27f9d48e",
+  "previewUrl": "https://zax-kodelex.vercel.app/",
+  "deploymentUrl": "https://zax-kodelex-dib6ft71g-copasik299-8255s-projects.vercel.app",
+  "verdict": "READY FOR VISUAL REVIEW",
+  "commands": {
+    "typecheck": { "command": "npm run typecheck", "result": "pass" },
+    "lint": { "command": "npm run lint", "result": "pass_with_warnings", "errors": 0, "warnings": 483 },
+    "unitTests": { "command": "npm test", "result": "pass", "passed": 52, "failed": 0 },
+    "demoBuild": { "command": "npm run build:demo via Vercel", "result": "pass" },
+    "e2e": {
+      "result": "pass",
+      "note": "Playwright layout + network isolation against live demo",
+      "evidence": "docs/releases/seamless-v2/screenshots/reader-qi-layout/verification.json"
+    }
+  },
+  "readerQiLayout": {
+    "bottomToolbarAbsent": true,
+    "singleTopBar": true,
+    "sideRailPresent": true,
+    "commentsDrawer": true,
+    "chapterListPanel": true,
+    "autoScroll": true,
+    "settingsPersistKey": "zax-reader-settings-v2",
+    "screenshots": "docs/releases/seamless-v2/screenshots/reader-qi-layout/"
+  },
+  "demoNetworkIsolation": {
+    "supabaseRequests": 0,
+    "paypalRequests": 0,
+    "placeholderCreateClient": false,
+    "offlineStubInBundle": true,
+    "consoleBackendErrors": 0,
+    "doc": "docs/releases/seamless-v2/DEMO-NETWORK-ISOLATION.md",
+    "routesChecked": ["/", "/reader", "/series", "/blog", "/demo"]
+  },
+  "accessibility": {
+    "tool": "axe-core (prior homepage/demo) + reader keyboard/Escape smoke",
+    "readerNote": "Side rail buttons labeled; Escape closes overlays first; reduced-motion stops auto-scroll"
+  },
+  "externalBlockers": [
+    "ADMIN visual approval of reader chrome before merge",
+    "PayPal sandbox/live credentials + webhook IDs",
+    "Apply Supabase migrations on real project",
+    "Custom production domain / VITE_SITE_URL",
+    "Do not publish v2.0.0 until approved"
+  ]
+}

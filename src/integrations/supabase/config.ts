@@ -38,8 +38,20 @@ export function resolveSupabaseConfig(): SupabaseConfig {
 }
 
 export function hasSupabaseCredentials(): boolean {
+  // Public demo builds must never treat credentials as available
+  if (
+    import.meta.env.VITE_APP_ENV === 'demo' ||
+    import.meta.env.VITE_DEMO_MODE === 'true'
+  ) {
+    return false;
+  }
   const config = resolveSupabaseConfig();
-  return Boolean(config.url && config.anonKey);
+  if (!config.url || !config.anonKey) return false;
+  if (config.url.includes('placeholder.supabase.co')) return false;
+  // Dev fallback URL is for convenience only — do not treat it as live auth/API.
+  // Set VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY (or localStorage) for real login.
+  if (config.source === 'dev-fallback') return false;
+  return true;
 }
 
 export function persistSupabaseCredentials(url: string, anonKey: string) {

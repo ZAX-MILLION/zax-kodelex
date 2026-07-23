@@ -1,0 +1,81 @@
+{
+  "routes": [
+    {
+      "name": "home",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "backendRequests": 0,
+      "backendSample": []
+    },
+    {
+      "name": "reader",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "backendRequests": 0,
+      "backendSample": []
+    },
+    {
+      "name": "series",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "backendRequests": 0,
+      "backendSample": []
+    },
+    {
+      "name": "blog",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "backendRequests": 0,
+      "backendSample": []
+    },
+    {
+      "name": "demo",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "backendRequests": 0,
+      "backendSample": []
+    }
+  ],
+  "layout": {
+    "desktop-1440": {
+      "topBar": true,
+      "sideRail": true,
+      "bottomNav": false,
+      "bottomFixed": false
+    },
+    "tablet-768": {
+      "topBar": true,
+      "sideRail": true,
+      "bottomNav": false,
+      "bottomFixed": false
+    },
+    "mobile-390": {
+      "topBar": true,
+      "sideRail": true,
+      "bottomNav": false,
+      "bottomFixed": false
+    }
+  },
+  "network": {
+    "offlineStubInBundle": true,
+    "placeholderCreateClientInBundle": false
+  },
+  "console": [],
+  "backendHits": [],
+  "pass": {
+    "noBackendRequests": true,
+    "noPlaceholderCreateClient": true,
+    "layoutOk": true,
+    "noAppConsoleErrors": true
+  }
+}

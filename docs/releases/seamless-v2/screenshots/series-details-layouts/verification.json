@@ -1,0 +1,116 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "generatedAt": "2026-07-20T21:39:26.357Z",
+  "shots": [
+    {
+      "layout": "A",
+      "viewport": "390",
+      "file": "layout-editorial-390.png"
+    },
+    {
+      "layout": "A",
+      "viewport": "768",
+      "file": "layout-editorial-768.png"
+    },
+    {
+      "layout": "A",
+      "viewport": "1440",
+      "file": "layout-editorial-1440.png"
+    },
+    {
+      "layout": "B",
+      "viewport": "390",
+      "file": "layout-cinematic-390.png"
+    },
+    {
+      "layout": "B",
+      "viewport": "768",
+      "file": "layout-cinematic-768.png"
+    },
+    {
+      "layout": "B",
+      "viewport": "1440",
+      "file": "layout-cinematic-1440.png"
+    },
+    {
+      "layout": "C",
+      "viewport": "390",
+      "file": "layout-compact-390.png"
+    },
+    {
+      "layout": "C",
+      "viewport": "768",
+      "file": "layout-compact-768.png"
+    },
+    {
+      "layout": "C",
+      "viewport": "1440",
+      "file": "layout-compact-1440.png"
+    }
+  ],
+  "overflow": [
+    {
+      "layout": "A",
+      "viewport": "390",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "layout": "A",
+      "viewport": "768",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "layout": "A",
+      "viewport": "1440",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "layout": "B",
+      "viewport": "390",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "layout": "B",
+      "viewport": "768",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "layout": "B",
+      "viewport": "1440",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    },
+    {
+      "layout": "C",
+      "viewport": "390",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflowX": false
+    },
+    {
+      "layout": "C",
+      "viewport": "768",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "overflowX": false
+    },
+    {
+      "layout": "C",
+      "viewport": "1440",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflowX": false
+    }
+  ]
+}

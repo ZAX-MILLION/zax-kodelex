@@ -1,0 +1,40 @@
+# Owner checklist — Seamless V2
+
+## Before approving the upgrade
+
+- [ ] Review before/after screenshots in `docs/releases/seamless-v2/screenshots/`
+- [ ] Read `IMPLEMENTATION-REPORT.md`
+- [ ] Confirm the live GitHub Pages demo should stay on `main` until you choose to merge
+
+## Before staging payments
+
+- [ ] Create a PayPal Sandbox application
+- [ ] Add Edge Function secrets (see `docs/runbooks/PAYPAL-GO-LIVE.md`)
+- [ ] Apply new Supabase migrations on the staging project
+- [ ] Confirm wallet RLS hardening migration is applied
+- [ ] Complete one sandbox coin purchase
+
+## Before enabling database-persisted series-details overrides (Layout D / four themes work)
+
+- [ ] Apply `supabase/migrations/20260722020000_series_details_appearance_overrides.sql` on
+      staging/production (adds nullable `manga_meta` columns — no data migration needed,
+      every existing series is compatible by default). See
+      `docs/releases/seamless-v2/SERIES-DETAILS-FOUR-THEMES.md` for full details.
+- [ ] Regenerate `src/integrations/supabase/types.ts` from the live schema once applied
+      (this PR hand-edited the types file to match the migration; running the Supabase CLI
+      codegen afterward keeps it authoritative).
+- [ ] Spot-check the admin "Site appearance" and per-series layout/appearance controls in
+      staging save correctly to the database (not just localStorage).
+
+## Before live payments
+
+- [ ] Confirm PayPal Business can receive USD for digital goods
+- [ ] Review Terms and `docs/legal/drafts/REFUND-AND-CHARGEBACK.md`
+- [ ] Set production `VITE_SITE_URL`
+- [ ] Set `PAYPAL_ALLOW_LIVE=true` only when ready
+- [ ] Complete `docs/runbooks/SUPABASE-DASHBOARD-SECURITY.md`
+
+## Public site URL (root GitHub Pages)
+
+- [ ] Decide whether to keep this repo as source and publish from `ZAX-MILLION.github.io`, or rename later
+- [ ] Follow `docs/runbooks/GITHUB-PAGES-ROOT-MIGRATION.md` (requires your explicit approval)

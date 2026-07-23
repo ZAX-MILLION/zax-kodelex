@@ -88,7 +88,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-card/50 border-t border-border/30 mt-auto">
-      <div className={`container mx-auto px-4 ${footerSettings.compactMode ? 'py-4' : 'py-8'}`}>
+      <div className={`container mx-auto px-4 sm:px-6 lg:px-8 ${footerSettings.compactMode ? 'py-4' : 'py-8'}`}>
         {/* Main Footer Content */}
         <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 ${footerSettings.compactMode ? 'mb-4' : 'mb-6'}`}>
           {/* Brand Section */}
@@ -154,9 +154,10 @@ const Footer = () => {
               <a 
                 key={social.id}
                 href={social.url} 
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="inline-flex items-center justify-center min-h-11 min-w-11 text-muted-foreground hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`${social.platform} (opens in a new tab)`}
               >
                 {getSocialIcon(social.icon)}
               </a>

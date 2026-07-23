@@ -1,0 +1,372 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "generatedAt": "2026-07-23T02:12:35.077Z",
+  "runs": [
+    {
+      "layout": "A",
+      "scheme": "dark",
+      "viewport": "390",
+      "layoutAttr": "editorial",
+      "hasMetaPanel": false,
+      "chaptersY": 938.25,
+      "commentsY": 1987.25,
+      "reviewsY": 2681.25,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "editorial-dark-390.png"
+    },
+    {
+      "layout": "A",
+      "scheme": "dark",
+      "viewport": "768",
+      "layoutAttr": "editorial",
+      "hasMetaPanel": false,
+      "chaptersY": 783.25,
+      "commentsY": 1712.25,
+      "reviewsY": 2358.25,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "editorial-dark-768.png"
+    },
+    {
+      "layout": "A",
+      "scheme": "dark",
+      "viewport": "1440",
+      "layoutAttr": "editorial",
+      "hasMetaPanel": false,
+      "chaptersY": 521.640625,
+      "commentsY": 1450.640625,
+      "reviewsY": 2096.640625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "editorial-dark-1440.png"
+    },
+    {
+      "layout": "A",
+      "scheme": "light",
+      "viewport": "390",
+      "layoutAttr": "editorial",
+      "hasMetaPanel": false,
+      "chaptersY": 938.25,
+      "commentsY": 1987.25,
+      "reviewsY": 2681.25,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "editorial-light-390.png"
+    },
+    {
+      "layout": "A",
+      "scheme": "light",
+      "viewport": "768",
+      "layoutAttr": "editorial",
+      "hasMetaPanel": false,
+      "chaptersY": 783.25,
+      "commentsY": 1712.25,
+      "reviewsY": 2358.25,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "editorial-light-768.png"
+    },
+    {
+      "layout": "A",
+      "scheme": "light",
+      "viewport": "1440",
+      "layoutAttr": "editorial",
+      "hasMetaPanel": false,
+      "chaptersY": 521.640625,
+      "commentsY": 1450.640625,
+      "reviewsY": 2096.640625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "editorial-light-1440.png"
+    },
+    {
+      "layout": "B",
+      "scheme": "dark",
+      "viewport": "390",
+      "layoutAttr": "cinematic",
+      "hasMetaPanel": false,
+      "chaptersY": 943.875,
+      "commentsY": 2697.875,
+      "reviewsY": 5774.875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "cinematic-dark-390.png"
+    },
+    {
+      "layout": "B",
+      "scheme": "dark",
+      "viewport": "768",
+      "layoutAttr": "cinematic",
+      "hasMetaPanel": false,
+      "chaptersY": 901.46875,
+      "commentsY": 4431.46875,
+      "reviewsY": 7576.46875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "cinematic-dark-768.png"
+    },
+    {
+      "layout": "B",
+      "scheme": "dark",
+      "viewport": "1440",
+      "layoutAttr": "cinematic",
+      "hasMetaPanel": false,
+      "chaptersY": 879,
+      "commentsY": 7174,
+      "reviewsY": 10080.46875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "cinematic-dark-1440.png"
+    },
+    {
+      "layout": "B",
+      "scheme": "light",
+      "viewport": "390",
+      "layoutAttr": "cinematic",
+      "hasMetaPanel": false,
+      "chaptersY": 943.875,
+      "commentsY": 2697.875,
+      "reviewsY": 5774.875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "cinematic-light-390.png"
+    },
+    {
+      "layout": "B",
+      "scheme": "light",
+      "viewport": "768",
+      "layoutAttr": "cinematic",
+      "hasMetaPanel": false,
+      "chaptersY": 901.46875,
+      "commentsY": 4431.46875,
+      "reviewsY": 7576.46875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "cinematic-light-768.png"
+    },
+    {
+      "layout": "B",
+      "scheme": "light",
+      "viewport": "1440",
+      "layoutAttr": "cinematic",
+      "hasMetaPanel": false,
+      "chaptersY": 879,
+      "commentsY": 7174,
+      "reviewsY": 10080.46875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "cinematic-light-1440.png"
+    },
+    {
+      "layout": "C",
+      "scheme": "dark",
+      "viewport": "390",
+      "layoutAttr": "catalogue",
+      "hasMetaPanel": false,
+      "chaptersY": 405,
+      "commentsY": 1161,
+      "reviewsY": 2995.3125,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "catalogue-dark-390.png"
+    },
+    {
+      "layout": "C",
+      "scheme": "dark",
+      "viewport": "768",
+      "layoutAttr": "catalogue",
+      "hasMetaPanel": false,
+      "chaptersY": 327,
+      "commentsY": 859,
+      "reviewsY": 2744.796875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "catalogue-dark-768.png"
+    },
+    {
+      "layout": "C",
+      "scheme": "dark",
+      "viewport": "1440",
+      "layoutAttr": "catalogue",
+      "hasMetaPanel": false,
+      "chaptersY": 327,
+      "commentsY": 859,
+      "reviewsY": 2433.65625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "catalogue-dark-1440.png"
+    },
+    {
+      "layout": "C",
+      "scheme": "light",
+      "viewport": "390",
+      "layoutAttr": "catalogue",
+      "hasMetaPanel": false,
+      "chaptersY": 405,
+      "commentsY": 1161,
+      "reviewsY": 2995.3125,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "catalogue-light-390.png"
+    },
+    {
+      "layout": "C",
+      "scheme": "light",
+      "viewport": "768",
+      "layoutAttr": "catalogue",
+      "hasMetaPanel": false,
+      "chaptersY": 327,
+      "commentsY": 859,
+      "reviewsY": 2744.796875,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "catalogue-light-768.png"
+    },
+    {
+      "layout": "C",
+      "scheme": "light",
+      "viewport": "1440",
+      "layoutAttr": "catalogue",
+      "hasMetaPanel": false,
+      "chaptersY": 327,
+      "commentsY": 859,
+      "reviewsY": 2433.65625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "catalogue-light-1440.png"
+    },
+    {
+      "layout": "D",
+      "scheme": "dark",
+      "viewport": "390",
+      "layoutAttr": "chapter-index",
+      "hasMetaPanel": false,
+      "chaptersY": 228,
+      "commentsY": 917,
+      "reviewsY": 1592,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "chapter-index-dark-390.png"
+    },
+    {
+      "layout": "D",
+      "scheme": "dark",
+      "viewport": "768",
+      "layoutAttr": "chapter-index",
+      "hasMetaPanel": false,
+      "chaptersY": 199.65625,
+      "commentsY": 664.65625,
+      "reviewsY": 1267.65625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "chapter-index-dark-768.png"
+    },
+    {
+      "layout": "D",
+      "scheme": "dark",
+      "viewport": "1440",
+      "layoutAttr": "chapter-index",
+      "hasMetaPanel": false,
+      "chaptersY": 199.65625,
+      "commentsY": 664.65625,
+      "reviewsY": 1267.65625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "chapter-index-dark-1440.png"
+    },
+    {
+      "layout": "D",
+      "scheme": "light",
+      "viewport": "390",
+      "layoutAttr": "chapter-index",
+      "hasMetaPanel": false,
+      "chaptersY": 228,
+      "commentsY": 917,
+      "reviewsY": 1592,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "chapter-index-light-390.png"
+    },
+    {
+      "layout": "D",
+      "scheme": "light",
+      "viewport": "768",
+      "layoutAttr": "chapter-index",
+      "hasMetaPanel": false,
+      "chaptersY": 199.65625,
+      "commentsY": 664.65625,
+      "reviewsY": 1267.65625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "chapter-index-light-768.png"
+    },
+    {
+      "layout": "D",
+      "scheme": "light",
+      "viewport": "1440",
+      "layoutAttr": "chapter-index",
+      "hasMetaPanel": false,
+      "chaptersY": 199.65625,
+      "commentsY": 664.65625,
+      "reviewsY": 1267.65625,
+      "overflowX": false,
+      "pageErrors": [
+        "TypeError: Cannot read properties of null (reading 'classList')"
+      ],
+      "screenshot": "chapter-index-light-1440.png"
+    }
+  ],
+  "thumbnails1440": {
+    "A": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-composition\\editorial-dark-1440.png",
+    "B": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-composition\\cinematic-dark-1440.png",
+    "C": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-composition\\catalogue-dark-1440.png",
+    "D": "C:\\Users\\Windows 11\\Projects\\zax-kodelex\\docs\\releases\\seamless-v2\\screenshots\\series-layouts-composition\\chapter-index-dark-1440.png"
+  }
+}

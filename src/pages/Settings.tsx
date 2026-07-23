@@ -12,6 +12,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import CreativeNavBar from '@/components/CreativeNavBar';
+import { useAppearance } from '@/hooks/useAppearance';
+import type { AppearanceMode } from '@/features/appearance/appearanceMode';
 import { 
   Settings as SettingsIcon, 
   User, 
@@ -49,6 +51,7 @@ interface UserPreferences {
 const Settings = () => {
   const { user, userProfile } = useAuth();
   const { toast } = useToast();
+  const { mode: appearanceMode, setGlobalMode } = useAppearance();
   const [loading, setLoading] = useState(false);
   const [preferences, setPreferences] = useState<UserPreferences>({
     theme: 'default',
@@ -59,7 +62,7 @@ const Settings = () => {
     comment_notifications: true,
     reading_direction: 'ltr',
     font_size: 16,
-    dark_mode: 'system',
+    dark_mode: 'dark',
     privacy_mode: false,
     auto_mark_read: true
   });
@@ -70,6 +73,13 @@ const Settings = () => {
     }
   }, [user]);
 
+  // The Light/Dark/System control is applied instantly and lives in its own
+  // storage key (see useAppearance) so it works even for signed-out visitors;
+  // keep the preferences panel's displayed value in sync with it.
+  useEffect(() => {
+    setPreferences(prev => (prev.dark_mode === appearanceMode ? prev : { ...prev, dark_mode: appearanceMode }));
+  }, [appearanceMode]);
+
   const loadUserPreferences = async () => {
     try {
       // Load from local storage for now since we don't have a preferences table yet
@@ -78,12 +88,18 @@ const Settings = () => {
         const parsed = JSON.parse(stored);
         setPreferences(prev => ({
           ...prev,
-          ...parsed
+          ...parsed,
+          dark_mode: appearanceMode,
         }));
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
     }
+  };
+
+  const handleAppearanceChange = (mode: AppearanceMode) => {
+    setGlobalMode(mode);
+    updatePreference('dark_mode', mode);
   };
 
   const savePreferences = async () => {
@@ -242,7 +258,7 @@ const Settings = () => {
                     <Button
                       variant={preferences.dark_mode === 'light' ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => updatePreference('dark_mode', 'light')}
+                      onClick={() => handleAppearanceChange('light')}
                       className="flex items-center gap-2"
                     >
                       <Sun className="h-4 w-4" />
@@ -251,7 +267,7 @@ const Settings = () => {
                     <Button
                       variant={preferences.dark_mode === 'dark' ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => updatePreference('dark_mode', 'dark')}
+                      onClick={() => handleAppearanceChange('dark')}
                       className="flex items-center gap-2"
                     >
                       <Moon className="h-4 w-4" />
@@ -260,13 +276,16 @@ const Settings = () => {
                     <Button
                       variant={preferences.dark_mode === 'system' ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => updatePreference('dark_mode', 'system')}
+                      onClick={() => handleAppearanceChange('system')}
                       className="flex items-center gap-2"
                     >
                       <Monitor className="h-4 w-4" />
                       System
                     </Button>
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Applies instantly across every page, including all four series-details layouts.
+                  </p>
                 </div>
               </div>
             </Card>
