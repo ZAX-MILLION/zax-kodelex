@@ -75,7 +75,7 @@ export function SeriesDetailsBackground({
 
   return (
     <div
-      className={cn('relative min-h-screen overflow-x-hidden', className)}
+      className={cn('relative min-h-screen overflow-x-clip', className)}
       style={accentStyle}
       data-series-details-layout={layoutId}
     >
