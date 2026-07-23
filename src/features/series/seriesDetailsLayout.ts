@@ -21,11 +21,11 @@ export const SERIES_DETAILS_LAYOUT_META: Record<
   },
   C: {
     label: 'Layout C — Compact Catalogue',
-    description: 'Small hero, chapters first, maximum information density.',
+    description: 'Dense catalogue strip with genre chips and tile browsing.',
   },
   D: {
-    label: 'Layout D — Compact List',
-    description: 'Cover beside info, chapters then comments, no hero — built for long catalogues.',
+    label: 'Layout D — Chapter Index',
+    description: 'Minimal identity strip; dense chapter list dominates immediately.',
   },
 };
 

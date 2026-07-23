@@ -101,7 +101,7 @@ describe('Admin layout selector exposes four options', () => {
       'utf-8'
     );
     expect(meta).toContain("'A' | 'B' | 'C' | 'D'");
-    expect(meta).toMatch(/Chapter Index|Compact List/);
+    expect(meta).toContain('Layout D — Chapter Index');
 
     const controls = readFileSync(
       resolve(process.cwd(), 'src/components/series/SeriesDetailsLayoutControls.tsx'),

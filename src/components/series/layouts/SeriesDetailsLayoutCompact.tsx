@@ -7,10 +7,8 @@ import type { SeriesDetailLayoutShellProps } from './types';
 
 /**
  * Layout C — Compact Catalogue.
- * Dense info header with a small thumbnail cover, no synopsis up top —
- * instead a structured catalogue metadata block (type/status/language/
- * updated) leads straight into the chapter catalogue. Organized library
- * feel, distinct from Layout D's list-first, metadata-free approach.
+ * Dense horizontal strip: small cover + genre/access chips. Library browse hub.
+ * Distinct from D: chips + catalogue tiles, not a text index.
  */
 export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) {
   const {
@@ -33,9 +31,13 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
     <>
       <SeriesDetailBreadcrumb title={series.title} />
 
-      <section className="border-b border-border/15" aria-label="Series overview">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex flex-row items-start gap-3">
+      <section
+        className="border-y border-border/25 bg-muted/20"
+        aria-label="Series catalogue header"
+        data-series-layout="catalogue"
+      >
+        <div className="container mx-auto px-4 py-3 sm:py-3.5">
+          <div className="flex flex-row items-start gap-3 sm:gap-4">
             <SeriesDetailCover
               seriesId={series.id}
               title={series.title}
@@ -43,16 +45,15 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
               status={series.status}
               ageRating={series.age_rating}
               size="sm"
-              className="mx-0 max-w-[76px] shrink-0 xs:max-w-[86px]"
+              className="mx-0 max-w-[72px] shrink-0 sm:max-w-[84px]"
             />
 
-            <div className="min-w-0 flex-1 space-y-1.5">
+            <div className="min-w-0 flex-1 space-y-2">
               <SeriesDetailTitleBlock
                 series={series}
                 chapterCount={chapters.length}
                 accessBadges={accessBadges}
-                compact
-                showStats
+                presentation="catalogue"
               />
 
               <SeriesDetailReadingActions
@@ -75,7 +76,7 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pb-24 pt-4 lg:pb-8">
+      <div className="container relative z-10 mx-auto px-4 pb-24 pt-3 sm:pt-4 lg:pb-8">
         <SeriesDetailSections
           series={series}
           chapters={chapters}
@@ -86,6 +87,7 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
           showSynopsis={false}
           relatedVariant="tile-grid"
           secondaryOrder="related-reviews"
+          className="space-y-4 sm:space-y-5"
         />
       </div>
 

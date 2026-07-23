@@ -1,20 +1,14 @@
-import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
 import { SeriesDetailBreadcrumb } from '../SeriesDetailBreadcrumb';
 import { SeriesDetailCover } from '../SeriesDetailCover';
 import { SeriesDetailTitleBlock } from '../SeriesDetailTitleBlock';
 import { SeriesDetailReadingActions } from '../SeriesDetailReadingActions';
 import { SeriesDetailSections } from '../SeriesDetailSections';
-import { cn } from '@/lib/utils';
 import type { SeriesDetailLayoutShellProps } from './types';
 
 /**
- * Layout D — Compact List.
- * The smallest possible header: tiny thumb beside title, a tiny action
- * row, and a short expandable synopsis — everything else is deferred so
- * chapters are the main focus immediately below. Reviews + related are
- * secondary and de-emphasized below comments. Built for browsing long
- * catalogues quickly.
+ * Layout D — Chapter Index.
+ * Utility strip (~15% viewport identity). Dense chapter list dominates immediately.
+ * Related titles as a plain text list; reviews muted.
  */
 export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellProps) {
   const {
@@ -33,17 +27,19 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
     onShare,
   } = props;
 
-  const [synopsisExpanded, setSynopsisExpanded] = useState(false);
-  const synopsis = series.description || '';
-  const isLongSynopsis = synopsis.length > 140;
-
   return (
     <>
-      <SeriesDetailBreadcrumb title={series.title} />
+      <div className="border-b border-border/15">
+        <SeriesDetailBreadcrumb title={series.title} />
+      </div>
 
-      <section className="border-b border-border/15" aria-label="Series overview">
-        <div className="container mx-auto px-4 py-2.5">
-          <div className="flex flex-row items-start gap-2.5">
+      <section
+        className="max-h-[15vh] min-h-[4.5rem] overflow-hidden border-b border-border/20"
+        aria-label="Series index header"
+        data-series-layout="chapter-index"
+      >
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex flex-row items-center gap-2.5">
             <SeriesDetailCover
               seriesId={series.id}
               title={series.title}
@@ -51,18 +47,19 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
               status={series.status}
               ageRating={series.age_rating}
               size="sm"
-              className="mx-0 max-w-[64px] shrink-0"
+              className="mx-0 max-w-[44px] shrink-0 sm:max-w-[52px]"
             />
 
-            <div className="min-w-0 flex-1 space-y-1.5">
+            <div className="min-w-0 flex-1">
               <SeriesDetailTitleBlock
                 series={series}
                 chapterCount={chapters.length}
-                accessBadges={accessBadges}
-                compact
-                showStats
+                accessBadges={[]}
+                presentation="index"
               />
+            </div>
 
+            <div className="hidden shrink-0 sm:block">
               <SeriesDetailReadingActions
                 seriesId={series.id}
                 seriesTitle={series.title}
@@ -79,28 +76,31 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
                 dense
                 iconOnlyLibrary
               />
-
-              {synopsis && (
-                <div className="max-w-2xl text-xs text-muted-foreground">
-                  <p className={cn(!synopsisExpanded && 'line-clamp-1')}>{synopsis}</p>
-                  {isLongSynopsis && (
-                    <button
-                      type="button"
-                      onClick={() => setSynopsisExpanded((v) => !v)}
-                      className="mt-0.5 inline-flex items-center gap-0.5 text-[11px] font-medium text-primary"
-                    >
-                      {synopsisExpanded ? 'Show less' : 'Show more'}
-                      <ChevronDown className={cn('h-3 w-3 transition-transform', synopsisExpanded && 'rotate-180')} />
-                    </button>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pb-24 pt-3 lg:pb-8">
+      <div className="container relative z-10 mx-auto px-4 pb-24 pt-2 sm:pt-2.5 lg:pb-8">
+        <div className="mb-2 sm:hidden">
+          <SeriesDetailReadingActions
+            seriesId={series.id}
+            seriesTitle={series.title}
+            startChapter={startChapter}
+            continueLabel={continueLabel}
+            progressPercent={readingState.progressPercent}
+            isInLibrary={readingState.isInLibrary}
+            hasChapters={chapters.length > 0}
+            accessBadges={[]}
+            onContinue={onContinue}
+            onLibraryToggle={onLibraryToggle}
+            onShare={onShare}
+            variant="inline"
+            dense
+            iconOnlyLibrary
+          />
+        </div>
+
         <SeriesDetailSections
           series={series}
           chapters={chapters}
@@ -112,6 +112,7 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
           relatedVariant="text-list"
           secondaryOrder="reviews-related"
           deemphasizeSecondary
+          className="space-y-3 sm:space-y-4"
         />
       </div>
 

@@ -61,7 +61,7 @@ describe('resolveSeriesDetailsLayout', () => {
     expect(resolveSeriesDetailsLayout()).toBe('A');
   });
 
-  it('accepts Layout D — Compact List as a valid override', () => {
+  it('accepts Layout D — Chapter Index as a valid override', () => {
     setSeriesDetailsLayoutOverride('demo-series-1', 'D');
     expect(resolveSeriesDetailsLayout('demo-series-1')).toBe('D');
   });
@@ -136,7 +136,7 @@ describe('layout bg presets merge', () => {
     expect(result.theme.overlayDarkness).toBeGreaterThanOrEqual(88);
   });
 
-  it('applies a non-fixed, high-readability preset for layout D (Compact List)', async () => {
+  it('applies a non-fixed, high-readability preset for layout D (Chapter Index)', async () => {
     const { resolveSeriesDetailsBackground } = await import(
       '../../src/features/series/seriesDetailsBackground'
     );

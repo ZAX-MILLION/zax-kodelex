@@ -7,9 +7,8 @@ import type { SeriesDetailLayoutShellProps } from './types';
 
 /**
  * Layout A — Editorial.
- * Magazine-style masthead: cover beside title with strong type hierarchy,
- * compact actions sit under the synopsis (not the loudest element on the
- * page), restrained background. Chapters render as publication-style rows.
+ * Magazine masthead: large cover left, typographic column, inline metadata
+ * with separators (no chips/boxes). Calm vertical rhythm.
  */
 export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps) {
   const {
@@ -32,16 +31,14 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
     <>
       <SeriesDetailBreadcrumb title={series.title} />
 
-      <section className="relative border-b border-border/25" aria-label="Series overview">
-        <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/25 via-background/55 to-background"
-          aria-hidden
-        />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-
-        <div className="container relative mx-auto px-4 py-5 sm:py-6 lg:py-7">
-          <div className="flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-start lg:gap-8 xl:gap-10">
-            <div className="mx-auto shrink-0 lg:mx-0 lg:w-[200px] xl:w-[220px]">
+      <section
+        className="relative border-b border-border/20"
+        aria-label="Series overview"
+        data-series-layout="editorial"
+      >
+        <div className="container relative mx-auto px-4 py-6 sm:py-8 lg:py-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10 xl:gap-12">
+            <div className="mx-auto w-full max-w-[200px] shrink-0 lg:mx-0 lg:w-[220px] lg:max-w-none">
               <SeriesDetailCover
                 seriesId={series.id}
                 title={series.title}
@@ -49,25 +46,26 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
                 status={series.status}
                 ageRating={series.age_rating}
                 size="md"
-                className="mx-auto max-w-[180px] sm:max-w-[200px] lg:mx-0 lg:max-w-none"
+                className="mx-auto lg:mx-0"
               />
             </div>
 
-            <div className="min-w-0 flex-1 space-y-3 sm:space-y-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary/80">
-                {series.format || series.content_type || 'Series'}
+            <div className="min-w-0 flex-1 space-y-4 lg:pt-1">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                {(series.format || series.content_type || 'Series').toString()}
               </p>
 
               <SeriesDetailTitleBlock
                 series={series}
                 chapterCount={chapters.length}
-                accessBadges={accessBadges}
+                accessBadges={[]}
+                presentation="editorial"
               />
 
               {series.description && (
-                <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-relaxed">
-                  {series.description.length > 320
-                    ? `${series.description.slice(0, 320).trim()}…`
+                <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+                  {series.description.length > 280
+                    ? `${series.description.slice(0, 280).trim()}…`
                     : series.description}
                 </p>
               )}
@@ -91,7 +89,7 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pb-24 pt-4 sm:pt-5 lg:pb-8">
+      <div className="container relative z-10 mx-auto px-4 pb-24 pt-6 sm:pt-8 lg:pb-10">
         <SeriesDetailSections
           series={series}
           chapters={chapters}
@@ -102,6 +100,7 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
           showSynopsis={false}
           relatedVariant="rail"
           secondaryOrder="reviews-related"
+          className="space-y-8 sm:space-y-10"
         />
       </div>
 
