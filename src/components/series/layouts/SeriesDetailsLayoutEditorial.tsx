@@ -7,7 +7,6 @@ import {
   SeriesCommentsBlock,
   SeriesDetailSynopsis,
   SeriesRelatedBlock,
-  SeriesReviewsBlock,
 } from '../SeriesDetailSections';
 import { SeriesRelatedTitles } from '../SeriesRelatedTitles';
 import type { SeriesDetailLayoutShellProps } from './types';
@@ -23,7 +22,6 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
     chapters,
     relatedSeries,
     isDemo,
-    seriesIndex,
     layoutId,
     accessBadges,
     startChapter,
@@ -115,8 +113,6 @@ export function SeriesDetailsLayoutEditorial(props: SeriesDetailLayoutShellProps
             />
 
             <SeriesCommentsBlock series={series} isDemo={isDemo} layoutId={layoutId} />
-
-            <SeriesReviewsBlock seriesId={series.id} seriesIndex={seriesIndex} />
 
             <SeriesRelatedBlock
               relatedSeries={relatedSeries}

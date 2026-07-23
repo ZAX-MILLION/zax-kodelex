@@ -6,7 +6,6 @@ import {
   SeriesChaptersBlock,
   SeriesCommentsBlock,
   SeriesRelatedBlock,
-  SeriesReviewsBlock,
 } from '../SeriesDetailSections';
 import type { SeriesDetailLayoutShellProps } from './types';
 
@@ -21,7 +20,6 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
     chapters,
     relatedSeries,
     isDemo,
-    seriesIndex,
     layoutId,
     accessBadges,
     startChapter,
@@ -107,8 +105,6 @@ export function SeriesDetailsLayoutCompact(props: SeriesDetailLayoutShellProps) 
             currentTitle={series.title}
             relatedVariant="tile-grid"
           />
-
-          <SeriesReviewsBlock seriesId={series.id} seriesIndex={seriesIndex} />
         </main>
       </div>
 

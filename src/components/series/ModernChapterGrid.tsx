@@ -69,13 +69,16 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({
 
   const columnClassName = getChapterGridColumnClasses(gridView);
   const Renderer = RENDERERS[variant];
+  const isIndexToc = variant === 'compact';
 
   return (
     <div className="w-full space-y-4 sm:space-y-5">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-xl font-bold sm:text-2xl">{heading}</h2>
-          <ChapterGridViewToggle value={gridView} onChange={setGridView} />
+          {!isIndexToc && (
+            <ChapterGridViewToggle value={gridView} onChange={setGridView} />
+          )}
         </div>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
@@ -127,10 +130,14 @@ const ModernChapterGrid: React.FC<ModernChapterGridProps> = ({
         </div>
       </div>
 
-      <div data-chapter-grid-view={gridView} data-chapter-list-variant={variant}>
+      <div
+        data-chapter-grid-view={isIndexToc ? 1 : gridView}
+        data-chapter-list-variant={variant}
+        data-chapter-toc={isIndexToc ? 'single-column' : undefined}
+      >
         <Renderer
           items={displayItems}
-          gridView={gridView}
+          gridView={isIndexToc ? 1 : gridView}
           columnClassName={columnClassName}
           onChapterClick={handleChapterClick}
         />

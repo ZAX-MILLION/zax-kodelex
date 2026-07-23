@@ -7,7 +7,6 @@ import {
   SeriesChaptersBlock,
   SeriesCommentsBlock,
   SeriesRelatedBlock,
-  SeriesReviewsBlock,
 } from '../SeriesDetailSections';
 import type { SeriesDetailLayoutShellProps } from './types';
 
@@ -22,7 +21,6 @@ export function SeriesDetailsLayoutCinematic(props: SeriesDetailLayoutShellProps
     chapters,
     relatedSeries,
     isDemo,
-    seriesIndex,
     layoutId,
     accessBadges,
     startChapter,
@@ -101,8 +99,6 @@ export function SeriesDetailsLayoutCinematic(props: SeriesDetailLayoutShellProps
           currentTitle={series.title}
           relatedVariant="visual-grid"
         />
-
-        <SeriesReviewsBlock seriesId={series.id} seriesIndex={seriesIndex} />
       </div>
 
       <SeriesDetailReadingActions

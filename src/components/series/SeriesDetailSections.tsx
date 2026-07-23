@@ -11,9 +11,6 @@ import type { RelatedTitlesVariant } from './SeriesRelatedTitles';
 export type { RelatedTitlesVariant };
 export type SecondaryBlockOrder = 'reviews-related' | 'related-reviews';
 
-const SeriesReviews = lazy(() =>
-  import('./SeriesReviews').then((m) => ({ default: m.SeriesReviews }))
-);
 const SeriesRelatedTitles = lazy(() =>
   import('./SeriesRelatedTitles').then((m) => ({ default: m.SeriesRelatedTitles }))
 );
@@ -44,11 +41,11 @@ export interface SeriesDetailSectionsProps {
   showSynopsis?: boolean;
   denseChapters?: boolean;
   className?: string;
-  /** Visually de-emphasize reviews + related (smaller headings, muted). */
+  /** Visually de-emphasize related (smaller headings, muted). */
   deemphasizeSecondary?: boolean;
   /** How Related Titles render after comments. */
   relatedVariant?: RelatedTitlesVariant;
-  /** Order of reviews vs related after comments. */
+  /** @deprecated Reviews removed; kept for call-site compat. */
   secondaryOrder?: SecondaryBlockOrder;
   /** Optional chapter list heading override. */
   chaptersHeading?: string;
@@ -56,7 +53,7 @@ export interface SeriesDetailSectionsProps {
   showChapters?: boolean;
   /** When false, omit comments. */
   showComments?: boolean;
-  /** When false, omit reviews + related. */
+  /** When false, omit related. */
   showSecondary?: boolean;
 }
 
@@ -147,36 +144,6 @@ export function SeriesCommentsBlock({
   );
 }
 
-export function SeriesReviewsBlock({
-  seriesId,
-  seriesIndex,
-  deemphasize = false,
-  className,
-}: {
-  seriesId: string;
-  seriesIndex: number;
-  deemphasize?: boolean;
-  className?: string;
-}) {
-  return (
-    <section id="series-reviews" aria-labelledby="reviews-section-heading" className={className}>
-      <h2
-        id="reviews-section-heading"
-        className={
-          deemphasize
-            ? 'mb-3 text-sm font-semibold text-muted-foreground sm:text-base'
-            : 'mb-4 text-xl font-bold sm:text-2xl'
-        }
-      >
-        Reviews
-      </h2>
-      <Suspense fallback={<SectionSkeleton tall />}>
-        <SeriesReviews seriesId={seriesId} seriesIndex={seriesIndex} />
-      </Suspense>
-    </section>
-  );
-}
-
 export function SeriesRelatedBlock({
   relatedSeries,
   currentTitle,
@@ -218,35 +185,20 @@ export function SeriesRelatedBlock({
 export function SeriesSecondaryBlocks({
   series,
   relatedSeries,
-  seriesIndex,
   relatedVariant = 'rail',
-  secondaryOrder = 'reviews-related',
   deemphasizeSecondary = false,
   className,
 }: {
   series: SeriesDetailViewModel;
   relatedSeries: DemoSeries[];
-  seriesIndex: number;
+  seriesIndex?: number;
   relatedVariant?: RelatedTitlesVariant;
+  /** @deprecated Reviews removed from series details; kept for call-site compat. */
   secondaryOrder?: SecondaryBlockOrder;
   deemphasizeSecondary?: boolean;
   className?: string;
 }) {
-  const reviewsBlock = (
-    <SeriesReviewsBlock
-      seriesId={series.id}
-      seriesIndex={seriesIndex}
-      deemphasize={deemphasizeSecondary}
-    />
-  );
-  const relatedBlock = (
-    <SeriesRelatedBlock
-      relatedSeries={relatedSeries}
-      currentTitle={series.title}
-      relatedVariant={relatedVariant}
-      deemphasize={deemphasizeSecondary}
-    />
-  );
+  if (relatedVariant === 'omit') return null;
 
   return (
     <div
@@ -256,17 +208,12 @@ export function SeriesSecondaryBlocks({
         className
       )}
     >
-      {secondaryOrder === 'related-reviews' ? (
-        <>
-          {relatedBlock}
-          {reviewsBlock}
-        </>
-      ) : (
-        <>
-          {reviewsBlock}
-          {relatedBlock}
-        </>
-      )}
+      <SeriesRelatedBlock
+        relatedSeries={relatedSeries}
+        currentTitle={series.title}
+        relatedVariant={relatedVariant}
+        deemphasize={deemphasizeSecondary}
+      />
     </div>
   );
 }

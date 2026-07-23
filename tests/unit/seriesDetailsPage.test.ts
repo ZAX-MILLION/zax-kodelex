@@ -34,23 +34,39 @@ describe('ModernSeriesDetail page structure', () => {
     }
   });
 
-  it('orders chapters then comments then reviews/related in shared sections', () => {
+  it('orders chapters then comments then related in shared sections', () => {
     const sections = readFileSync(
       resolve(process.cwd(), 'src/components/series/SeriesDetailSections.tsx'),
       'utf-8'
     );
     const chaptersIdx = sections.indexOf('id="series-chapters"');
     const commentsIdx = sections.indexOf('id="series-comments"');
-    const reviewsIdx = sections.indexOf('id="series-reviews"');
     const relatedIdx = sections.indexOf('id="series-related"');
     expect(chaptersIdx).toBeGreaterThan(-1);
     expect(commentsIdx).toBeGreaterThan(-1);
-    expect(reviewsIdx).toBeGreaterThan(-1);
     expect(relatedIdx).toBeGreaterThan(-1);
     expect(sections).toContain('SeriesChaptersBlock');
     expect(sections).toContain('SeriesCommentsBlock');
+    expect(sections).not.toContain('SeriesReviewsBlock');
+    expect(sections).not.toContain('id="series-reviews"');
     expect(sections).not.toContain('SeriesDetailMetaPanel');
     expect(sections).not.toContain('showMetaStats');
+  });
+
+  it('omits reviews from every public layout shell', () => {
+    for (const file of [
+      'SeriesDetailsLayoutEditorial.tsx',
+      'SeriesDetailsLayoutCinematic.tsx',
+      'SeriesDetailsLayoutCompact.tsx',
+      'SeriesDetailsLayoutCompactList.tsx',
+    ]) {
+      const src = readFileSync(
+        resolve(process.cwd(), `src/components/series/layouts/${file}`),
+        'utf-8'
+      );
+      expect(src).not.toContain('SeriesReviews');
+      expect(src).not.toContain('series-reviews');
+    }
   });
 
   it('supports related presentation variants after comments', () => {
@@ -59,7 +75,6 @@ describe('ModernSeriesDetail page structure', () => {
       'utf-8'
     );
     expect(sections).toContain('relatedVariant');
-    expect(sections).toContain('secondaryOrder');
     expect(sections).toContain('deemphasizeSecondary');
   });
 });
@@ -125,13 +140,28 @@ describe('Layout D — Chapter Index', () => {
     expect(layoutDSource).not.toContain("from '../SeriesReviews'");
   });
 
-  it('is a text-only TOC utility with no related rail and no cover art', () => {
+  it('is a text-only TOC utility with no related rail, no reviews, and no cover art', () => {
     expect(layoutDSource).toContain('data-series-layout="chapter-index"');
     expect(layoutDSource).toContain('heading="Table of contents"');
-    expect(layoutDSource).toContain('deemphasize');
     expect(layoutDSource).not.toContain('SeriesDetailCover');
     expect(layoutDSource).not.toContain('SeriesRelatedBlock');
+    expect(layoutDSource).not.toContain('SeriesReviews');
     expect(layoutDSource).not.toContain('SeriesDetailTabs');
+  });
+
+  it('forces a single-column chapter TOC (ignores multi-col grid prefs)', () => {
+    const compactList = readFileSync(
+      resolve(process.cwd(), 'src/components/series/chapters/CompactChapterList.tsx'),
+      'utf-8'
+    );
+    const grid = readFileSync(
+      resolve(process.cwd(), 'src/components/series/ModernChapterGrid.tsx'),
+      'utf-8'
+    );
+    expect(compactList).toContain('data-chapter-toc="single-column"');
+    expect(compactList).not.toContain('grid-cols-');
+    expect(grid).toContain("variant === 'compact'");
+    expect(grid).toContain('!isIndexToc');
   });
 
   it('has no large cinematic hero and no tabs', () => {

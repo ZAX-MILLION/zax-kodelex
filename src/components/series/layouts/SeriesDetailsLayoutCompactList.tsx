@@ -1,23 +1,17 @@
 import { SeriesDetailBreadcrumb } from '../SeriesDetailBreadcrumb';
 import { SeriesDetailReadingActions } from '../SeriesDetailReadingActions';
-import {
-  SeriesChaptersBlock,
-  SeriesCommentsBlock,
-  SeriesReviewsBlock,
-} from '../SeriesDetailSections';
+import { SeriesChaptersBlock, SeriesCommentsBlock } from '../SeriesDetailSections';
 import type { SeriesDetailLayoutShellProps } from './types';
 
 /**
  * Layout D — Chapter Index (docs / TOC utility).
- * Almost no art. Title + Start in a one-line chrome bar; the chapter TOC
- * fills the viewport immediately. No related rail. Reviews muted at the end.
+ * Text-only chrome; single-column chapter TOC fills the page. No related, no reviews.
  */
 export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellProps) {
   const {
     series,
     chapters,
     isDemo,
-    seriesIndex,
     layoutId,
     accessBadges,
     startChapter,
@@ -27,8 +21,8 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
     onLibraryToggle,
     onShare,
   } = props;
-  // Layout D intentionally omits related titles — utility TOC only.
   void props.relatedSeries;
+  void props.seriesIndex;
 
   const metaBits: string[] = [];
   if (series.author) metaBits.push(series.author);
@@ -41,7 +35,6 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
         <SeriesDetailBreadcrumb title={series.title} />
       </div>
 
-      {/* Utility chrome — text-first, no cover art */}
       <header
         className="sticky top-0 z-20 border-b border-border/25 bg-background/95 backdrop-blur-md"
         aria-label="Chapter index"
@@ -73,24 +66,17 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
         </div>
       </header>
 
-      {/* TOC fills the page */}
       <div className="relative z-10 mx-auto max-w-3xl px-4 pb-24 pt-3 sm:pt-4 lg:pb-10">
         <SeriesChaptersBlock
           seriesId={series.id}
           chapters={chapters}
           layoutId={layoutId}
           heading="Table of contents"
-          className="min-h-[55vh]"
+          className="min-h-[50vh]"
         />
 
-        <div className="mt-8 space-y-6 border-t border-border/20 pt-6">
+        <div className="mt-8 border-t border-border/20 pt-6">
           <SeriesCommentsBlock series={series} isDemo={isDemo} layoutId={layoutId} />
-          <SeriesReviewsBlock
-            seriesId={series.id}
-            seriesIndex={seriesIndex}
-            deemphasize
-            className="opacity-80"
-          />
         </div>
       </div>
 
