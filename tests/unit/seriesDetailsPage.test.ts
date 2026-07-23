@@ -140,10 +140,11 @@ describe('Layout D — Chapter Index', () => {
     expect(layoutDSource).not.toContain("from '../SeriesReviews'");
   });
 
-  it('is a text-only TOC utility with no related rail, no reviews, and no cover art', () => {
+  it('is a reader archive layout with no related rail and no reviews', () => {
     expect(layoutDSource).toContain('data-series-layout="chapter-index"');
-    expect(layoutDSource).toContain('heading="Table of contents"');
-    expect(layoutDSource).not.toContain('SeriesDetailCover');
+    expect(layoutDSource).toContain('Reader Archive');
+    expect(layoutDSource).toContain('heading="Chapter archive"');
+    expect(layoutDSource).toContain('SeriesDetailCover');
     expect(layoutDSource).not.toContain('SeriesRelatedBlock');
     expect(layoutDSource).not.toContain('SeriesReviews');
     expect(layoutDSource).not.toContain('SeriesDetailTabs');
@@ -162,6 +163,11 @@ describe('Layout D — Chapter Index', () => {
     expect(compactList).not.toContain('grid-cols-');
     expect(grid).toContain("variant === 'compact'");
     expect(grid).toContain('!isIndexToc');
+  });
+
+  it('keeps comments lower priority behind archive details', () => {
+    expect(layoutDSource).toContain('Show discussion');
+    expect(layoutDSource).toContain('<details');
   });
 
   it('has no large cinematic hero and no tabs', () => {
