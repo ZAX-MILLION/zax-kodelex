@@ -17,7 +17,7 @@ export const SERIES_DETAILS_LAYOUT_META: Record<
   },
   B: {
     label: 'Layout B — Streaming Title',
-    description: 'Full-bleed billboard hero; episode posters only below the fold.',
+    description: 'Immersive billboard + overlapping cover; episode rail below the fold.',
   },
   C: {
     label: 'Layout C — Store Catalogue',

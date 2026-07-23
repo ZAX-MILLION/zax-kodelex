@@ -88,7 +88,7 @@ describe('four page products are structurally distinct', () => {
     expect(editorial).toContain('data-series-layout="editorial"');
     expect(editorial).toContain('lg:grid-cols-[240px_minmax(0,1fr)]');
     expect(editorial).toContain('relatedVariant="rail"');
-    expect(editorial).not.toContain('min-h-[78vh]');
+    expect(editorial).not.toContain('min-h-[82vh]');
     expect(editorial).not.toContain('Table of contents');
   });
 
@@ -98,10 +98,21 @@ describe('four page products are structurally distinct', () => {
       'utf-8'
     );
     expect(cinematic).toContain('data-series-layout="cinematic"');
-    expect(cinematic).toContain('min-h-[78vh]');
+    expect(cinematic).toContain('min-h-[82vh]');
+    expect(cinematic).toContain('Streaming Title');
+    expect(cinematic).toContain('SeriesDetailCover');
     expect(cinematic).toContain('heading="Episodes"');
     expect(cinematic).toContain('relatedVariant="visual-grid"');
-    expect(cinematic).not.toContain('SeriesDetailCover');
+    expect(cinematic).toContain('Show discussion');
+  });
+
+  it('B episode cards use a horizontal rail at density 1', () => {
+    const cards = readFileSync(
+      resolve(process.cwd(), 'src/components/series/chapters/CinematicChapterCards.tsx'),
+      'utf-8'
+    );
+    expect(cards).toContain('data-chapter-rail="episodes"');
+    expect(cards).toContain('overflow-x-auto');
   });
 
   it('C store uses a product sidebar + tile browse pane', () => {
@@ -113,7 +124,7 @@ describe('four page products are structurally distinct', () => {
     expect(compact).toContain('lg:w-[280px]');
     expect(compact).toContain('heading="Browse chapters"');
     expect(compact).toContain('relatedVariant="tile-grid"');
-    expect(compact).not.toContain('min-h-[78vh]');
+    expect(compact).not.toContain('min-h-[82vh]');
   });
 });
 
@@ -172,7 +183,7 @@ describe('Layout D — Chapter Index', () => {
 
   it('has no large cinematic hero and no tabs', () => {
     expect(layoutDSource).not.toContain('SeriesDetailTabs');
-    expect(layoutDSource).not.toContain('min-h-[78vh]');
+    expect(layoutDSource).not.toContain('min-h-[82vh]');
     expect(layoutDSource).not.toMatch(/py-1[0-9]\s/);
   });
 });
