@@ -94,14 +94,14 @@ describe('chapter grid view toggle wiring', () => {
 });
 
 describe('editorial layout premium composition', () => {
-  it('groups hero tightly and defers duplicate synopsis/meta panels', () => {
+  it('uses magazine hero with inline metadata and related rail', () => {
     const editorial = readFileSync(
       resolve(process.cwd(), 'src/components/series/layouts/SeriesDetailsLayoutEditorial.tsx'),
       'utf-8'
     );
-    expect(editorial).toContain('bg-gradient-to-b from-background/25');
+    expect(editorial).toContain('data-series-layout="editorial"');
     expect(editorial).toContain('showSynopsis={false}');
-    expect(editorial).toContain('showMetaStats={false}');
-    expect(editorial).toContain('compactRelated');
+    expect(editorial).toContain('presentation="editorial"');
+    expect(editorial).toContain('relatedVariant="rail"');
   });
 });
