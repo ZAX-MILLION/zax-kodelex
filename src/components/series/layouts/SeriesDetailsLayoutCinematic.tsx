@@ -1,16 +1,20 @@
 import LazyImage from '@/components/LazyImage';
 import { getFallbackCoverImage } from '@/utils/imageOptimization';
 import { SeriesDetailBreadcrumb } from '../SeriesDetailBreadcrumb';
-import { SeriesDetailCover } from '../SeriesDetailCover';
 import { SeriesDetailTitleBlock } from '../SeriesDetailTitleBlock';
 import { SeriesDetailReadingActions } from '../SeriesDetailReadingActions';
-import { SeriesDetailSections } from '../SeriesDetailSections';
+import {
+  SeriesChaptersBlock,
+  SeriesCommentsBlock,
+  SeriesRelatedBlock,
+  SeriesReviewsBlock,
+} from '../SeriesDetailSections';
 import type { SeriesDetailLayoutShellProps } from './types';
 
 /**
- * Layout B — Cinematic.
- * Full-bleed artwork hero, cover overlapping the lower edge, compact floating
- * glass panel. Immersive and image-driven — no empty centered column.
+ * Layout B — Streaming Title (Netflix-style).
+ * First viewport is almost only artwork + Start. Chapters appear below the fold
+ * as large episode posters — never competing with the hero.
  */
 export function SeriesDetailsLayoutCinematic(props: SeriesDetailLayoutShellProps) {
   const {
@@ -33,79 +37,72 @@ export function SeriesDetailsLayoutCinematic(props: SeriesDetailLayoutShellProps
 
   return (
     <>
-      <div className="relative z-20 bg-background/80 backdrop-blur-sm">
+      <div className="relative z-30">
         <SeriesDetailBreadcrumb title={series.title} />
       </div>
 
-      <section className="relative" aria-label="Series hero" data-series-layout="cinematic">
-        <div className="relative h-[42vh] min-h-[260px] overflow-hidden sm:h-[52vh] sm:min-h-[340px] lg:h-[58vh] lg:min-h-[420px]">
-          <LazyImage src={heroArt} alt="" priority className="object-cover" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/80 via-background/20 to-transparent" />
+      {/* Immersive title billboard — owns the first viewport */}
+      <section
+        className="relative isolate min-h-[78vh] w-full overflow-hidden sm:min-h-[85vh]"
+        aria-label="Series title"
+        data-series-layout="cinematic"
+      >
+        <div className="absolute inset-0">
+          <LazyImage src={heroArt} alt="" priority className="object-cover object-top" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/55 to-background/10" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4">
-          <div className="-mt-16 flex flex-col gap-4 sm:-mt-20 sm:flex-row sm:items-end sm:gap-6 lg:-mt-24">
-            <div className="shrink-0 self-start drop-shadow-2xl sm:self-auto">
-              <SeriesDetailCover
-                seriesId={series.id}
-                title={series.title}
-                coverUrl={series.cover_image_url}
-                status={series.status}
-                ageRating={series.age_rating}
-                size="sm"
-                className="mx-0 w-[112px] sm:w-[140px] lg:w-[168px]"
-              />
-            </div>
-
-            <div className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-background/75 p-4 shadow-2xl backdrop-blur-xl sm:p-5 lg:max-w-xl">
-              <SeriesDetailTitleBlock
-                series={series}
-                chapterCount={chapters.length}
-                accessBadges={[]}
-                presentation="cinematic"
-              />
-              <div className="mt-3">
-                <SeriesDetailReadingActions
-                  seriesId={series.id}
-                  seriesTitle={series.title}
-                  startChapter={startChapter}
-                  continueLabel={continueLabel}
-                  progressPercent={readingState.progressPercent}
-                  isInLibrary={readingState.isInLibrary}
-                  hasChapters={chapters.length > 0}
-                  accessBadges={accessBadges}
-                  onContinue={onContinue}
-                  onLibraryToggle={onLibraryToggle}
-                  onShare={onShare}
-                  variant="inline"
-                  dense
-                  iconOnlyLibrary
-                />
-              </div>
-            </div>
+        <div className="relative z-10 flex min-h-[78vh] flex-col justify-end px-4 pb-10 pt-24 sm:min-h-[85vh] sm:px-8 sm:pb-14 lg:px-12 lg:pb-16">
+          <div className="max-w-xl space-y-4 sm:space-y-5">
+            <SeriesDetailTitleBlock
+              series={series}
+              chapterCount={chapters.length}
+              accessBadges={[]}
+              presentation="cinematic"
+            />
+            {series.description && (
+              <p className="line-clamp-3 text-sm leading-relaxed text-foreground/85 sm:text-[15px]">
+                {series.description}
+              </p>
+            )}
+            <SeriesDetailReadingActions
+              seriesId={series.id}
+              seriesTitle={series.title}
+              startChapter={startChapter}
+              continueLabel={continueLabel}
+              progressPercent={readingState.progressPercent}
+              isInLibrary={readingState.isInLibrary}
+              hasChapters={chapters.length > 0}
+              accessBadges={accessBadges}
+              onContinue={onContinue}
+              onLibraryToggle={onLibraryToggle}
+              onShare={onShare}
+              variant="inline"
+              iconOnlyLibrary
+            />
           </div>
         </div>
       </section>
 
-      <div className="container relative z-10 mx-auto px-4 pb-24 pt-8 sm:pt-10 lg:pb-10">
-        {series.description && (
-          <p className="mb-8 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:mb-10 sm:text-base">
-            {series.description}
-          </p>
-        )}
-        <SeriesDetailSections
-          series={series}
+      {/* Below the fold: episodes → comments → more like this → reviews */}
+      <div className="relative z-10 space-y-12 bg-background px-4 pb-24 pt-8 sm:space-y-14 sm:px-8 sm:pt-10 lg:px-12 lg:pb-12">
+        <SeriesChaptersBlock
+          seriesId={series.id}
           chapters={chapters}
-          relatedSeries={relatedSeries}
-          isDemo={isDemo}
-          seriesIndex={seriesIndex}
           layoutId={layoutId}
-          showSynopsis={false}
-          relatedVariant="visual-grid"
-          secondaryOrder="related-reviews"
-          className="space-y-10 sm:space-y-12"
+          heading="Episodes"
         />
+
+        <SeriesCommentsBlock series={series} isDemo={isDemo} layoutId={layoutId} />
+
+        <SeriesRelatedBlock
+          relatedSeries={relatedSeries}
+          currentTitle={series.title}
+          relatedVariant="visual-grid"
+        />
+
+        <SeriesReviewsBlock seriesId={series.id} seriesIndex={seriesIndex} />
       </div>
 
       <SeriesDetailReadingActions

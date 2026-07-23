@@ -1,20 +1,21 @@
 import { SeriesDetailBreadcrumb } from '../SeriesDetailBreadcrumb';
-import { SeriesDetailCover } from '../SeriesDetailCover';
-import { SeriesDetailTitleBlock } from '../SeriesDetailTitleBlock';
 import { SeriesDetailReadingActions } from '../SeriesDetailReadingActions';
-import { SeriesDetailSections } from '../SeriesDetailSections';
+import {
+  SeriesChaptersBlock,
+  SeriesCommentsBlock,
+  SeriesReviewsBlock,
+} from '../SeriesDetailSections';
 import type { SeriesDetailLayoutShellProps } from './types';
 
 /**
- * Layout D — Chapter Index.
- * Utility strip (~15% viewport identity). Dense chapter list dominates immediately.
- * Related titles as a plain text list; reviews muted.
+ * Layout D — Chapter Index (docs / TOC utility).
+ * Almost no art. Title + Start in a one-line chrome bar; the chapter TOC
+ * fills the viewport immediately. No related rail. Reviews muted at the end.
  */
 export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellProps) {
   const {
     series,
     chapters,
-    relatedSeries,
     isDemo,
     seriesIndex,
     layoutId,
@@ -26,63 +27,33 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
     onLibraryToggle,
     onShare,
   } = props;
+  // Layout D intentionally omits related titles — utility TOC only.
+  void props.relatedSeries;
+
+  const metaBits: string[] = [];
+  if (series.author) metaBits.push(series.author);
+  if (series.status) metaBits.push(series.status);
+  if (chapters.length > 0) metaBits.push(`${chapters.length} ch`);
 
   return (
     <>
-      <div className="border-b border-border/15">
+      <div className="border-b border-border/15 bg-background">
         <SeriesDetailBreadcrumb title={series.title} />
       </div>
 
-      <section
-        className="max-h-[15vh] min-h-[4.5rem] overflow-hidden border-b border-border/20"
-        aria-label="Series index header"
+      {/* Utility chrome — text-first, no cover art */}
+      <header
+        className="sticky top-0 z-20 border-b border-border/25 bg-background/95 backdrop-blur-md"
+        aria-label="Chapter index"
         data-series-layout="chapter-index"
       >
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex flex-row items-center gap-2.5">
-            <SeriesDetailCover
-              seriesId={series.id}
-              title={series.title}
-              coverUrl={series.cover_image_url}
-              status={series.status}
-              ageRating={series.age_rating}
-              size="sm"
-              className="mx-0 max-w-[44px] shrink-0 sm:max-w-[52px]"
-            />
-
-            <div className="min-w-0 flex-1">
-              <SeriesDetailTitleBlock
-                series={series}
-                chapterCount={chapters.length}
-                accessBadges={[]}
-                presentation="index"
-              />
-            </div>
-
-            <div className="hidden shrink-0 sm:block">
-              <SeriesDetailReadingActions
-                seriesId={series.id}
-                seriesTitle={series.title}
-                startChapter={startChapter}
-                continueLabel={continueLabel}
-                progressPercent={readingState.progressPercent}
-                isInLibrary={readingState.isInLibrary}
-                hasChapters={chapters.length > 0}
-                accessBadges={[]}
-                onContinue={onContinue}
-                onLibraryToggle={onLibraryToggle}
-                onShare={onShare}
-                variant="inline"
-                dense
-                iconOnlyLibrary
-              />
-            </div>
+        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-2.5 sm:py-3">
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-sm font-semibold tracking-tight sm:text-base">
+              {series.title}
+            </h1>
+            <p className="truncate text-[11px] text-muted-foreground">{metaBits.join(' · ')}</p>
           </div>
-        </div>
-      </section>
-
-      <div className="container relative z-10 mx-auto px-4 pb-24 pt-2 sm:pt-2.5 lg:pb-8">
-        <div className="mb-2 sm:hidden">
           <SeriesDetailReadingActions
             seriesId={series.id}
             seriesTitle={series.title}
@@ -100,20 +71,27 @@ export function SeriesDetailsLayoutCompactList(props: SeriesDetailLayoutShellPro
             iconOnlyLibrary
           />
         </div>
+      </header>
 
-        <SeriesDetailSections
-          series={series}
+      {/* TOC fills the page */}
+      <div className="relative z-10 mx-auto max-w-3xl px-4 pb-24 pt-3 sm:pt-4 lg:pb-10">
+        <SeriesChaptersBlock
+          seriesId={series.id}
           chapters={chapters}
-          relatedSeries={relatedSeries}
-          isDemo={isDemo}
-          seriesIndex={seriesIndex}
           layoutId={layoutId}
-          showSynopsis={false}
-          relatedVariant="text-list"
-          secondaryOrder="reviews-related"
-          deemphasizeSecondary
-          className="space-y-3 sm:space-y-4"
+          heading="Table of contents"
+          className="min-h-[55vh]"
         />
+
+        <div className="mt-8 space-y-6 border-t border-border/20 pt-6">
+          <SeriesCommentsBlock series={series} isDemo={isDemo} layoutId={layoutId} />
+          <SeriesReviewsBlock
+            seriesId={series.id}
+            seriesIndex={seriesIndex}
+            deemphasize
+            className="opacity-80"
+          />
+        </div>
       </div>
 
       <SeriesDetailReadingActions

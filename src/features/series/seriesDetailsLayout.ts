@@ -12,20 +12,20 @@ export const SERIES_DETAILS_LAYOUT_META: Record<
   { label: string; description: string }
 > = {
   A: {
-    label: 'Layout A — Editorial',
-    description: 'Cover beside title, dense chapters, restrained background.',
+    label: 'Layout A — Magazine Profile',
+    description: 'Sticky cover + long-form article column; calm chapter list.',
   },
   B: {
-    label: 'Layout B — Cinematic',
-    description: 'Large hero with cinematic background, prominent start action.',
+    label: 'Layout B — Streaming Title',
+    description: 'Full-bleed billboard hero; episode posters only below the fold.',
   },
   C: {
-    label: 'Layout C — Compact Catalogue',
-    description: 'Dense catalogue strip with genre chips and tile browsing.',
+    label: 'Layout C — Store Catalogue',
+    description: 'Product sidebar + chapter tile browse hub from first paint.',
   },
   D: {
     label: 'Layout D — Chapter Index',
-    description: 'Minimal identity strip; dense chapter list dominates immediately.',
+    description: 'Text-only chrome; table of contents fills the viewport immediately.',
   },
 };
 

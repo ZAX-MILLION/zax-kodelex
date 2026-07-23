@@ -50,15 +50,29 @@ export interface SeriesDetailSectionsProps {
   relatedVariant?: RelatedTitlesVariant;
   /** Order of reviews vs related after comments. */
   secondaryOrder?: SecondaryBlockOrder;
+  /** Optional chapter list heading override. */
+  chaptersHeading?: string;
+  /** When false, omit chapters (shell already rendered them). */
+  showChapters?: boolean;
+  /** When false, omit comments. */
+  showComments?: boolean;
+  /** When false, omit reviews + related. */
+  showSecondary?: boolean;
 }
 
-export function SeriesDetailSynopsis({ description }: { description?: string | null }) {
+export function SeriesDetailSynopsis({
+  description,
+  className,
+}: {
+  description?: string | null;
+  className?: string;
+}) {
   if (!description) return null;
   return (
     <section
       id="series-synopsis"
       aria-labelledby="synopsis-heading"
-      className="border-b border-border/20 pb-4 sm:pb-5"
+      className={cn('border-b border-border/20 pb-4 sm:pb-5', className)}
     >
       <h2 id="synopsis-heading" className="mb-2 text-base font-semibold sm:text-lg">
         Synopsis
@@ -68,34 +82,49 @@ export function SeriesDetailSynopsis({ description }: { description?: string | n
   );
 }
 
-export function SeriesDetailSections({
-  series,
+export function SeriesChaptersBlock({
+  seriesId,
   chapters,
-  relatedSeries,
-  isDemo,
-  seriesIndex,
   layoutId,
-  showSynopsis = true,
-  denseChapters = false,
+  heading = 'Chapters',
   className,
-  deemphasizeSecondary = false,
-  relatedVariant = 'rail',
-  secondaryOrder = 'reviews-related',
-}: SeriesDetailSectionsProps) {
-  void denseChapters;
+}: {
+  seriesId: string;
+  chapters: SeriesChapterItem[];
+  layoutId: SeriesDetailsLayoutId;
+  heading?: string;
+  className?: string;
+}) {
   const presentationVariant = getChapterListVariant(layoutId);
-
-  const chaptersSection = (
-    <section id="series-chapters" aria-labelledby="chapters-section-heading">
+  return (
+    <section id="series-chapters" aria-labelledby="chapters-section-heading" className={className}>
       <h2 id="chapters-section-heading" className="sr-only">
         Chapters
       </h2>
-      <ModernChapterGrid chapters={chapters} seriesId={series.id} variant={presentationVariant} />
+      <ModernChapterGrid
+        chapters={chapters}
+        seriesId={seriesId}
+        variant={presentationVariant}
+        heading={heading}
+      />
     </section>
   );
+}
 
-  const commentsSection = (
-    <section id="series-comments" aria-labelledby="comments-section-heading">
+export function SeriesCommentsBlock({
+  series,
+  isDemo,
+  layoutId,
+  className,
+}: {
+  series: SeriesDetailViewModel;
+  isDemo: boolean;
+  layoutId: SeriesDetailsLayoutId;
+  className?: string;
+}) {
+  const presentationVariant = getChapterListVariant(layoutId);
+  return (
+    <section id="series-comments" aria-labelledby="comments-section-heading" className={className}>
       <Suspense fallback={<SectionSkeleton tall />}>
         {isDemo ? (
           <DemoSeriesCommentsPanel
@@ -116,13 +145,25 @@ export function SeriesDetailSections({
       </Suspense>
     </section>
   );
+}
 
-  const reviewsBlock = (
-    <section id="series-reviews" aria-labelledby="reviews-section-heading">
+export function SeriesReviewsBlock({
+  seriesId,
+  seriesIndex,
+  deemphasize = false,
+  className,
+}: {
+  seriesId: string;
+  seriesIndex: number;
+  deemphasize?: boolean;
+  className?: string;
+}) {
+  return (
+    <section id="series-reviews" aria-labelledby="reviews-section-heading" className={className}>
       <h2
         id="reviews-section-heading"
         className={
-          deemphasizeSecondary
+          deemphasize
             ? 'mb-3 text-sm font-semibold text-muted-foreground sm:text-base'
             : 'mb-4 text-xl font-bold sm:text-2xl'
         }
@@ -130,40 +171,89 @@ export function SeriesDetailSections({
         Reviews
       </h2>
       <Suspense fallback={<SectionSkeleton tall />}>
-        <SeriesReviews seriesId={series.id} seriesIndex={seriesIndex} />
+        <SeriesReviews seriesId={seriesId} seriesIndex={seriesIndex} />
       </Suspense>
     </section>
   );
+}
 
-  const relatedBlock =
-    relatedVariant === 'omit' ? null : (
-      <section id="series-related" aria-labelledby="related-section-heading">
-        <h2
-          id="related-section-heading"
-          className={cn(
-            'mb-3 font-semibold',
-            deemphasizeSecondary || relatedVariant === 'text-list' || relatedVariant === 'rail'
-              ? 'text-sm text-muted-foreground sm:text-base'
-              : 'mb-4 text-xl font-bold sm:text-2xl'
-          )}
-        >
-          Related Titles
-        </h2>
-        <Suspense fallback={<SectionSkeleton />}>
-          <SeriesRelatedTitles
-            series={relatedSeries}
-            currentTitle={series.title}
-            variant={relatedVariant}
-          />
-        </Suspense>
-      </section>
-    );
+export function SeriesRelatedBlock({
+  relatedSeries,
+  currentTitle,
+  relatedVariant = 'rail',
+  deemphasize = false,
+  className,
+}: {
+  relatedSeries: DemoSeries[];
+  currentTitle: string;
+  relatedVariant?: RelatedTitlesVariant;
+  deemphasize?: boolean;
+  className?: string;
+}) {
+  if (relatedVariant === 'omit') return null;
+  return (
+    <section id="series-related" aria-labelledby="related-section-heading" className={className}>
+      <h2
+        id="related-section-heading"
+        className={cn(
+          'mb-3 font-semibold',
+          deemphasize || relatedVariant === 'text-list' || relatedVariant === 'rail'
+            ? 'text-sm text-muted-foreground sm:text-base'
+            : 'mb-4 text-xl font-bold sm:text-2xl'
+        )}
+      >
+        Related Titles
+      </h2>
+      <Suspense fallback={<SectionSkeleton />}>
+        <SeriesRelatedTitles
+          series={relatedSeries}
+          currentTitle={currentTitle}
+          variant={relatedVariant}
+        />
+      </Suspense>
+    </section>
+  );
+}
 
-  const secondarySection = (
+export function SeriesSecondaryBlocks({
+  series,
+  relatedSeries,
+  seriesIndex,
+  relatedVariant = 'rail',
+  secondaryOrder = 'reviews-related',
+  deemphasizeSecondary = false,
+  className,
+}: {
+  series: SeriesDetailViewModel;
+  relatedSeries: DemoSeries[];
+  seriesIndex: number;
+  relatedVariant?: RelatedTitlesVariant;
+  secondaryOrder?: SecondaryBlockOrder;
+  deemphasizeSecondary?: boolean;
+  className?: string;
+}) {
+  const reviewsBlock = (
+    <SeriesReviewsBlock
+      seriesId={series.id}
+      seriesIndex={seriesIndex}
+      deemphasize={deemphasizeSecondary}
+    />
+  );
+  const relatedBlock = (
+    <SeriesRelatedBlock
+      relatedSeries={relatedSeries}
+      currentTitle={series.title}
+      relatedVariant={relatedVariant}
+      deemphasize={deemphasizeSecondary}
+    />
+  );
+
+  return (
     <div
       className={cn(
         'space-y-5 border-t border-border/15 pt-5 sm:space-y-6 sm:pt-6',
-        deemphasizeSecondary && 'opacity-90'
+        deemphasizeSecondary && 'opacity-90',
+        className
       )}
     >
       {secondaryOrder === 'related-reviews' ? (
@@ -179,14 +269,57 @@ export function SeriesDetailSections({
       )}
     </div>
   );
+}
 
-  // Required order everywhere: series info (hero/synopsis) → chapters → comments → secondary
+/**
+ * Shared body composer: synopsis → chapters → comments → secondary.
+ * Layout shells own page chrome; they may also compose the exported blocks
+ * directly when structure must diverge beyond props.
+ */
+export function SeriesDetailSections({
+  series,
+  chapters,
+  relatedSeries,
+  isDemo,
+  seriesIndex,
+  layoutId,
+  showSynopsis = true,
+  denseChapters = false,
+  className,
+  deemphasizeSecondary = false,
+  relatedVariant = 'rail',
+  secondaryOrder = 'reviews-related',
+  chaptersHeading,
+  showChapters = true,
+  showComments = true,
+  showSecondary = true,
+}: SeriesDetailSectionsProps) {
+  void denseChapters;
+
   return (
     <div className={cn('relative z-10 space-y-5 sm:space-y-6', className)}>
       {showSynopsis && <SeriesDetailSynopsis description={series.description} />}
-      {chaptersSection}
-      {commentsSection}
-      {secondarySection}
+      {showChapters && (
+        <SeriesChaptersBlock
+          seriesId={series.id}
+          chapters={chapters}
+          layoutId={layoutId}
+          heading={chaptersHeading}
+        />
+      )}
+      {showComments && (
+        <SeriesCommentsBlock series={series} isDemo={isDemo} layoutId={layoutId} />
+      )}
+      {showSecondary && (
+        <SeriesSecondaryBlocks
+          series={series}
+          relatedSeries={relatedSeries}
+          seriesIndex={seriesIndex}
+          relatedVariant={relatedVariant}
+          secondaryOrder={secondaryOrder}
+          deemphasizeSecondary={deemphasizeSecondary}
+        />
+      )}
     </div>
   );
 }

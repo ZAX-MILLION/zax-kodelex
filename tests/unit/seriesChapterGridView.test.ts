@@ -68,7 +68,7 @@ describe('chapter grid view toggle wiring', () => {
     expect(toggle).toContain('data-testid="chapter-grid-view-toggle"');
   });
 
-  it('toggle survives layout switching via shared SeriesDetailSections', () => {
+  it('toggle survives layout switching via shared chapter blocks', () => {
     const sections = readFileSync(
       resolve(process.cwd(), 'src/components/series/SeriesDetailSections.tsx'),
       'utf-8'
@@ -88,20 +88,20 @@ describe('chapter grid view toggle wiring', () => {
 
     expect(sections).toContain('ModernChapterGrid');
     for (const layout of [editorial, cinematic, compact]) {
-      expect(layout).toContain('SeriesDetailSections');
+      expect(layout).toContain('SeriesChaptersBlock');
     }
   });
 });
 
 describe('editorial layout premium composition', () => {
-  it('uses magazine hero with inline metadata and related rail', () => {
+  it('uses magazine column with sticky cover and related rail', () => {
     const editorial = readFileSync(
       resolve(process.cwd(), 'src/components/series/layouts/SeriesDetailsLayoutEditorial.tsx'),
       'utf-8'
     );
     expect(editorial).toContain('data-series-layout="editorial"');
-    expect(editorial).toContain('showSynopsis={false}');
     expect(editorial).toContain('presentation="editorial"');
     expect(editorial).toContain('relatedVariant="rail"');
+    expect(editorial).toContain('lg:sticky');
   });
 });
