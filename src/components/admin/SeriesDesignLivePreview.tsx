@@ -102,6 +102,7 @@ export function SeriesDesignLivePreview({ draft, className, viewport = 'desktop'
         >
           <div className="scale-[0.85] origin-top">
             <SeriesDetailsLayoutShell
+              key={draft.layout}
               layoutId={draft.layout}
               series={seriesView}
               chapters={chapters}

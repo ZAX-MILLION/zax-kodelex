@@ -364,6 +364,7 @@ const ModernSeriesDetail = () => {
       />
 
       <SeriesDetailsLayoutShell
+        key={layoutId}
         layoutId={layoutId}
         series={series}
         chapters={chapters}

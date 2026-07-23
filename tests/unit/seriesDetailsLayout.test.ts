@@ -66,6 +66,28 @@ describe('resolveSeriesDetailsLayout', () => {
     expect(resolveSeriesDetailsLayout('demo-series-1')).toBe('D');
   });
 
+  it('maps A/B/C/D to four distinct layout shell component references', async () => {
+    const {
+      SERIES_DETAILS_LAYOUT_SHELLS,
+      SERIES_DETAILS_LAYOUT_SHELL_FILES,
+      getSeriesDetailsLayoutShellLazy,
+    } = await import('../../src/components/series/layouts');
+
+    const ids = ['A', 'B', 'C', 'D'] as const;
+    const shells = ids.map((id) => getSeriesDetailsLayoutShellLazy(id));
+    const unique = new Set(shells);
+    expect(unique.size).toBe(4);
+    expect(SERIES_DETAILS_LAYOUT_SHELLS.A).not.toBe(SERIES_DETAILS_LAYOUT_SHELLS.B);
+    expect(SERIES_DETAILS_LAYOUT_SHELLS.B).not.toBe(SERIES_DETAILS_LAYOUT_SHELLS.C);
+    expect(SERIES_DETAILS_LAYOUT_SHELLS.C).not.toBe(SERIES_DETAILS_LAYOUT_SHELLS.D);
+    expect(SERIES_DETAILS_LAYOUT_SHELL_FILES).toEqual({
+      A: 'SeriesDetailsLayoutEditorial',
+      B: 'SeriesDetailsLayoutCinematic',
+      C: 'SeriesDetailsLayoutCompact',
+      D: 'SeriesDetailsLayoutCompactList',
+    });
+  });
+
   it('database-persisted override wins over local override and global default', () => {
     setGlobalSeriesDetailsLayout('B');
     setSeriesDetailsLayoutOverride('demo-series-1', 'C');

@@ -34,7 +34,11 @@ function LayoutFallback() {
   );
 }
 
-const SHELLS: Record<
+/**
+ * Canonical ID → lazy shell mapping.
+ * A/B/C/D MUST each point at a different component (enforced by unit tests).
+ */
+export const SERIES_DETAILS_LAYOUT_SHELLS: Record<
   SeriesDetailsLayoutId,
   LazyExoticComponent<ComponentType<SeriesDetailLayoutShellProps>>
 > = {
@@ -44,14 +48,28 @@ const SHELLS: Record<
   D: CompactList,
 };
 
+export const SERIES_DETAILS_LAYOUT_SHELL_FILES: Record<SeriesDetailsLayoutId, string> = {
+  A: 'SeriesDetailsLayoutEditorial',
+  B: 'SeriesDetailsLayoutCinematic',
+  C: 'SeriesDetailsLayoutCompact',
+  D: 'SeriesDetailsLayoutCompactList',
+};
+
+export function getSeriesDetailsLayoutShellLazy(
+  layoutId: SeriesDetailsLayoutId
+): LazyExoticComponent<ComponentType<SeriesDetailLayoutShellProps>> {
+  return SERIES_DETAILS_LAYOUT_SHELLS[layoutId];
+}
+
 export function SeriesDetailsLayoutShell({
   layoutId,
   ...props
 }: SeriesDetailLayoutShellProps) {
-  const Shell = SHELLS[layoutId];
+  const Shell = SERIES_DETAILS_LAYOUT_SHELLS[layoutId];
   return (
     <Suspense fallback={<LayoutFallback />}>
-      <Shell {...props} layoutId={layoutId} />
+      {/* key forces a full unmount when the visitor switches A/B/C/D */}
+      <Shell key={layoutId} {...props} layoutId={layoutId} />
     </Suspense>
   );
 }
